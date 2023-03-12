@@ -4,27 +4,31 @@
       <v-app-bar-title>
         <v-img
           src="@/assets/img/Multi Plus Streaming.png"
-          width="25vw"
+          max-width="30vw"
+          min-width="200px"
           class="ml-5"
         ></v-img>
       </v-app-bar-title>
 
       <template v-slot:append>
         <v-btn
-          class="mr-2 text-h5"
+          class="mr-2 text-sm-body-1 text-md-h7 text-lg-h6 text-xl-h5"
           variant="outlined"
           rounded="lg"
           color="pink"
-          width="150px"
+          width="8vw"
+          min-width="80px"
           height="50px"
           >Entrar</v-btn
         >
         <v-btn
-          class="gradient-button text-h4"
+          id="gradient-button"
+          class="text-sm-body-1 text-md-h6 text-lg-h5 text-xl-h4"
           dark
           variant="flat"
           rounded="lg"
-          width="250px"
+          width="14vw"
+          min-width="100px"
           height="50px"
           >Cadastrar</v-btn
         >
@@ -35,6 +39,7 @@
     <v-responsive height="100vh" class="d-flex justify-center align-center">
       <div
         style="
+          min-width: 350px;
           width: 50vw;
           height: 80vh;
           top: -400px;
@@ -46,8 +51,9 @@
       ></div>
       <v-responsive>
         <v-row align="center" justify="center">
-          <v-col cols="7" class="text-center">
-            <span class="text-h2 font-weight-medium text-white"
+          <v-col cols="8" class="text-center">
+            <span
+              class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
               >Seus filmes, séries e livros favoritos <br />
               em um só lugar</span
             >
@@ -59,7 +65,8 @@
     <v-responsive height="100vh" class="d-flex justify-center align-center">
       <div
         style="
-          width: 50vw;
+          width: 55vw;
+          min-width: 500px;
           height: 70vh;
           top: 120px;
           left: -130px;
@@ -71,12 +78,17 @@
       ></div>
       <v-responsive>
         <v-row align="start" justify="start">
-          <v-col cols="5" class="text-center">
-            <span class="text-h2 font-weight-medium text-white"
+          <v-col cols="6" class="text-center">
+            <span
+              class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
               >Salve e acompanhe seu <br />
               progresso a cada episódio</span
             >
-            <v-img class="mx-auto mt-5" src="@/assets/img/icon-1.png" width="12vw" />
+            <v-img
+              class="mx-auto mt-5"
+              src="@/assets/img/icon-1.png"
+              width="12vw"
+            />
           </v-col>
         </v-row>
       </v-responsive>
@@ -85,7 +97,8 @@
     <v-responsive height="100vh" class="d-flex justify-center align-center">
       <div
         style="
-          width: 50vw;
+          width: 55vw;
+          min-width: 500px;
           height: 70vh;
           top: 120px;
           right: -120px;
@@ -97,11 +110,16 @@
       ></div>
       <v-responsive>
         <v-row align="center" justify="end">
-          <v-col cols="5" class="text-center">
-            <span class="text-h2 font-weight-medium text-white"
+          <v-col cols="6" class="text-center">
+            <span
+              class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
               >Veja comentários, <br />resenhas e avaliações</span
             >
-            <v-img class="mx-auto mt-5" src="@/assets/img/icon-2.png" width="12vw" />
+            <v-img
+              class="mx-auto mt-5"
+              src="@/assets/img/icon-2.png"
+              width="12vw"
+            />
           </v-col>
         </v-row>
       </v-responsive>
@@ -122,8 +140,7 @@ export default {};
   height: 100%;
   width: 100%;
 }
-.gradient-button {
+#gradient-button {
   background: linear-gradient(to right, #8e0336, #fb394f);
-  box-shadow: 10px 5px 5px #8e0336;
 }
 </style>

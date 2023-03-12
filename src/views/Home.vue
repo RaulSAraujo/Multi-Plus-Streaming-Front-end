@@ -4,7 +4,7 @@
       <v-app-bar-title>
         <v-img
           src="@/assets/img/Multi Plus Streaming.png"
-          width="18vw"
+          width="25vw"
           class="ml-5"
         ></v-img>
       </v-app-bar-title>

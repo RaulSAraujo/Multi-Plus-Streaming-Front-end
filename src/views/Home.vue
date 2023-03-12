@@ -61,11 +61,11 @@
         style="
           width: 50vw;
           height: 70vh;
-          top: 220px;
+          top: 120px;
           left: -130px;
           position: absolute;
           background: rgb(0, 0, 0, 0.9);
-          filter: blur(50px);
+          filter: blur(80px);
           transition: filter 0.5s ease-in-out;
         "
       ></div>
@@ -76,6 +76,7 @@
               >Salve e acompanhe seu <br />
               progresso a cada episódio</span
             >
+            <v-img class="mx-auto mt-5" src="@/assets/img/icon-1.png" width="12vw" />
           </v-col>
         </v-row>
       </v-responsive>
@@ -84,8 +85,8 @@
     <v-responsive height="100vh" class="d-flex justify-center align-center">
       <div
         style="
-          width: 60vw;
-          height: 80vh;
+          width: 50vw;
+          height: 70vh;
           top: 120px;
           right: -120px;
           position: absolute;
@@ -100,6 +101,7 @@
             <span class="text-h2 font-weight-medium text-white"
               >Veja comentários, <br />resenhas e avaliações</span
             >
+            <v-img class="mx-auto mt-5" src="@/assets/img/icon-2.png" width="12vw" />
           </v-col>
         </v-row>
       </v-responsive>

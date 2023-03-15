@@ -6,7 +6,6 @@
           src="@/assets/img/Multi Plus Streaming.png"
           max-width="30vw"
           min-width="200px"
-          class="ml-5"
         ></v-img>
       </v-app-bar-title>
 
@@ -30,6 +29,7 @@
           width="14vw"
           min-width="100px"
           height="50px"
+          @click="activeSingIn"
           >Cadastrar</v-btn
         >
       </template>
@@ -84,11 +84,7 @@
               >Salve e acompanhe seu <br />
               progresso a cada episódio</span
             >
-            <v-img
-              class="mx-auto mt-5"
-              src="@/assets/img/icon-1.png"
-              width="12vw"
-            />
+            <v-img class="mx-auto mt-5" src="@/assets/img/icon-1.png" width="12vw" />
           </v-col>
         </v-row>
       </v-responsive>
@@ -115,20 +111,31 @@
               class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
               >Veja comentários, <br />resenhas e avaliações</span
             >
-            <v-img
-              class="mx-auto mt-5"
-              src="@/assets/img/icon-2.png"
-              width="12vw"
-            />
+            <v-img class="mx-auto mt-5" src="@/assets/img/icon-2.png" width="12vw" />
           </v-col>
         </v-row>
       </v-responsive>
     </v-responsive>
+
+    <SingIn ref="SingIn" />
   </v-app>
 </template>
 
 <script>
-export default {};
+import SingIn from "@/components/SingIn.vue";
+export default {
+  components: {
+    SingIn,
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    activeSingIn() {
+      this.$refs.SingIn.dialog = true;
+    },
+  },
+};
 </script>
 
 <style>

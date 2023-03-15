@@ -13,6 +13,7 @@
     "sass": "^1.59.2",
     "vue": "^3.2.38",
     "vue-router": "^4.0.0",
+    "vue3-steppy": "^1.1.0",
     "vuetify": "^3.0.0",
     "webfontloader": "^1.0.0"
   },

@@ -18,6 +18,7 @@
           width="8vw"
           min-width="80px"
           height="50px"
+          to="/singIn"
           >Entrar</v-btn
         >
         <v-btn
@@ -122,7 +123,7 @@
 </template>
 
 <script>
-import SingIn from "@/components/SingIn.vue";
+import SingIn from "@/components/SingUp.vue";
 export default {
   components: {
     SingIn,

@@ -11,6 +11,11 @@ const routes = [
         name: 'Landing',
         component: () => import('@/views/LandingPage.vue'),
       },
+      {
+        path: '/singIn',
+        name: 'Sing In',
+        component: () => import('@/views/singIn.vue'),
+      },
     ],
   },
 ]

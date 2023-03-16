@@ -20,7 +20,7 @@
               nextText="Proximo"
               primaryColor1="#fb394f"
               :finalize="steppyFinalize"
-              content-class="bg-red"
+              
             >
               <template #1>
                 <p class="text-h6 text-left">E-mail:</p>

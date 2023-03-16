@@ -1,70 +1,109 @@
 <template>
   <v-dialog v-model="dialog" width="70vw" scrim="black">
     <v-card rounded="xl">
-      <v-card-title>
-        <v-row justify="center" no-gutters>
-          <v-img
-            src="@/assets/img/Novo Cadastro.png"
-            cover
-            max-width="20vw"
-            min-width="200px"
-          ></v-img>
+      <v-row class="mt-5" justify="center" no-gutters>
+        <v-img
+          src="@/assets/img/Novo Cadastro.png"
+          cover
+          max-width="250px"
+          min-width="200px"
+        ></v-img>
+      </v-row>
+
+      <v-container fluid class="mt-n7">
+        <v-row justify="center">
+          <v-responsive class="mt-n3" max-width="60vw">
+            <Steppy
+              v-model:step="step"
+              :tabs="tabs"
+              backText="Voltar"
+              nextText="Proximo"
+              primaryColor1="#fb394f"
+              :finalize="steppyFinalize"
+              content-class="bg-red"
+            >
+              <template #1>
+                <p class="text-h6 text-left">E-mail:</p>
+                <v-text-field
+                  label="Digite seu e-mail..."
+                  density="compact"
+                  variant="outlined"
+                  bg-color="white"
+                  single-line
+                  color="pink"
+                />
+
+                <p class="text-h6 text-left">Senha:</p>
+                <v-text-field
+                  label="Digite seu senha..."
+                  density="compact"
+                  variant="outlined"
+                  bg-color="white"
+                  single-line
+                  color="pink"
+                />
+
+                <p class="text-h6 text-left">Confirme sua senha:</p>
+                <v-text-field
+                  label="Confirme sua senha..."
+                  density="compact"
+                  variant="outlined"
+                  bg-color="white"
+                  single-line
+                  color="pink"
+                />
+              </template>
+
+              <template #2>
+                <p class="text-h6 text-truncate text-left">Nome completo:</p>
+                <v-text-field
+                  label="Digite seu nome..."
+                  density="compact"
+                  variant="outlined"
+                  bg-color="white"
+                  single-line
+                  color="pink"
+                />
+
+                <p class="text-h6 text-truncate text-left">Telefone:</p>
+                <v-text-field
+                  label="Digite seu telefone..."
+                  density="compact"
+                  variant="outlined"
+                  bg-color="white"
+                  single-line
+                  color="pink"
+                />
+
+                <p class="text-h6 text-truncate text-left">Idade:</p>
+                <v-text-field
+                  label="Digite sua idade..."
+                  density="compact"
+                  variant="outlined"
+                  bg-color="white"
+                  single-line
+                  color="pink"
+                />
+
+                <p class="text-h6 text-truncate text-left">Cidade:</p>
+                <v-text-field
+                  label="Digite sua cidade..."
+                  density="compact"
+                  variant="outlined"
+                  bg-color="white"
+                  single-line
+                  color="pink"
+                />
+              </template>
+
+              <template #3>
+                <p class="text-h6 text-center">Cadastro realizado com sucesso</p>
+              </template>
+            </Steppy>
+          </v-responsive>
         </v-row>
-      </v-card-title>
-      <v-card-text>
-        <Steppy
-          v-model:step="step"
-          :tabs="tabs"
-          backText="Voltar"
-          nextText="Proximo"
-          primaryColor1="red"
-          primaryColor2="pink"
-          :finalize="steppyFinalize"
-        >
-          <template #1>
-            <span class="text-h6">Seu nome:</span>
-            <v-text-field
-              label="Digite seu nome..."
-              density="compact"
-              variant="outlined"
-              bg-color="white"
-              single-line
-            />
-            <span class="text-h6">E-mail:</span>
-            <v-text-field
-              label="Digite seu e-mail..."
-              density="compact"
-              variant="outlined"
-              bg-color="white"
-              single-line
-            />
-            <span class="text-h6">Confirme seu E-mail:</span>
-            <v-text-field
-              label="Confirme seu e-mail..."
-              density="compact"
-              variant="outlined"
-              bg-color="white"
-              single-line
-            />
-          </template>
-          <template #2
-            ><span class="text-h6">Senha:</span>
-            <v-text-field
-              label="Digite seu senha..."
-              density="compact"
-              variant="outlined"
-              bg-color="white"
-              single-line />
-            <span class="text-h6">Confirme sua senha:</span>
-            <v-text-field
-              label="Confirme sua senha..."
-              density="compact"
-              variant="outlined"
-              bg-color="white"
-              single-line
-          /></template>
-        </Steppy>
-      </v-card-text>
+      </v-container>
+
       <!-- <v-card-actions>
         <v-row justify="center" class="my-2">
           <v-btn
@@ -96,8 +135,9 @@ export default {
       dialog: false,
       step: undefined,
       tabs: [
-        { title: "teste", iconSuccess: null, isValid: true },
-        { title: "teste2", iconSuccess: null, isValid: true },
+        { title: "E-mail e senha", iconSuccess: null, isValid: true },
+        { title: "informações básicas sobre você", iconSuccess: null, isValid: true },
+        { title: "Obrigado", iconSuccess: null, isValid: true },
       ],
     };
   },
@@ -109,7 +149,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 #gradient-button {
   background: linear-gradient(to right, #8e0336, #fb394f);
 }

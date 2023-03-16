@@ -1,27 +1,23 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import Landing from '@/views/LandingPage.vue';
+import SingIn from '@/views/SingIn.vue'
 
 const routes = [
   {
     path: '/',
-    component: () => import('@/layouts/default/Default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Landing',
-        component: () => import('@/views/LandingPage.vue'),
-      },
-      {
-        path: '/singIn',
-        name: 'Sing In',
-        component: () => import('@/views/singIn.vue'),
-      },
-    ],
+    name: 'Landing',
+    component: Landing,
+  },
+  {
+    path: '/SingIn',
+    name: 'SingIn',
+    component: SingIn,
   },
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
 })
 

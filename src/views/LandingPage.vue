@@ -18,7 +18,7 @@
           width="8vw"
           min-width="80px"
           height="50px"
-          to="/singIn"
+          to="/home"
           >Entrar</v-btn
         >
         <v-btn
@@ -139,9 +139,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #background {
-  background-image: url("src/assets/img/Backgroud.png");
+  background-image: url("@/assets/img/Backgroud.png");
   background-size: cover;
   position: absolute;
   filter: brightness(40%);

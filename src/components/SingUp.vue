@@ -2,98 +2,44 @@
   <v-dialog v-model="dialog" width="70vw" scrim="black">
     <v-card rounded="xl">
       <v-row class="mt-5" justify="center" no-gutters>
-        <v-img
-          src="@/assets/img/Novo Cadastro.png"
-          cover
-          max-width="250px"
-          min-width="200px"
-        ></v-img>
+        <v-img src="@/assets/img/Novo Cadastro.png" cover max-width="250px" min-width="200px"></v-img>
       </v-row>
 
       <v-container fluid class="mt-n7">
         <v-row justify="center">
-          <v-responsive class="mt-n3" max-width="60vw">
-            <Steppy
-              v-model:step="step"
-              :tabs="tabs"
-              backText="Voltar"
-              nextText="Proximo"
-              primaryColor1="#fb394f"
-              :finalize="steppyFinalize"
-              
-            >
+          <v-responsive class="mt-n3">
+            <Steppy v-model:step="step" :tabs="tabs" backText="Voltar" nextText="Proximo" primaryColor1="#fb394f"
+              :finalize="steppyFinalize">
               <template #1>
                 <p class="text-h6 text-left">E-mail:</p>
-                <v-text-field
-                  label="Digite seu e-mail..."
-                  density="compact"
-                  variant="outlined"
-                  bg-color="white"
-                  single-line
-                  color="pink"
-                />
+                <v-text-field label="Digite seu e-mail..." density="compact" variant="outlined" bg-color="white"
+                  single-line color="pink" />
 
                 <p class="text-h6 text-left">Senha:</p>
-                <v-text-field
-                  label="Digite seu senha..."
-                  density="compact"
-                  variant="outlined"
-                  bg-color="white"
-                  single-line
-                  color="pink"
-                />
+                <v-text-field label="Digite seu senha..." density="compact" variant="outlined" bg-color="white"
+                  single-line color="pink" />
 
                 <p class="text-h6 text-left">Confirme sua senha:</p>
-                <v-text-field
-                  label="Confirme sua senha..."
-                  density="compact"
-                  variant="outlined"
-                  bg-color="white"
-                  single-line
-                  color="pink"
-                />
+                <v-text-field label="Confirme sua senha..." density="compact" variant="outlined" bg-color="white"
+                  single-line color="pink" />
               </template>
 
               <template #2>
                 <p class="text-h6 text-truncate text-left">Nome completo:</p>
-                <v-text-field
-                  label="Digite seu nome..."
-                  density="compact"
-                  variant="outlined"
-                  bg-color="white"
-                  single-line
-                  color="pink"
-                />
+                <v-text-field label="Digite seu nome..." density="compact" variant="outlined" bg-color="white" single-line
+                  color="pink" />
 
                 <p class="text-h6 text-truncate text-left">Telefone:</p>
-                <v-text-field
-                  label="Digite seu telefone..."
-                  density="compact"
-                  variant="outlined"
-                  bg-color="white"
-                  single-line
-                  color="pink"
-                />
+                <v-text-field label="Digite seu telefone..." density="compact" variant="outlined" bg-color="white"
+                  single-line color="pink" />
 
                 <p class="text-h6 text-truncate text-left">Idade:</p>
-                <v-text-field
-                  label="Digite sua idade..."
-                  density="compact"
-                  variant="outlined"
-                  bg-color="white"
-                  single-line
-                  color="pink"
-                />
+                <v-text-field label="Digite sua idade..." density="compact" variant="outlined" bg-color="white"
+                  single-line color="pink" />
 
                 <p class="text-h6 text-truncate text-left">Cidade:</p>
-                <v-text-field
-                  label="Digite sua cidade..."
-                  density="compact"
-                  variant="outlined"
-                  bg-color="white"
-                  single-line
-                  color="pink"
-                />
+                <v-text-field label="Digite sua cidade..." density="compact" variant="outlined" bg-color="white"
+                  single-line color="pink" />
               </template>
 
               <template #3>
@@ -136,7 +82,7 @@ export default {
       step: undefined,
       tabs: [
         { title: "E-mail e senha", iconSuccess: null, isValid: true },
-        { title: "informações básicas sobre você", iconSuccess: null, isValid: true },
+        { title: "informações básicas", iconSuccess: null, isValid: true },
         { title: "Obrigado", iconSuccess: null, isValid: true },
       ],
     };

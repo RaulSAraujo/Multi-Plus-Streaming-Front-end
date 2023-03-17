@@ -6,44 +6,49 @@
       </v-row>
 
       <v-container fluid class="mt-n7">
-            <Steppy v-model:step="step" class="ma-0 pt-8 pb-0" :tabs="tabs" backText="Voltar" nextText="Proximo" primaryColor1="#fb394f"
-              :finalize="steppyFinalize">
-              <template #1>
-                <p class="text-h6 text-left">E-mail:</p>
-                <v-text-field label="Digite seu e-mail..." density="compact" variant="outlined" bg-color="white"
-                  single-line color="pink" />
+        <Steppy v-model:step="step" class="ma-0 pt-8 pb-0" :tabs="tabs" backText="Voltar" nextText="Proximo"
+          primaryColor1="#fb394f" :finalize="steppyFinalize">
+          <template #1 ref="form1">
+            <p class="text-h6 text-left">E-mail:</p>
+            <v-text-field v-model="email" :rules="[() => !!email || 'Este campo é obrigatorio']"
+              label="Digite seu e-mail..." density="compact" variant="outlined" bg-color="white" single-line
+              color="pink" />
 
-                <p class="text-h6 text-left">Senha:</p>
-                <v-text-field label="Digite seu senha..." density="compact" variant="outlined" bg-color="white"
-                  single-line color="pink" />
+            <p class="text-h6 text-left">Senha:</p>
+            <v-text-field v-model="password" :rules="[() => !!password || 'Este campo é obrigatorio']"
+              label="Digite seu senha..." :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show1 ? 'text' : 'password'" density="compact" variant="outlined" bg-color="white" single-line
+              color="pink" @click:append-inner="show1 = !show1" />
 
-                <p class="text-h6 text-left">Confirme sua senha:</p>
-                <v-text-field label="Confirme sua senha..." density="compact" variant="outlined" bg-color="white"
-                  single-line color="pink" />
-              </template>
+            <p class="text-h6 text-left">Confirme sua senha:</p>
+            <v-text-field v-model="ConfirmPassword" @update:focused="this.sendForm()"
+              :rules="[() => !!ConfirmPassword || 'Este campo é obrigatorio']" label="Confirme sua senha..."
+              :append-inner-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" :type="show2 ? 'text' : 'password'" density="compact"
+              variant="outlined" bg-color="white" single-line color="pink" @click:append-inner="show2 = !show2" />
+          </template>
 
-              <template #2>
-                <p class="text-h6 text-truncate text-left">Nome completo:</p>
-                <v-text-field label="Digite seu nome..." density="compact" variant="outlined" bg-color="white" single-line
-                  color="pink" />
+          <template #2>
+            <p class="text-h6 text-truncate text-left">Nome completo:</p>
+            <v-text-field label="Digite seu nome..." density="compact" variant="outlined" bg-color="white" single-line
+              color="pink" />
 
-                <p class="text-h6 text-truncate text-left">Telefone:</p>
-                <v-text-field label="Digite seu telefone..." density="compact" variant="outlined" bg-color="white"
-                  single-line color="pink" />
+            <p class="text-h6 text-truncate text-left">Telefone:</p>
+            <v-text-field label="Digite seu telefone..." density="compact" variant="outlined" bg-color="white" single-line
+              color="pink" />
 
-                <p class="text-h6 text-truncate text-left">Idade:</p>
-                <v-text-field label="Digite sua idade..." density="compact" variant="outlined" bg-color="white"
-                  single-line color="pink" />
+            <p class="text-h6 text-truncate text-left">Idade:</p>
+            <v-text-field label="Digite sua idade..." density="compact" variant="outlined" bg-color="white" single-line
+              color="pink" />
 
-                <p class="text-h6 text-truncate text-left">Cidade:</p>
-                <v-text-field label="Digite sua cidade..." density="compact" variant="outlined" bg-color="white"
-                  single-line color="pink" />
-              </template>
+            <p class="text-h6 text-truncate text-left">Cidade:</p>
+            <v-text-field label="Digite sua cidade..." density="compact" variant="outlined" bg-color="white" single-line
+              color="pink" />
+          </template>
 
-              <template #3>
-                <p class="text-h6 text-center">Cadastro realizado com sucesso</p>
-              </template>
-            </Steppy>
+          <template #3>
+            <p class="text-h6 text-center">Cadastro realizado com sucesso</p>
+          </template>
+        </Steppy>
       </v-container>
 
       <!-- <v-card-actions>
@@ -77,17 +82,43 @@ export default {
       dialog: false,
       step: undefined,
       tabs: [
-        { title: "E-mail e senha", iconSuccess: null, isValid: true },
-        { title: "informações básicas", iconSuccess: null, isValid: true },
+        { title: "E-mail e senha", iconSuccess: null, isValid: this.formHasErrors },
+        { title: "informações básicas", iconSuccess: null, isValid: this.formHasErrors },
         { title: "Obrigado", iconSuccess: null, isValid: true },
       ],
+      show1: false,
+      show2: false,
+      email: "",
+      password: "",
+      ConfirmPassword: "",
+      formHasErrors: false,
     };
   },
+  computed: {
+    form1() {
+      return {
+        email: this.email,
+        password: this.password,
+        confirm_password: this.ConfirmPassword,
+      }
+    },
+  },
   methods: {
+    sendForm() {
+      this.formHasErrors = false
+
+      Object.keys(this.form).forEach(f => {
+        if (!this.form[f]) this.formHasErrors = true
+
+        this.$refs[f].validate(true)
+      })
+    },
     steppyFinalize() {
       console.log("Finalizado");
     },
+
   },
+
 };
 </script>
 

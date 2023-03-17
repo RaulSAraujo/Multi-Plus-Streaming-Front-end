@@ -18,7 +18,7 @@
           width="8vw"
           min-width="80px"
           height="50px"
-          to="/home"
+          @click="activeSingIn"
           >Entrar</v-btn
         >
         <v-btn
@@ -30,7 +30,7 @@
           width="14vw"
           min-width="100px"
           height="50px"
-          @click="activeSingIn"
+          @click="activeSingUp"
           >Cadastrar</v-btn
         >
       </template>
@@ -118,20 +118,26 @@
       </v-responsive>
     </v-responsive>
 
+    <SingUp ref="SingUp" />
     <SingIn ref="SingIn" />
   </v-app>
 </template>
 
 <script>
-import SingIn from "@/components/SingUp.vue";
+import SingUp from "@/components/SingUp.vue";
+import SingIn from "@/components/Sing-In.vue";
 export default {
   components: {
+    SingUp,
     SingIn,
   },
   data() {
     return {};
   },
   methods: {
+    activeSingUp() {
+      this.$refs.SingUp.dialog = true;
+    },
     activeSingIn() {
       this.$refs.SingIn.dialog = true;
     },

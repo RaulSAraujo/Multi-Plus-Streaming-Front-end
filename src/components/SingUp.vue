@@ -6,9 +6,7 @@
       </v-row>
 
       <v-container fluid class="mt-n7">
-        <v-row justify="center">
-          <v-responsive class="mt-n3">
-            <Steppy v-model:step="step" :tabs="tabs" backText="Voltar" nextText="Proximo" primaryColor1="#fb394f"
+            <Steppy v-model:step="step" class="ma-0 pt-8 pb-0" :tabs="tabs" backText="Voltar" nextText="Proximo" primaryColor1="#fb394f"
               :finalize="steppyFinalize">
               <template #1>
                 <p class="text-h6 text-left">E-mail:</p>
@@ -46,8 +44,6 @@
                 <p class="text-h6 text-center">Cadastro realizado com sucesso</p>
               </template>
             </Steppy>
-          </v-responsive>
-        </v-row>
       </v-container>
 
       <!-- <v-card-actions>

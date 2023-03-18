@@ -1,6 +1,14 @@
 <template>
   <v-app fluid>
-    <v-app-bar color="transparent" elevation="0" height="100">
+    <v-app-bar
+      style="
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      "
+      color="rgb(0, 0, 0, 0.5)"
+      elevation="5"
+      height="100"
+    >
       <v-app-bar-title>
         <v-img
           src="@/assets/img/Multi Plus Streaming.png"

@@ -17,7 +17,7 @@
       </v-card-text>
       <v-row no-gutters>
         <v-btn id="gradient-button" class="text-sm-body-1 text-md-h6 text-lg-h5 text-xl-h4 mx-8 mb-5" dark variant="flat"
-          rounded="lg" block min-width="100px" height="40px" @click="activeSingIn">LOGIN</v-btn>
+          rounded="lg" block min-width="100px" height="40px">LOGIN</v-btn>
       </v-row>
     </v-card>
   </v-dialog>

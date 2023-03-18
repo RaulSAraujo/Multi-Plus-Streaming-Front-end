@@ -33,6 +33,7 @@
                 bg-color="white"
                 single-line
                 color="pink"
+                required
               />
 
               <p class="text-h6 text-left">Senha:</p>
@@ -48,6 +49,7 @@
                 bg-color="white"
                 single-line
                 color="pink"
+                required
                 @click:append-inner="show1 = !show1"
               />
 
@@ -64,6 +66,7 @@
                 bg-color="white"
                 single-line
                 color="pink"
+                required
                 @click:append-inner="show2 = !show2"
                 @blur="checkForm"
               />
@@ -149,8 +152,16 @@ export default {
       dialog: false,
       step: undefined,
       tabs: [
-        { title: "E-mail e senha", iconSuccess: null, isValid: this.formHasErrors },
-        { title: "informações básicas", iconSuccess: null, isValid: this.formHasErrors },
+        {
+          title: "E-mail e senha",
+          iconSuccess: null,
+          isValid: this.formHasErrors,
+        },
+        {
+          title: "informações básicas",
+          iconSuccess: null,
+          isValid: this.formHasErrors,
+        },
         { title: "Obrigado", iconSuccess: null, isValid: true },
       ],
       show1: false,

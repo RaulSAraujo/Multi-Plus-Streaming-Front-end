@@ -24,7 +24,6 @@
             <div ref="form1">
               <p class="text-h6 text-left">E-mail:</p>
               <v-text-field
-                ref="email"
                 v-model="email"
                 :rules="[() => !!email || 'Este campo é obrigatorio']"
                 label="Digite seu e-mail..."
@@ -38,8 +37,7 @@
 
               <p class="text-h6 text-left">Senha:</p>
               <v-text-field
-                ref="password"
-                v-model="password"
+                v-model="password.password"
                 :rules="[() => !!password || 'Este campo é obrigatorio']"
                 label="Digite seu senha..."
                 :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -56,7 +54,7 @@
               <p class="text-h6 text-left">Confirme sua senha:</p>
               <v-text-field
                 ref="ConfirmPassword"
-                v-model="ConfirmPassword"
+                v-model="password.confirm"
                 :rules="[() => !!ConfirmPassword || 'Este campo é obrigatorio']"
                 label="Confirme sua senha..."
                 :append-inner-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -143,53 +141,57 @@
 
 <script>
 import { Steppy } from "vue3-steppy";
+import useValidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
 export default {
   components: {
     Steppy,
   },
   data() {
     return {
+      v$: useValidate(),
       dialog: false,
       step: undefined,
       tabs: [
         {
           title: "E-mail e senha",
           iconSuccess: null,
-          isValid: this.formHasErrors,
+          isValid: false,
         },
         {
           title: "informações básicas",
           iconSuccess: null,
-          isValid: this.formHasErrors,
+          isValid: false,
         },
         { title: "Obrigado", iconSuccess: null, isValid: true },
       ],
       show1: false,
       show2: false,
       email: "",
-      password: "",
-      ConfirmPassword: "",
+      password: {
+        password: "",
+        confirm: "",
+      },
       formHasErrors: false,
     };
   },
-  computed: {
-    form1() {
-      return {
-        email: this.email,
-        password: this.password,
-        confirm_password: this.ConfirmPassword,
-      };
-    },
+  validations() {
+    return {
+      email: { required, email },
+      password: {
+        password: { required },
+        confirm: { required },
+      },
+    };
   },
   methods: {
     checkForm() {
-      this.formHasErrors = false;
-
-      Object.keys(this.form1).forEach((f) => {
-        if (!this.form1[f]) this.formHasErrors = true;
-
-        this.$refs[f].validate(true);
-      });
+      this.v$.$validate();
+      if (!this.v$.$error) {
+        this.tabs[0].isValid = true;
+      } else {
+        this.tabs[0].isValid = false;
+      }
     },
     steppyFinalize() {
       console.log("Finalizado");

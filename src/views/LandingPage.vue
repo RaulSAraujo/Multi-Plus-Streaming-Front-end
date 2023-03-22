@@ -5,9 +5,9 @@
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
       "
-      color="rgb(0, 0, 0, 0.5)"
+      color="rgb(0, 0, 0, 0.3)"
       elevation="5"
-      height="100"
+      height="70"
     >
       <v-app-bar-title>
         <v-img
@@ -25,7 +25,7 @@
           color="pink"
           width="8vw"
           min-width="80px"
-          height="50px"
+          height="45px"
           @click="activeSingIn"
           >Entrar</v-btn
         >
@@ -37,7 +37,7 @@
           rounded="lg"
           width="14vw"
           min-width="100px"
-          height="50px"
+          height="45px"
           @click="activeSingUp"
           >Cadastrar</v-btn
         >

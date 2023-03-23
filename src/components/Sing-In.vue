@@ -1,10 +1,14 @@
 <template>
   <v-dialog v-model="dialog" width="40vw" scrim="black">
     <v-card class="pa-5" rounded="xl">
-      <v-card-title class="text-center text-h5"
-        >Entrar no <strong class="text-h3 text-pink">M</strong>ulti
-        <strong class="text-h3 text-pink">P</strong>lus
-        <strong class="text-h3 text-pink">S</strong>treaming
+      <v-card-title class="text-center text-h5">
+        <v-img
+          class="mx-auto mb-5"
+          src="@/assets/img/Multi Plus Streaming.png"
+          max-width="350px"
+          height="50px"
+          min-width="150px"
+        ></v-img>
       </v-card-title>
       <v-card-text>
         <v-text-field
@@ -26,12 +30,12 @@
       <v-row no-gutters>
         <v-btn
           id="gradient-button"
-          class="text-sm-body-1 text-md-h6 text-lg-h5 text-xl-h4 mx-8 mb-5"
+          class="mx-12 text-sm-body-1 text-md-h6 text-lg-h5 text-xl-h4 mx-8 mb-5"
           dark
           variant="flat"
           rounded="lg"
           block
-          min-width="100px"
+          min-width="50px"
           height="40px"
           >LOGIN</v-btn
         >

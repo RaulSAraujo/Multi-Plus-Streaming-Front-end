@@ -5,12 +5,15 @@
 <script setup></script>
 
 <style>
+html * {
+  font-family: 'Yantramanav', sans-serif !important;
+}
+
 html,
 body {
   height: 100%;
   overflow: auto;
   scroll-behavior: smooth;
- 
 }
 ::-webkit-scrollbar {
   width: 0px;

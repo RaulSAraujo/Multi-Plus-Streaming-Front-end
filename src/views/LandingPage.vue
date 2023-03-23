@@ -65,7 +65,6 @@
           <v-col cols="8" class="text-center">
             <span
               class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
-              
               >Seus filmes, séries e livros favoritos <br />
               em um só lugar</span
             >

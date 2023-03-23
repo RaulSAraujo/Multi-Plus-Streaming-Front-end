@@ -2,85 +2,31 @@
   <div>
     <v-hover close-delay="200">
       <template v-slot:default="{ isHovering, props }">
-        <v-carousel
-          v-bind="props"
-          cycle
-          :height="isHovering ? '600' : '300'"
-          hide-delimiter-background
-          hide-delimiters
-          show-arrows="hover"
-          :interval="isHovering ? 50000 : 6000"
-        >
-          <v-carousel-item
-            v-for="movies in moviesPopular"
-            :key="movies"
-            :src="`https://api.themoviedb.org/3/${movies.backdrop_path}`"
-            cover
-            class="px-12"
-          >
-            <v-banner
-              stacked
-              height="100%"
-              width="50%"
-              class="ml-12 d-flex justify-center align-center bg-transparent"
-            >
-              <v-banner-text>
-                <h2>{{ movies.title }}</h2>
-                <p>
-                  {{
-                    `${
-                      isHovering
-                        ? movies.overview
-                        : movies.overview.lighten > 150 ? `${movies.overview.substring(0, 200)}...` : movies.overview
-                    }`
-                  }}
-                </p>
-                <br />
-                <v-btn class="mr-2" color="white" @click="getFilmesCinema"
-                  >Assistir</v-btn
-                >
-                <v-btn
-                  color="white"
-                  prepend-icon="mdi-information"
-                  title="Mais informações"
-                >
-                  Mais informações
-                </v-btn>
-              </v-banner-text>
-            </v-banner>
+        <v-carousel v-bind="props" cycle :height="isHovering ? '600' : '300'" hide-delimiter-background hide-delimiters
+          show-arrows="hover" :interval="isHovering ? 50000 : 50000">
+          <v-carousel-item v-for="movies in moviesPopular" :key="movies" style="opacity: 0.3;"
+            :src="`https://image.tmdb.org/t/p/original${movies.backdrop_path}`" cover class="justify-center align-end">
+            <v-card height="150px" width="100%" elevation="0" rounded="t-lg" :title="movies.title">
+              <v-card-text>
+                <v-responsive width="40%" height="100px">
+                  <div class="text-truncate">
+                    {{ `${movies.overview}` }}
+                  </div>
+                </v-responsive>
+              </v-card-text>
+            </v-card>
           </v-carousel-item>
         </v-carousel>
       </template>
     </v-hover>
 
     <v-sheet class="mx-auto" elevation="8">
-      <v-slide-group
-        v-model="model"
-        class="pa-4"
-        selected-class="bg-primary"
-        center-active
-        show-arrows
-      >
-        <v-slide-group-item
-          v-for="n in 15"
-          :key="n"
-          v-slot="{ isSelected, toggle, selectedClass }"
-        >
-          <v-card
-            color="grey-lighten-1"
-            :class="['ma-4', selectedClass]"
-            height="200"
-            width="270"
-            @click="toggle"
-          >
+      <v-slide-group v-model="model" class="pa-4" selected-class="bg-primary" center-active show-arrows>
+        <v-slide-group-item v-for="n in 15" :key="n" v-slot="{ isSelected, toggle, selectedClass }">
+          <v-card color="grey-lighten-1" :class="['ma-4', selectedClass]" height="200" width="270" @click="toggle">
             <div class="d-flex fill-height align-center justify-center">
               <v-scale-transition>
-                <v-icon
-                  v-if="isSelected"
-                  color="white"
-                  size="48"
-                  icon="mdi-close-circle-outline"
-                ></v-icon>
+                <v-icon v-if="isSelected" color="white" size="48" icon="mdi-close-circle-outline"></v-icon>
               </v-scale-transition>
             </div>
           </v-card>
@@ -131,5 +77,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

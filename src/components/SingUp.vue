@@ -20,10 +20,13 @@
               placeholder="john@google.com"
               color="pink"
               :error-messages="
-                v$.email.$error ? v$.email.$errors[0].$message : ''
+                v$.email.$error
+                  ? errorMessage(v$.email.$errors[0].$message)
+                  : ''
               "
+              @keypress.enter="checkForm"
             ></v-text-field>
-            <span class="mt-4 text-caption text-grey-darken-1">
+            <span class="text-caption text-grey-darken-1">
               Este é o e-mail que você usará para acessar sua conta.
             </span>
           </v-card-text>
@@ -34,29 +37,33 @@
             <v-text-field
               v-model="password.password"
               label="Password"
+              placeholder="**********"
               :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show1 ? 'text' : 'password'"
               color="pink"
               @click:append-inner="show1 = !show1"
               :error-messages="
                 v$.password.password.$error
-                  ? v$.password.password.$errors[0].$message
+                  ? errorMessage(v$.password.password.$errors[0].$message)
                   : ''
               "
+              @keypress.enter="checkForm"
             ></v-text-field>
 
             <v-text-field
               v-model="password.confirm"
               label="Confirm Password"
+              placeholder="**********"
               :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show2 ? 'text' : 'password'"
               color="pink"
               @click:append-inner="show2 = !show2"
               :error-messages="
                 v$.password.confirm.$error
-                  ? v$.password.confirm.$errors[0].$message
+                  ? errorMessage(v$.password.confirm.$errors[0].$message)
                   : ''
               "
+              @keypress.enter="checkForm"
             ></v-text-field>
             <span class="text-caption text-grey-darken-1">
               Por favor, insira uma senha para sua conta
@@ -66,9 +73,42 @@
 
         <v-window-item :value="3">
           <v-card-text>
-            <v-text-field label="Nome completo" color="pink" />
-            <v-text-field label="Idade" color="pink" />
-            <v-text-field label="Região" color="pink" />
+            <v-text-field
+              v-model="basicInf.name"
+              class="mb-2"
+              label="Nome completo"
+              color="pink"
+              :error-messages="
+                v$.basicInf.name.$error
+                  ? errorMessage(v$.basicInf.name.$errors[0].$message)
+                  : ''
+              "
+              @keypress.enter="checkForm"
+            />
+            <v-text-field
+              v-model="basicInf.age"
+              class="mb-2"
+              label="Idade"
+              color="pink"
+              :error-messages="
+                v$.basicInf.age.$error
+                  ? errorMessage(v$.basicInf.age.$errors[0].$message)
+                  : ''
+              "
+              @keypress.enter="checkForm"
+            />
+            <v-text-field
+              v-model="basicInf.region"
+              class="mb-2"
+              label="Região"
+              color="pink"
+              :error-messages="
+                v$.basicInf.region.$error
+                  ? errorMessage(v$.basicInf.region.$errors[0].$message)
+                  : ''
+              "
+              @keypress.enter="checkForm"
+            />
             <span class="text-caption text-grey-darken-1">
               Por favor, insira os dados basicos de sua conta
             </span>
@@ -77,6 +117,13 @@
 
         <v-window-item :value="4">
           <div class="pa-4 text-center">
+            <v-img
+              class="mx-auto mb-5"
+              src="@/assets/img/logo.png"
+              max-width="150px"
+              min-width="150px"
+            ></v-img>
+
             <h3 class="text-h6 font-weight-light mb-2">Bem-vindo</h3>
             <span class="text-caption text-grey"
               >Obrigado por inscrever-se!</span
@@ -97,6 +144,15 @@
           @click="checkForm"
         >
           Proximo
+        </v-btn>
+
+        <v-btn
+          v-if="step == 4"
+          class="gradient"
+          variant="flat"
+          @click="steppyFinalize"
+        >
+          Finalizar
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -119,7 +175,11 @@ export default {
         password: "",
         confirm: "",
       },
-
+      basicInf: {
+        name: "",
+        age: "",
+        region: "",
+      },
     };
   },
   validations() {
@@ -129,21 +189,38 @@ export default {
         password: { required },
         confirm: { required, sameAs: sameAs(this.password.password) },
       },
+      basicInf: {
+        name: { required },
+        age: { required },
+        region: { required },
+      },
     };
   },
   methods: {
     checkForm() {
-      this.v$.$validate();
       if (this.step == 1) {
+        this.v$.email.$validate();
         if (!this.v$.email.$error) {
-          this.v$.password.$reset();
           this.step++;
         }
       } else if (this.step == 2) {
+        this.v$.password.$validate();
         if (!this.v$.password.$error) {
           this.step++;
         }
+      } else if (this.step == 3) {
+        this.v$.basicInf.$validate();
+        if (!this.v$.basicInf.$error) {
+          this.step++;
+        }
       }
+    },
+    errorMessage(message) {
+      if (message == "Value is required") return "Valor é requerido";
+      if (message == "Value is not a valid email address")
+        return "O valor não é um endereço de e-mail válido";
+      if (message == "The value must be equal to the other value")
+        return "O valor deve ser igual ao outro valor";
     },
     steppyFinalize() {
       console.log("Finalizado");
@@ -170,4 +247,5 @@ export default {
 .gradient {
   background: linear-gradient(to right, #8e0336, #fb394f);
 }
+
 </style>

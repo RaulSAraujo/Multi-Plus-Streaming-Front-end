@@ -8,6 +8,7 @@
 .background {
   background: rgb(0, 0, 0);
 }
+
 html,
 body {
   height: 100%;

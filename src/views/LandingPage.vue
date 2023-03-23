@@ -2,42 +2,44 @@
   <v-app fluid>
     <v-app-bar
       style="
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
       "
-      color="rgb(0, 0, 0, 0.3)"
-      elevation="5"
-      height="70"
+      color="rgb(0, 0, 0, 0.0)"
+      elevation="0"
+      height="120"
+      
     >
       <v-app-bar-title>
         <v-img
-          src="@/assets/img/Multi Plus Streaming.png"
-          max-width="350px"
-          min-width="200px"
+          class="ml-12"
+          src="@/assets/img/logo.png"
+          max-width="150px"
+          min-width="150px"
         ></v-img>
       </v-app-bar-title>
 
       <template v-slot:append>
         <v-btn
-          class="mr-2 text-sm-body-1 text-md-h7 text-lg-h6 text-xl-h5"
+          class="mr-1 text-sm-body-1 text-md-h7 text-lg-h6 text-xl-h5"
           variant="outlined"
           rounded="lg"
           color="pink"
           width="8vw"
           min-width="80px"
-          height="45px"
+          height="50px"
           @click="activeSingIn"
           >Entrar</v-btn
         >
         <v-btn
           id="gradient-button"
-          class="text-sm-body-1 text-md-h6 text-lg-h5 text-xl-h4"
+          class="mr-12 text-sm-body-1 text-md-h6 text-lg-h5 text-xl-h4"
           dark
           variant="flat"
           rounded="lg"
           width="14vw"
           min-width="100px"
-          height="45px"
+          height="50px"
           @click="activeSingUp"
           >Cadastrar</v-btn
         >
@@ -165,4 +167,5 @@ export default {
 #gradient-button {
   background: linear-gradient(to right, #8e0336, #fb394f);
 }
+
 </style>

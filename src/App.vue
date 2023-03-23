@@ -5,15 +5,12 @@
 <script setup></script>
 
 <style>
-.background {
-  background: rgb(0, 0, 0);
-}
-
 html,
 body {
   height: 100%;
   overflow: auto;
   scroll-behavior: smooth;
+ 
 }
 ::-webkit-scrollbar {
   width: 0px;

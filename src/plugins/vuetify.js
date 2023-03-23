@@ -15,7 +15,6 @@ import { pt } from 'vuetify/locale'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
-  
   locale: {
     locale: 'pt',
     fallback: 'pt',

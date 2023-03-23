@@ -3,12 +3,11 @@
     <v-card class="pa-5" rounded="xl">
       <v-card-title class="text-center text-h5">
         <v-img
-          class="mx-auto mb-5"
-          src="@/assets/img/Multi Plus Streaming.png"
-          max-width="350px"
-          height="50px"
-          min-width="150px"
+          class="mx-auto mb-2"
+          src="@/assets/img/logo.png"
+          height="5vw"
         ></v-img>
+        <p>Entrar no Multi Plus Streaming</p>
       </v-card-title>
       <v-card-text>
         <v-text-field
@@ -37,6 +36,8 @@
           block
           min-width="50px"
           height="40px"
+          to="/home"
+          @click="getToken"
           >LOGIN</v-btn
         >
       </v-row>
@@ -44,7 +45,10 @@
   </v-dialog>
 </template>
 
+
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -54,7 +58,21 @@ export default {
       password: "",
     };
   },
-  methods: {},
+  methods: {
+    getToken() {
+      axios
+        .get(
+          "https://api.themoviedb.org/3/authentication/token/new?api_key=9f9a623c8918bc56839f26a94b5507aa"
+        )
+        .then((response) => {
+          console.log('token',response);
+          localStorage.setItem("jwt", response.data.request_token);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
 };
 </script>
 

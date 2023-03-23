@@ -9,7 +9,7 @@
 
   webFontLoader.load({
     google: {
-      families: ['Yantramanav, sans-serif'],
+      families: ['Yantramanav'],
     },
   })
 }

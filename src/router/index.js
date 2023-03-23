@@ -1,6 +1,7 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
 import Landing from '@/views/LandingPage.vue';
+import Home from '@/views/Home.vue';
 
 const routes = [
   {
@@ -8,11 +9,11 @@ const routes = [
     name: 'Landing',
     component: Landing,
   },
-  // {
-  //   path: '/SingIn',
-  //   name: 'SingIn',
-  //   component: SingIn,
-  // },
+  {
+    path: '/home',
+    name: 'Home',
+    component: Home,
+  },
 ]
 
 const router = createRouter({

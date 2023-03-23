@@ -6,14 +6,14 @@
 
 // Plugins
 import { loadFonts } from './webfontloader'
+import { createPinia } from 'pinia'
 import vuetify from './vuetify'
-import pinia from '../store'
 import router from '../router'
 
 export function registerPlugins (app) {
   loadFonts()
   app
     .use(vuetify)
-    .use(pinia)
+    .use(createPinia())
     .use(router)
 }

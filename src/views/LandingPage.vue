@@ -65,6 +65,7 @@
           <v-col cols="8" class="text-center">
             <span
               class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+              style="font-family: 'Yantramanav', sans-serif !important;"
               >Seus filmes, séries e livros favoritos <br />
               em um só lugar</span
             >
@@ -92,6 +93,7 @@
           <v-col cols="6" class="text-center">
             <span
               class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+              style="font-family: 'Yantramanav', sans-serif !important;"
               >Salve e acompanhe seu <br />
               progresso a cada episódio</span
             >
@@ -120,6 +122,7 @@
           <v-col cols="6" class="text-center">
             <span
               class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+              style="font-family: 'Yantramanav', sans-serif !important;"
               >Veja comentários, <br />resenhas e avaliações</span
             >
             <v-img class="mx-auto mt-5" src="@/assets/img/icon-2.png" width="12vw" />

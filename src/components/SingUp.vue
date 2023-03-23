@@ -23,7 +23,7 @@
                 v$.email.$error ? v$.email.$errors[0].$message : ''
               "
             ></v-text-field>
-            <span class="text-caption text-grey-darken-1">
+            <span class="mt-4 text-caption text-grey-darken-1">
               Este é o e-mail que você usará para acessar sua conta.
             </span>
           </v-card-text>

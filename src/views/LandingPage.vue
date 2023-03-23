@@ -12,7 +12,7 @@
       <v-app-bar-title>
         <v-img
           src="@/assets/img/Multi Plus Streaming.png"
-          max-width="30vw"
+          max-width="350px"
           min-width="200px"
         ></v-img>
       </v-app-bar-title>

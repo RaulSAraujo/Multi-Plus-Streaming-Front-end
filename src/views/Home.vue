@@ -85,7 +85,7 @@
       <v-slide-group
         v-model="model"
         class="pa-4"
-        selected-class="bg-primary"
+        selected-class="bg-grey-darken-3"
         center-active
         show-arrows
       >
@@ -128,7 +128,7 @@
         </v-slide-group-item>
       </v-slide-group>
 
-      <v-expand-transition style="transition-delay: 1s">
+      <v-expand-transition>
         <v-sheet v-if="model != null" class="px-10 pb-5">
           <v-card variant="outlined" rounded="xl">
             <v-row no-gutters>
@@ -380,19 +380,121 @@
   <v-dialog
     v-model="dialog3"
     width="90vw"
-    height="80vh"
+    height="90vh"
     scrim="black"
     scrollable
   >
-    <v-toolbar rounded="t-xl" color="primary">
-      <v-toolbar-title class="text-h5">Detalhes</v-toolbar-title>
-      <v-toolbar-items>
-        <v-btn icon="mdi-close" class="mr-3" @click="dialog3 = false"></v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
+    <v-sheet rounded="xl" elevation="0">
+      <v-img
+        class="mb-5"
+        :src="`https://image.tmdb.org/t/p/original${movieBackdropPath}`"
+        height="320px"
+        cover
+      >
+        <v-card
+          class="pa-4"
+          height="100%"
+          elevation="0"
+          color="rgb(0, 0, 0, 0.8)"
+        >
+          <v-card-title class="text-h4">
+            <v-row no-gutters justify="space-between" align="center">
+              <v-col cols="10" sm="10" md="11" lg="11">
+                <span
+                  class="text-h6 text-sm-subtitle-1 text-md-h4 text-lg-h3 text-xl-h3"
+                  >{{ movieNameTitle }}</span
+                >
+              </v-col>
+              <v-col cols="2" sm="1" md="1" lg="1">
+                <v-avatar
+                  color="green"
+                  variant="outlined"
+                  class="d-none d-md-flex text-body-1"
+                >
+                  {{ movieVoteAverage }}
+                </v-avatar>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-subtitle class="mt-n1 text-white">
+            <v-row no-gutters>
+              <v-icon icon="mdi-calendar-month" flat></v-icon>
 
-    <v-sheet rounded="b-xl" height="80vh" class="pt-5">
-      <span class="ml-12 mt-5 text-h5">Midia</span>
+              <span>
+                {{ formatDate(movieReleaseDate) }}
+              </span>
+
+              <v-icon
+                icon="mdi-ticket-confirmation-outline"
+                class="ml-1"
+                flat
+              ></v-icon>
+
+              <v-breadcrumbs density="compact" divider="," class="py-0 px-0">
+                <v-breadcrumbs-item
+                  v-for="(genres, index) in movieGenres"
+                  :key="index"
+                  class="px-0"
+                >
+                  <span>{{ genres.name }}</span>
+                  <span v-if="movieGenres.length - 1 > index">,</span>
+                </v-breadcrumbs-item>
+              </v-breadcrumbs>
+
+              <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
+
+              <span>{{ formatRuntime(movieRuntime) }}m</span>
+            </v-row>
+          </v-card-subtitle>
+
+          <v-card-text>
+            <v-responsive height="10vh">
+              <p
+                style="
+                  display: -webkit-box;
+                  max-width: 100vw;
+                  -webkit-line-clamp: 4;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+                class="text-body-2"
+              >
+                {{ movieOverview }}
+              </p>
+            </v-responsive>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn
+              class="mt-4 mr-2"
+              variant="plain"
+              prepend-icon="mdi-play-circle"
+              @click="getWatchProviders()"
+              >Assista agora</v-btn
+            >
+            <v-btn class="mt-4 mr-2" variant="plain" prepend-icon="mdi-plus"
+              >Minha lista</v-btn
+            >
+
+            <v-row align="center" justify="end" no-gutters>
+              <span class="mr-2">Avalie:</span>
+              <span class="text-grey-lighten-2 text-caption mr-2">
+                ({{ rating }})
+              </span>
+              <v-rating
+                v-model="rating"
+                color="white"
+                active-color="yellow-accent-4"
+                half-increments
+                hover
+                density="compact"
+              ></v-rating>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </v-img>
+
+      <span class="ml-12 text-h5">Midia</span>
       <v-card elevation="0">
         <v-tabs v-model="tab" class="mx-9">
           <v-tab value="Imagens">Imagens</v-tab>
@@ -573,7 +675,42 @@
         </v-card>
       </v-sheet>
 
-      <span class="ml-12 mt-5 text-h5">Recomendações</span>
+      <v-card v-if="movieBelongsCollection" class="my-5">
+        <v-img
+          :src="`https://image.tmdb.org/t/p/original${movieBelongsCollection.backdrop_path}`"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+          :height="
+            useDisplay.smAndDown
+              ? '50vw'
+              : useDisplay.md
+              ? '8vw'
+              : useDisplay.lg
+              ? '15vw'
+              : useDisplay.xl
+              ? '11vw'
+              : '10vw'
+          "
+          cover
+        >
+          <v-card-title class="text-white">
+            <v-row no-gutters>
+              <span class="text-h5">{{ movieBelongsCollection.name }}</span>
+
+              <v-spacer></v-spacer>
+              <v-btn
+                rounded="xl"
+                variant="outlined"
+                flat
+                @click="getWatchColection()"
+                >MOSTRAR A COLETÂNEA</v-btn
+              >
+            </v-row>
+          </v-card-title>
+        </v-img>
+      </v-card>
+
+      <span class="ml-12 text-h5">Recomendações</span>
       <v-sheet elevation="0" max-width="100%">
         <v-slide-group
           v-model="modelCreditos"
@@ -810,6 +947,16 @@ export default {
       dialog3: false,
       modelCreditos: undefined,
       modelCreditos2: undefined,
+
+      movieNameTitle: "",
+      movieVoteAverage: "",
+      movieBackdropPath: "",
+      movieGenres: [],
+      movieReleaseDate: "",
+      movieRuntime: 0,
+      movieOverview: "",
+      movieBelongsCollection: [],
+
       movieMainCast: [],
       movieTechnicalTeam: [],
       movieReviews: [],
@@ -910,11 +1057,19 @@ export default {
         .get(
           `https://api.themoviedb.org/3/movie/${
             this.moviesPopular[this.model].id
-          }?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=images,videos,similar,recommendations,keywords,reviews,credits&include_image_language=en,null&include_video_language=pt-BR`
+          }?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=images,videos,similar,recommendations,reviews,credits&include_image_language=en,null&include_video_language=pt-BR`
         )
         .then((response) => {
           console.log("MoreDetails", response);
           this.dialog3 = true;
+          this.movieNameTitle = response.data.title;
+          this.movieVoteAverage = response.data.vote_average.toFixed(1);
+          this.movieBackdropPath = response.data.backdrop_path;
+          this.movieGenres = response.data.genres;
+          this.movieReleaseDate = response.data.release_date;
+          this.movieRuntime = response.data.runtime;
+          this.movieOverview = response.data.overview;
+          this.movieBelongsCollection = response.data.belongs_to_collection;
           this.movieMainCast = response.data.credits.cast;
           this.movieTechnicalTeam = response.data.credits.crew;
           this.movieReviews = response.data.reviews.results;

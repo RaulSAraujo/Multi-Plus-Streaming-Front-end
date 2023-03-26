@@ -291,9 +291,9 @@
                       elevation="0"
                     >
                       <v-card-title class="text-white">
-                        <v-row v-if="movieReviews" no-gutters>
+                        <v-row v-if="movieReview" no-gutters>
                           <p class="text-h6">
-                            Resenha de {{ movieReviews.author }}
+                            Resenha de {{ movieReview.author }}
                           </p>
                           <v-spacer></v-spacer>
                           <v-card-subtitle>Veja mais...</v-card-subtitle>
@@ -305,7 +305,7 @@
 
                       <v-card-text>
                         <p
-                          v-if="movieReviews"
+                          v-if="movieReview"
                           style="
                             display: -webkit-box;
                             max-width: 100vw;
@@ -323,7 +323,7 @@
                           "
                           class="text-body-2"
                         >
-                          {{ movieReviews.content }}
+                          {{ movieReview.content }}
                         </p>
                         <v-row v-else justify="center" class="mt-2">
                           <v-icon icon="mdi-emoticon-sad-outline" size="70">
@@ -346,6 +346,7 @@
                           class="mt-4"
                           variant="outlined"
                           prepend-icon="mdi-information"
+                          @click="getMoreDetails()"
                           >Saiba mais</v-btn
                         >
                       </v-col>
@@ -375,6 +376,244 @@
       </v-expand-transition>
     </v-card>
   </div>
+
+  <v-dialog
+    v-model="dialog3"
+    width="90vw"
+    height="80vh"
+    scrim="black"
+    scrollable
+  >
+    <v-toolbar rounded="t-xl" color="primary">
+      <v-toolbar-title class="text-h5">Detalhes</v-toolbar-title>
+      <v-toolbar-items>
+        <v-btn icon="mdi-close" class="mr-3" @click="dialog3 = false"></v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+
+    <v-sheet rounded="b-xl" height="80vh" class="pt-5">
+      <span class="ml-12 mt-5 text-h5">Midia</span>
+      <v-card elevation="0">
+        <v-tabs v-model="tab" class="mx-9">
+          <v-tab value="Imagens">Imagens</v-tab>
+          <v-tab value="Videos">Videos</v-tab>
+          <v-tab value="Pôsteres">Pôsteres</v-tab>
+        </v-tabs>
+
+        <v-card-text>
+          <v-window v-model="tab">
+            <v-window-item value="Imagens">
+              <v-sheet elevation="0" max-width="100%">
+                <v-slide-group
+                  v-model="modelCreditos"
+                  selected-class="bg-success"
+                  show-arrows
+                >
+                  <v-slide-group-item
+                    v-for="backdrops in moviesBackDrops"
+                    :key="backdrops"
+                  >
+                    <v-card
+                      color="grey-lighten-3"
+                      class="ma-4"
+                      height="250"
+                      width="400"
+                    >
+                      <v-img
+                        :src="`https://image.tmdb.org/t/p/w500${backdrops.file_path}`"
+                        height="100%"
+                        cover
+                      ></v-img>
+                    </v-card>
+                  </v-slide-group-item>
+                </v-slide-group>
+              </v-sheet>
+            </v-window-item>
+            <v-window-item value="Videos">
+              <v-sheet elevation="0" max-width="100%">
+                <v-slide-group
+                  v-model="modelCreditos"
+                  selected-class="bg-success"
+                  show-arrows
+                >
+                  <v-slide-group-item
+                    v-for="video in moviesVideos"
+                    :key="video"
+                  >
+                    <v-card
+                      color="grey-lighten-3"
+                      class="ma-4"
+                      width="450"
+                      height="250"
+                    >
+                      <iframe
+                        width="450"
+                        height="250"
+                        :src="`https://www.youtube-nocookie.com/embed/${video.key}`"
+                        frameborder="0"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen
+                      ></iframe>
+                      <!-- <v-img
+                        :src="`https://image.tmdb.org/t/p/w300${videos.file_path}`"
+                        height="100%"
+                        cover
+                      ></v-img> -->
+                    </v-card>
+                  </v-slide-group-item>
+                </v-slide-group>
+              </v-sheet>
+            </v-window-item>
+            <v-window-item value="Pôsteres">
+              <v-sheet elevation="0" max-width="100%">
+                <v-slide-group
+                  v-model="modelCreditos"
+                  selected-class="bg-success"
+                  show-arrows
+                >
+                  <v-slide-group-item
+                    v-for="postes in moviesPostes"
+                    :key="postes"
+                  >
+                    <v-card
+                      color="grey-lighten-3"
+                      class="ma-4"
+                      height="250"
+                      width="150"
+                    >
+                      <v-img
+                        :src="`https://image.tmdb.org/t/p/w300${postes.file_path}`"
+                        height="100%"
+                        cover
+                      ></v-img>
+                    </v-card>
+                  </v-slide-group-item>
+                </v-slide-group>
+              </v-sheet>
+            </v-window-item>
+          </v-window>
+        </v-card-text>
+      </v-card>
+
+      <span class="ml-12 text-h5">Elenco principal</span>
+      <v-sheet class="mx-auto" elevation="0" max-width="100%">
+        <v-slide-group
+          v-model="modelCreditos"
+          class="pa-4"
+          selected-class="bg-success"
+          show-arrows
+        >
+          <v-slide-group-item
+            v-for="cast in movieMainCast"
+            :key="cast"
+            v-slot="{ toggle, selectedClass }"
+          >
+            <v-card
+              color="grey-lighten-3"
+              :class="['ma-4', selectedClass]"
+              height="200"
+              width="170"
+              @click="toggle"
+            >
+              <v-img
+                :src="`https://image.tmdb.org/t/p/w300${cast.profile_path}`"
+                height="130px"
+                cover
+              ></v-img>
+              <v-card-title>{{ cast.name }}</v-card-title>
+              <v-card-subtitle class="mt-n3">{{
+                cast.character
+              }}</v-card-subtitle>
+            </v-card>
+          </v-slide-group-item>
+        </v-slide-group>
+      </v-sheet>
+
+      <span class="ml-12 mt-5 text-h5">Reviews</span>
+      <v-sheet elevation="0" max-width="100% ">
+        <v-slide-group
+          v-model="modelCreditos"
+          v-if="movieReviews.length > 0"
+          class="pa-4"
+          selected-class="bg-success"
+          show-arrows
+        >
+          <v-slide-group-item v-for="review in movieReviews" :key="review">
+            <v-card
+              elevation="12"
+              width="1150"
+              border="sm"
+              rounded="xl"
+              class="ma-5"
+            >
+              <v-card-title class="text-white">
+                <v-row v-if="review" no-gutters>
+                  <p class="text-h6">Resenha de {{ review.author }}</p>
+                </v-row>
+              </v-card-title>
+
+              <v-card-text>
+                <p class="text-body-2">
+                  {{ review.content }}
+                </p>
+              </v-card-text>
+            </v-card>
+          </v-slide-group-item>
+        </v-slide-group>
+
+        <v-card v-else elevation="0">
+          <v-card-title class="text-center text-h5"
+            >Infelizmente este filme não possui resenhas.</v-card-title
+          >
+          <v-card-text>
+            <v-row justify="center" class="mt-2">
+              <v-icon icon="mdi-emoticon-sad-outline" size="70"> </v-icon>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-sheet>
+
+      <span class="ml-12 mt-5 text-h5">Recomendações</span>
+      <v-sheet elevation="0" max-width="100%">
+        <v-slide-group
+          v-model="modelCreditos"
+          class="pa-4"
+          selected-class="bg-success"
+          show-arrows
+        >
+          <v-slide-group-item
+            v-for="recommendation in moviesRecommendations"
+            :key="recommendation"
+          >
+            <v-card
+              color="grey-lighten-3"
+              class="ma-4"
+              height="190"
+              width="270"
+            >
+              <v-img
+                :src="`https://image.tmdb.org/t/p/w300${recommendation.backdrop_path}`"
+                height="120px"
+                cover
+              ></v-img>
+
+              <v-card-title>
+                {{ recommendation.title }}
+              </v-card-title>
+
+              <v-card-subtitle class="mt-n3">
+                <v-responsive height="20px" width="100%">
+                  <div class="text-truncate">
+                    {{ recommendation.overview }}
+                  </div>
+                </v-responsive>
+              </v-card-subtitle>
+            </v-card>
+          </v-slide-group-item>
+        </v-slide-group>
+      </v-sheet>
+    </v-sheet>
+  </v-dialog>
 
   <v-dialog
     v-model="dialog2"
@@ -563,11 +802,23 @@ export default {
       moviesPopular: [],
       moviesDetails: [],
       movieProviders: [],
-      movieReviews: [],
+      movieReview: [],
       rating: 3,
       dialog: false,
       dialog2: false,
       collectionMovies: [],
+      dialog3: false,
+      modelCreditos: undefined,
+      modelCreditos2: undefined,
+      movieMainCast: [],
+      movieTechnicalTeam: [],
+      movieReviews: [],
+      moviesRecommendations: [],
+      tab: null,
+      moviesBackDrops: [],
+      moviesLogos: [],
+      moviesPostes: [],
+      moviesVideos: [],
     };
   },
   created() {
@@ -618,7 +869,7 @@ export default {
         .then((response) => {
           console.log("Detalhes", response);
           this.moviesDetails = response.data;
-          this.movieReviews = response.data.reviews.results[0];
+          this.movieReview = response.data.reviews.results[0];
         })
         .catch((error) => {
           console.log(error);
@@ -649,6 +900,29 @@ export default {
           console.log("Collections", response);
           this.collectionMovies = response.data;
           this.dialog2 = true;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getMoreDetails() {
+      axios
+        .get(
+          `https://api.themoviedb.org/3/movie/${
+            this.moviesPopular[this.model].id
+          }?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=images,videos,similar,recommendations,keywords,reviews,credits&include_image_language=en,null&include_video_language=pt-BR`
+        )
+        .then((response) => {
+          console.log("MoreDetails", response);
+          this.dialog3 = true;
+          this.movieMainCast = response.data.credits.cast;
+          this.movieTechnicalTeam = response.data.credits.crew;
+          this.movieReviews = response.data.reviews.results;
+          this.moviesRecommendations = response.data.recommendations.results;
+          this.moviesBackDrops = response.data.images.backdrops;
+          this.moviesLogos = response.data.images.logos;
+          this.moviesPostes = response.data.images.posters;
+          this.moviesVideos = response.data.videos.results;
         })
         .catch((error) => {
           console.log(error);

@@ -1,12 +1,35 @@
 <template>
-  <router-view />
+  <v-app v-if="$route.path == '/'">
+    <AppBarLandingPage />
+    <router-view />
+  </v-app>
+
+  <v-app v-if="$route.path != '/'">
+    <v-main>
+      <AppBarDefaut />
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
-<script setup></script>
+<script>
+import AppBarLandingPage from "@/components/AppBarLandingPage.vue";
+import AppBarDefaut from "@/components/AppBarDefaut.vue";
+export default {
+  components: {
+    AppBarLandingPage,
+    AppBarDefaut,
+  },
+  data() {
+    return {};
+  },
+  methods: {},
+};
+</script>
 
 <style>
 html * {
-  font-family: 'Yantramanav', sans-serif !important;
+  font-family: "Yantramanav", sans-serif !important;
 }
 
 html,

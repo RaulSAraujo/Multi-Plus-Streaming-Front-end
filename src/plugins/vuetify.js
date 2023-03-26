@@ -12,6 +12,22 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import { pt } from 'vuetify/locale'
 
+const myCustomLightTheme = {
+  dark: true,
+  colors: {
+    background: '#000000',
+    surface: '#212121',
+    primary: '#cc3949',
+    'primary-darken-1': '#fa445c',
+    secondary: '#e03d51',
+    'secondary-darken-1': '#e03d51',
+    error: '#B00020',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FB8C00',
+  }
+}
+
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -21,20 +37,9 @@ export default createVuetify({
     messages: { pt }
   },
   theme: {
-    defaultTheme: 'dark',
+    defaultTheme: 'myCustomLightTheme',
     themes: {
-      colors: {
-        background: '#FFFFFF',
-        surface: '#FFFFFF',
-        primary: '#b52234',
-        'primary-darken-1': '#3700B3',
-        secondary: '#f34156',
-        'secondary-darken-1': '#018786',
-        error: '#B00020',
-        info: '#2196F3',
-        success: '#4CAF50',
-        warning: '#FB8C00',
-      }
+      myCustomLightTheme,
     },
   },
 })

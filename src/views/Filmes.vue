@@ -76,7 +76,7 @@
     </v-carousel>
 
     <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Nos cinemas</h1>
+      <h1 class="ml-10 pt-5 mb-n5">Em cartaz</h1>
       <v-slide-group
         v-model="modelNowPlaying"
         class="pa-4"
@@ -385,7 +385,7 @@
     </v-card>
 
     <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Em cartaz</h1>
+      <h1 class="ml-10 pt-5 mb-n5">Populares</h1>
       <v-slide-group
         v-model="modelPopular"
         class="pa-4"
@@ -694,7 +694,7 @@
     </v-card>
 
     <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Filmes mais votados</h1>
+      <h1 class="ml-10 pt-5 mb-n5">Mais votados</h1>
       <v-slide-group
         v-model="modelTopRated"
         class="pa-4"

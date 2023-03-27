@@ -14,16 +14,16 @@
           min-width="80px"
         ></v-img>
 
-        <v-btn flat variant="plain" size="x-large" class="text-h5 ml-3"
+        <v-btn flat variant="plain" size="x-large" class="text-h5 ml-3" to="/Inicio"
           >Inicio</v-btn
         >
-        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1"
+        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1" to="/Filmes"
           >Filmes</v-btn
         >
-        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1"
+        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1" to="/Series"
           >Séries</v-btn
         >
-        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1"
+        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1" to="/Livros"
           >Livros</v-btn
         >
         <v-spacer></v-spacer>

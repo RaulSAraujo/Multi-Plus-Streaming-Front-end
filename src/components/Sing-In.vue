@@ -36,7 +36,7 @@
           block
           min-width="50px"
           height="40px"
-          to="/home"
+          to="/Inicio"
           @click="getToken"
           >LOGIN</v-btn
         >

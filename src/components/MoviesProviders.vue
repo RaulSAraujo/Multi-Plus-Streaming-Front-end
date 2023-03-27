@@ -110,6 +110,7 @@ export default {
   props: {
     id: Number,
     title: String,
+    tvOrMovie: String
   },
   data() {
     return {
@@ -128,7 +129,7 @@ export default {
     getWatchProviders() {
       axios
         .get(
-          `https://api.themoviedb.org/3/movie/${this.id}/watch/providers?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
+          `https://api.themoviedb.org/3/${this.tvOrMovie}/${this.id}/watch/providers?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
         )
         .then((response) => {
           this.movieProviders = response.data.results.BR;

@@ -362,7 +362,11 @@
               ></v-img>
 
               <v-card-title>
-                {{ recommendation.title }}
+                {{
+                  recommendation.title != undefined
+                    ? recommendation.title
+                    : recommendation.name
+                }}
               </v-card-title>
 
               <v-card-subtitle class="mt-n3">
@@ -383,7 +387,12 @@
       </v-sheet>
     </v-sheet>
 
-    <MoviesProviders ref="MoviesProviders" :id="id" :title="movieNameTitle" />
+    <MoviesProviders
+      ref="MoviesProviders"
+      :id="id"
+      :title="movieNameTitle"
+      :tvOrMovie="tvOrMovie"
+    />
     <MoviesCollection ref="MoviesCollection" :collectionId="collectionId" />
   </v-dialog>
 </template>
@@ -397,6 +406,7 @@ import MoviesCollection from "@/components/MoviesCollection.vue";
 export default {
   props: {
     id: Number,
+    tvOrMovie: String,
   },
   components: {
     MoviesProviders,
@@ -446,11 +456,13 @@ export default {
       this.loading = true;
       axios
         .get(
-          `https://api.themoviedb.org/3/movie/${this.id}?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=images,videos,similar,recommendations,reviews,credits&include_image_language=en,null&include_video_language=pt-BR`
+          `https://api.themoviedb.org/3/${this.tvOrMovie}/${this.id}?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=images,videos,similar,recommendations,reviews,credits&include_image_language=en,null&include_video_language=pt-BR`
         )
         .then((response) => {
           console.log("MoreDetails", response);
-          this.movieNameTitle = response.data.title;
+          this.movieNameTitle = this.tvOrMovie
+            ? response.data.name
+            : response.data.title;
           this.movieVoteAverage = response.data.vote_average.toFixed(1);
           this.movieBackdropPath = response.data.backdrop_path;
           this.movieGenres = response.data.genres;

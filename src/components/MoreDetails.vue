@@ -448,6 +448,7 @@
       :tvOrMovie="tvOrMovie"
     />
     <MoviesCollection ref="MoviesCollection" :collectionId="collectionId" />
+    <Episodios ref="Episodios" :serieId="id" :seasons="seasons" />
   </v-dialog>
 </template>
 
@@ -456,6 +457,7 @@ import axios from "axios";
 import { useDisplay } from "vuetify";
 import WatchProviders from "@/components/WatchProviders.vue";
 import MoviesCollection from "@/components/MoviesCollection.vue";
+import Episodios from './Episodios.vue';
 
 export default {
   props: {
@@ -465,6 +467,7 @@ export default {
   components: {
     WatchProviders,
     MoviesCollection,
+    Episodios,
   },
   data() {
     return {
@@ -498,6 +501,7 @@ export default {
       numberOfSeasons: 0,
       numberOfEpisodes: 0,
       inProduction: false,
+      seasons: [],
     };
   },
   watch: {
@@ -538,6 +542,7 @@ export default {
           this.numberOfSeasons = response.data.number_of_seasons;
           this.numberOfEpisodes = response.data.number_of_episodes;
           this.inProduction = response.data.in_production;
+          this.seasons = response.data.seasons;
           this.loading = false;
         })
         .catch((error) => {
@@ -554,7 +559,7 @@ export default {
       this.$refs.WatchProviders.dialog = true;
     },
     eventEmitEpisodios() {
-      this.$emit("episodios");
+      this.$refs.Episodios.dialog = true;
     },
     formatRuntime(runtime) {
       if (runtime != undefined) {

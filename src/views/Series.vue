@@ -3,12 +3,12 @@
     <v-carousel
       v-model="modelCarousel"
       cycle
-      :height="isHovering ? '600' : '300'"
+      height="420"
       hide-delimiter-background
       hide-delimiters
       show-arrows="hover"
       :interval="isHovering ? 50000 : 6000"
-      @click="isHovering = true"
+      @mouseenter="isHovering = true"
       @mouseleave="isHovering = false"
     >
       <v-carousel-item
@@ -35,11 +35,11 @@
         </v-responsive>
 
         <v-card
-          :height="isHovering ? '230px' : '180px'"
+          height="180px"
           width="100%"
           elevation="0"
           color="rgb(0, 0, 0,0.4)"
-          class="mx-auto"
+          class="mx-auto pl-12"
           :title="movies.name"
         >
           <v-card-text>
@@ -50,7 +50,7 @@
               v-else
               style="
                 display: -webkit-box;
-                max-width: 100vw;
+                max-width: 50vw;
                 -webkit-line-clamp: 2;
                 -webkit-box-orient: vertical;
                 overflow: hidden;

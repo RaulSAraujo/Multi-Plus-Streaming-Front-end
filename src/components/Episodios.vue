@@ -23,7 +23,7 @@
           <v-row>
             <v-col v-for="(season, i) in seasons" :key="i" cols="12">
               <v-item v-slot="{ isSelected, toggle }">
-                <v-banner
+                <!-- <v-banner
                   class="my-4"
                   rounded="xl"
                   elevation="8"
@@ -53,12 +53,53 @@
                   </v-banner-text>
 
                   <template v-slot:actions>
+                   
+                  </template>
+                </v-banner> -->
+
+                <v-card
+                  elevation="5"
+                  border="sm"
+                  rounded="xl"
+                  height="250"
+                  class="ma-3"
+                >
+                  <v-img
+                    v-if="season.poster_path"
+                    :src="`https://image.tmdb.org/t/p/original${season.poster_path}`"
+                    :alt="season.name"
+                    gradient="to bottom, rgba(0,0,0,.9), rgba(0,0,0,.5)"
+                    cover
+                  >
+                    <v-card-title>{{ season.name }}</v-card-title>
+                    <v-card-subtitle class="mt-n1">
+                      {{
+                        season.air_date != "" ? formatDate(season.air_date) : ""
+                      }}
+                    </v-card-subtitle>
+                    <v-card-text>
+                      <p
+                        style="
+                          display: -webkit-box;
+                          max-width: 100vw;
+                          -webkit-line-clamp: 5;
+                          -webkit-box-orient: vertical;
+                          overflow: hidden;
+                        "
+                        class="text-body-2"
+                      >
+                        {{ season.overview }}
+                      </p>
+                    </v-card-text>
+                  </v-img>
+                  <v-row class="mt-n12 mr-2" no-gutters justify="end">
                     <v-btn
+                      variant="plain"
                       :icon="isSelected ? 'mdi-chevron-up' : 'mdi-chevron-down'"
                       @click="toggle"
                     ></v-btn>
-                  </template>
-                </v-banner>
+                  </v-row>
+                </v-card>
 
                 <v-expand-transition>
                   <div v-show="isSelected">

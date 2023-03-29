@@ -59,7 +59,11 @@
                   <v-icon icon="mdi-calendar-month" flat></v-icon>
 
                   <span>
-                    {{ formatDate(details.release_date) }}
+                    {{
+                      tvOrMovie == "movie"
+                        ? formatDate(details.release_date)
+                        : formatDate(details.first_air_date)
+                    }}
                   </span>
 
                   <v-icon
@@ -83,20 +87,25 @@
                     </v-breadcrumbs-item>
                   </v-breadcrumbs>
 
-                  <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
+                  <v-responsive v-if="tvOrMovie == 'movie'">
+                    <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
+                    <span
+                      >{{
+                        details.runtime ? formatRuntime(details.runtime) : ""
+                      }}m</span
+                    >
+                  </v-responsive>
 
-                  <span v-if="tvOrMovie == 'movie'"
-                    >{{
-                      details.runtime ? formatRuntime(details.runtime) : ""
-                    }}m</span
-                  >
-                  <span v-else
-                    >{{
-                      details.episode_run_time
-                        ? formatRuntime(details.episode_run_time[0]) 
-                        : ""
-                    }}m</span
-                  >
+                  <v-responsive v-else-if="details.episode_run_time">
+                    <v-icon v-if="details.episode_run_time[0]" icon="mdi-timer-sand" class="ml-1" flat></v-icon>
+                    <span v-if="details.episode_run_time[0]"
+                      >{{
+                        details.episode_run_time
+                          ? formatRuntime(details.episode_run_time[0])
+                          : ""
+                      }}m</span
+                    >
+                  </v-responsive>
                 </v-row>
               </v-card-subtitle>
 
@@ -190,19 +199,21 @@
                       <v-row no-gutters align="start" justify="space-between">
                         <v-col>
                           <span class="text-caption text-grey">
-                            {{ details.number_of_episodes }} episódios 
+                            {{ details.number_of_episodes }} episódios
                             {{ details.in_production ? "/ Em produção" : "" }}
                           </span>
                         </v-col>
                         <v-col cols="4" sm="2" md="2" lg="2">
-                          <v-btn variant="plain" @click="eventEmitEpisodios">Ver Episódios</v-btn>
+                          <v-btn variant="plain" @click="eventEmitEpisodios"
+                            >Ver Episódios</v-btn
+                          >
                         </v-col>
                       </v-row>
                     </v-card>
                   </v-img>
                 </v-card>
 
-                <!-- <v-card
+                <v-card
                   v-else
                   :height="
                     useDisplay.smAndDown
@@ -257,7 +268,7 @@
                       </v-icon>
                     </v-row>
                   </v-card-text>
-                </v-card> -->
+                </v-card>
               </v-card-text>
 
               <v-card-actions>
@@ -334,8 +345,8 @@ export default {
     eventEmitMoreDetails() {
       this.$emit("eventMoreDetails");
     },
-    eventEmitEpisodios(){
-      this.$emit('episodios')
+    eventEmitEpisodios() {
+      this.$emit("episodios");
     },
     formatAverage(voteAverage) {
       if (voteAverage != undefined) {

@@ -9,7 +9,7 @@
     <v-card
       rounded="xl"
       border="sm"
-      :image="`https://image.tmdb.org/t/p/original${collectionMovies.backdrop_path}`"
+      color="black"
     >
       <v-card-title style="background: rgb(0, 0, 0, 0.9)" class="text-h5 py-4">
         <v-row no-gutters>
@@ -24,9 +24,47 @@
         </v-row>
       </v-card-title>
       <v-card-text>
-        <v-banner
+        <v-card
           v-for="parts in collectionMovies.parts"
           :key="parts"
+          elevation="5"
+          border="sm"
+          rounded="xl"
+          height="250"
+          class="ma-3"
+        >
+          <v-img
+            :src="`https://image.tmdb.org/t/p/original${parts.poster_path}`"
+            gradient="to bottom, rgba(0,0,0,.9), rgba(0,0,0,.5)"
+            cover
+          >
+            <v-card-title>{{ parts.title }}</v-card-title>
+            <v-card-subtitle class="mt-n1">
+              {{
+                parts.release_date != "" ? formatDate(parts.release_date) : ""
+              }}</v-card-subtitle
+            >
+            <v-card-text>
+              <p
+                style="
+                  display: -webkit-box;
+                  max-width: 100vw;
+                  -webkit-line-clamp: 5;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+                class="text-body-2"
+              >
+                {{ parts.overview }}
+              </p>
+            </v-card-text>
+          </v-img>
+          <v-row class="mt-n9" no-gutters justify="end">
+            <v-btn variant="plain">Ver mais</v-btn>
+          </v-row>
+        </v-card>
+
+        <!-- <v-banner
           class="my-4"
           rounded="xl"
           elevation="8"
@@ -59,7 +97,7 @@
           <template v-slot:actions>
             <v-btn color="primary" variant="plain">Veja mais</v-btn>
           </template>
-        </v-banner>
+        </v-banner> -->
       </v-card-text>
     </v-card>
   </v-dialog>

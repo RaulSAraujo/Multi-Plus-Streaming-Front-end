@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="50vw" scrim="black">
+  <v-dialog v-model="dialog" min-width="300" max-width="500" scrim="black">
     <v-card rounded="xl">
       <v-card-title class="text-h6 font-weight-regular justify-space-between">
         <span>{{ currentTitle }}</span>

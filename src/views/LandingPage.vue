@@ -18,7 +18,7 @@
       <v-row align="center" justify="center">
         <v-col cols="8" class="text-center">
           <span
-            class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+            class="text-h6 text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
             style="font-family: 'Yantramanav', sans-serif !important"
             >Seus filmes, séries e livros favoritos <br />
             em um só lugar</span
@@ -46,7 +46,7 @@
       <v-row align="start" justify="start">
         <v-col cols="6" class="text-center">
           <span
-            class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+            class="text-h6 text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
             style="font-family: 'Yantramanav', sans-serif !important"
             >Salve e acompanhe seu <br />
             progresso a cada episódio</span
@@ -55,6 +55,7 @@
             class="mx-auto mt-5"
             src="@/assets/img/icon-1.png"
             width="12vw"
+            min-width="80px"
           />
         </v-col>
       </v-row>
@@ -79,7 +80,7 @@
       <v-row align="center" justify="end">
         <v-col cols="6" class="text-center">
           <span
-            class="text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+            class="text-h6 text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
             style="font-family: 'Yantramanav', sans-serif !important"
             >Veja comentários, <br />resenhas e avaliações</span
           >
@@ -87,6 +88,7 @@
             class="mx-auto mt-5"
             src="@/assets/img/icon-2.png"
             width="12vw"
+            min-width="80px"
           />
         </v-col>
       </v-row>

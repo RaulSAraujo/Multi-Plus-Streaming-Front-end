@@ -148,8 +148,8 @@
         </v-tabs>
 
         <v-card-text>
-          <v-window v-model="tab">
-            <v-window-item value="Imagens">
+          <v-window v-model="tab" :touch="true" disabled>
+            <v-window-item value="Imagens" disabled>
               <v-sheet elevation="0" max-width="100%">
                 <v-slide-group
                   v-model="modelBackDrops"

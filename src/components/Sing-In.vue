@@ -1,13 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" width="40vw" scrim="black">
+  <v-dialog v-model="dialog" min-width="300" max-width="380" scrim="black">
     <v-card class="pa-5" rounded="xl">
       <v-card-title class="text-center text-h5">
         <v-img
           class="mx-auto mb-2"
           src="@/assets/img/logo.png"
-          height="5vw"
+          height="80px"
         ></v-img>
-        <p>Entrar no Multi Plus Streaming</p>
+        <p class="text-subtitle-1 text-sm-h6 text-md-h6 text-lg-h6 text-xl-h6">Entrar no Multi Plus Streaming</p>
       </v-card-title>
       <v-card-text>
         <v-text-field

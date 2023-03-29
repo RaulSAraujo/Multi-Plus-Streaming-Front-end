@@ -6,7 +6,7 @@
     scroll-target="#scrolling-techniques"
   >
     <v-app-bar-title>
-      <v-row no-gutters>
+      <v-row v-if="!useDisplay.smAndDown" no-gutters align="center">
         <v-img
           class="ml-12"
           src="@/assets/img/logo.png"
@@ -14,16 +14,36 @@
           min-width="80px"
         ></v-img>
 
-        <v-btn flat variant="plain" size="x-large" class="text-h5 ml-3" to="/Inicio"
+        <v-btn
+          flat
+          variant="plain"
+          size="x-large"
+          class="text-h5 ml-3"
+          to="/Inicio"
           >Inicio</v-btn
         >
-        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1" to="/Filmes"
+        <v-btn
+          flat
+          variant="plain"
+          size="x-large"
+          class="text-h5 mx-1"
+          to="/Filmes"
           >Filmes</v-btn
         >
-        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1" to="/Series"
+        <v-btn
+          flat
+          variant="plain"
+          size="x-large"
+          class="text-h5 mx-1"
+          to="/Series"
           >Séries</v-btn
         >
-        <v-btn flat variant="plain" size="x-large" class="text-h5 mx-1" to="/Livros"
+        <v-btn
+          flat
+          variant="plain"
+          size="x-large"
+          class="text-h5 mx-1"
+          to="/Livros"
           >Livros</v-btn
         >
         <v-spacer></v-spacer>
@@ -75,8 +95,112 @@
           </v-card>
         </v-menu>
       </v-row>
+
+      <v-row v-else no-gutters align="center">
+        <v-app-bar-nav-icon
+          variant="text"
+          @click.stop="drawer = !drawer"
+        ></v-app-bar-nav-icon>
+
+        <v-spacer></v-spacer>
+
+        <v-img
+          class="ml-12"
+          src="@/assets/img/logo.png"
+          max-width="80px"
+          min-width="80px"
+        ></v-img>
+        <v-spacer></v-spacer>
+
+        <v-menu
+          location="bottom"
+          :width="useDisplay.xs ? '100%' : '50%'"
+          :close-on-content-click="false"
+        >
+          <template v-slot:activator="{ props }">
+            <v-icon icon="mdi-magnify" color="primary" v-bind="props"></v-icon>
+          </template>
+          <v-card>
+            <v-card-text>
+              <v-text-field
+                v-model="search"
+                density="compact"
+                variant="solo"
+                single-line
+                hide-details
+                color="black"
+                bg-color="white"
+                clear-icon="mdi-close-circle"
+                clearable
+                append-icon="mdi-magnify"
+                label="Pesquisar"
+                type="text"
+                @click:append="searchMovie"
+                @keypress.enter="searchMovie"
+              ></v-text-field>
+            </v-card-text>
+          </v-card>
+        </v-menu>
+
+        <v-menu min-width="200px" rounded>
+          <template v-slot:activator="{ props }">
+            <v-btn icon v-bind="props" class="mx-4">
+              <v-avatar color="grey" size="large" icon="mdi-account">
+              </v-avatar>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-text>
+              <div class="mx-auto text-center">
+                <v-avatar
+                  color="grey"
+                  size="large"
+                  icon="mdi-account"
+                  class="mb-2"
+                >
+                </v-avatar>
+                <h3>Raul Silva Araujo</h3>
+                <p class="text-caption mt-1">raul.araujo.2000@hotmail.com</p>
+                <v-divider class="my-3"></v-divider>
+                <v-btn rounded variant="text"> Editar conta </v-btn>
+                <v-divider class="my-3"></v-divider>
+                <v-btn rounded variant="text"> Desconectar </v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-menu>
+      </v-row>
     </v-app-bar-title>
   </v-app-bar>
+
+  <v-navigation-drawer v-model="drawer" location="left" temporary>
+    <v-list nav>
+      <v-list-item to="/Inicio">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-home"></v-icon>
+        </template>
+        <v-list-item-title>Inicio</v-list-item-title>
+      </v-list-item>
+      <v-list-item to="/Filmes">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-movie-open-outline"></v-icon>
+        </template>
+        <v-list-item-title>Filmes</v-list-item-title>
+      </v-list-item>
+      <v-list-item to="/Series">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-youtube-tv"></v-icon>
+        </template>
+        <v-list-item-title>Series</v-list-item-title>
+      </v-list-item>
+      <v-list-item to="/Livros">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-book-open-variant"></v-icon>
+        </template>
+        <v-list-item-title>Livros</v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 
   <v-dialog
     v-model="dialog"
@@ -101,56 +225,82 @@
         </v-row>
       </v-card-title>
       <v-card-text>
-        <v-banner
+        <v-card
           v-for="movies in resultSearch"
           :key="movies"
-          class="my-4"
-          rounded="xl"
-          elevation="8"
+          elevation="5"
           border="sm"
-          style="background: rgb(0, 0, 0, 0.9)"
+          rounded="xl"
+          height="250"
+          class="ma-3"
         >
-          <template v-slot:prepend>
-            <v-avatar size="130">
-              <v-img
-                v-if="movies.poster_path"
-                :src="`https://image.tmdb.org/t/p/w200${movies.poster_path}`"
-                :alt="movies.title"
-                cover
-              ></v-img>
-              <v-icon v-else icon="mdi-cancel" size="80"></v-icon>
-            </v-avatar>
-          </template>
-
-          <v-banner-text>
-            <p class="text-h6">{{ movies.title }}</p>
-            <p class="text-caption-2">
+          <v-img
+            :src="`https://image.tmdb.org/t/p/original${movies.poster_path}`"
+            gradient="to bottom, rgba(0,0,0,.9), rgba(0,0,0,.5)"
+            cover
+          >
+            <v-card-title>{{ movies.title }}</v-card-title>
+            <v-card-subtitle class="mt-n1">
               {{
                 movies.release_date != "" ? formatDate(movies.release_date) : ""
-              }}
-            </p>
-            <span class="text-body-1">{{ movies.overview }}</span>
-          </v-banner-text>
-
-          <template v-slot:actions>
-            <v-btn color="primary" variant="plain">Veja mais</v-btn>
-          </template>
-        </v-banner>
+              }}</v-card-subtitle
+            >
+            <v-card-text>
+              <p
+                style="
+                  display: -webkit-box;
+                  max-width: 100vw;
+                  -webkit-line-clamp: 5;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+                class="text-body-2"
+              >
+                {{ movies.overview }}
+              </p>
+            </v-card-text>
+          </v-img>
+          <v-row class="mt-n9" no-gutters justify="end">
+            <v-btn variant="plain">Ver mais</v-btn>
+          </v-row>
+        </v-card>
       </v-card-text>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import { useDisplay } from "vuetify";
 import axios from "axios";
 export default {
   data() {
     return {
+      useDisplay: useDisplay(),
       dialog: false,
       search: "",
       page: 1,
       resultSearch: [],
       totalResults: 0,
+
+      drawer: false,
+      items: [
+        {
+          title: "Foo",
+          value: "foo",
+        },
+        {
+          title: "Bar",
+          value: "bar",
+        },
+        {
+          title: "Fizz",
+          value: "fizz",
+        },
+        {
+          title: "Buzz",
+          value: "buzz",
+        },
+      ],
     };
   },
   methods: {

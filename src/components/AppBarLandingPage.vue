@@ -3,18 +3,18 @@
     style="backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px)"
     color="rgb(0, 0, 0, 0.0)"
     elevation="0"
-    height="120"
+    :height="!useDisplay.xs ? '120' : '70'"
   >
     <v-app-bar-title>
       <v-img
-        class="ml-12"
+        :class="!useDisplay.xs ? 'ml-12' : ''"
         src="@/assets/img/logo.png"
-        max-width="150px"
-        min-width="150px"
+        :max-width="!useDisplay.xs ? '150px' : '80px'"
+        min-width="80px"
       ></v-img>
     </v-app-bar-title>
 
-    <template v-slot:append>
+    <template v-slot:append v-if="!useDisplay.xs">
       <v-btn
         class="mr-1 text-sm-body-1 text-md-h7 text-lg-h6 text-xl-h5"
         variant="outlined"
@@ -39,6 +39,36 @@
         >Cadastrar</v-btn
       >
     </template>
+
+    <template v-slot:append v-else>
+      <v-menu >
+        <template v-slot:activator="{ props }">
+          <v-icon v-bind="props" icon="mdi-menu" size="35"></v-icon>
+        </template>
+
+        <v-card rounded="xl">
+          <v-card-text>
+            <div class="mx-auto text-center">
+              <v-btn
+                variant="text"
+                rounded="lg"
+                color="primary"
+                @click="activeSingIn"
+                >Entrar</v-btn
+              >
+              <v-divider></v-divider>
+              <v-btn
+                variant="text"
+                rounded="lg"
+                color="primary"
+                @click="activeSingUp"
+                >Cadastrar</v-btn
+              >
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-menu>
+    </template>
   </v-app-bar>
 
   <SingUp ref="SingUp" />
@@ -48,13 +78,17 @@
 <script>
 import SingUp from "@/components/SingUp.vue";
 import SingIn from "@/components/Sing-In.vue";
+import { useDisplay } from "vuetify";
+
 export default {
   components: {
     SingUp,
     SingIn,
   },
   data() {
-    return {};
+    return {
+      useDisplay: useDisplay(),
+    };
   },
   methods: {
     activeSingUp() {

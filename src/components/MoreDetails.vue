@@ -24,7 +24,7 @@
     <v-sheet v-else rounded="xl" elevation="0">
       <v-img
         class="mb-5"
-        :src="`https://image.tmdb.org/t/p/original${movieBackdropPath}`"
+        :src="`https://image.tmdb.org/t/p/original${backdropPath}`"
         height="320px"
         cover
       >
@@ -39,7 +39,7 @@
               <v-col cols="10" sm="10" md="11" lg="11">
                 <span
                   class="text-h6 text-sm-subtitle-1 text-md-h4 text-lg-h3 text-xl-h3"
-                  >{{ movieNameTitle }}</span
+                  >{{ nameTitle }}</span
                 >
               </v-col>
               <v-col cols="2" sm="1" md="1" lg="1">
@@ -48,7 +48,7 @@
                   variant="outlined"
                   class="d-none d-md-flex text-body-1"
                 >
-                  {{ movieVoteAverage }}
+                  {{ voteAverage }}
                 </v-avatar>
               </v-col>
             </v-row>
@@ -58,7 +58,7 @@
               <v-icon icon="mdi-calendar-month" flat></v-icon>
 
               <span>
-                {{ movieReleaseDate != "" ? formatDate(movieReleaseDate) : "" }}
+                {{ releaseDate != "" ? formatDate(releaseDate) : "" }}
               </span>
 
               <v-icon
@@ -69,18 +69,18 @@
 
               <v-breadcrumbs density="compact" divider="," class="py-0 px-0">
                 <v-breadcrumbs-item
-                  v-for="(genres, index) in movieGenres"
+                  v-for="(genres, index) in genres"
                   :key="index"
                   class="px-0"
                 >
                   <span>{{ genres.name }}</span>
-                  <span v-if="movieGenres.length - 1 > index">,</span>
+                  <span v-if="genres.length - 1 > index">,</span>
                 </v-breadcrumbs-item>
               </v-breadcrumbs>
 
               <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
 
-              <span>{{ formatRuntime(movieRuntime) }}m</span>
+              <span>{{ formatRuntime(runtime) }}m</span>
             </v-row>
           </v-card-subtitle>
 
@@ -96,7 +96,7 @@
                 "
                 class="text-body-2"
               >
-                {{ movieOverview }}
+                {{ overview }}
               </p>
             </v-responsive>
           </v-card-text>
@@ -149,7 +149,7 @@
                   show-arrows
                 >
                   <v-slide-group-item
-                    v-for="backdrops in moviesBackDrops"
+                    v-for="backdrops in backDrops"
                     :key="backdrops"
                   >
                     <v-card
@@ -175,10 +175,7 @@
                   selected-class="bg-success"
                   show-arrows
                 >
-                  <v-slide-group-item
-                    v-for="video in moviesVideos"
-                    :key="video"
-                  >
+                  <v-slide-group-item v-for="video in videos" :key="video">
                     <v-card
                       color="grey-lighten-3"
                       class="ma-4"
@@ -205,10 +202,7 @@
                   selected-class="bg-success"
                   show-arrows
                 >
-                  <v-slide-group-item
-                    v-for="postes in moviesPostes"
-                    :key="postes"
-                  >
+                  <v-slide-group-item v-for="postes in postes" :key="postes">
                     <v-card
                       color="grey-lighten-3"
                       class="ma-4"
@@ -238,7 +232,7 @@
           show-arrows
         >
           <v-slide-group-item
-            v-for="cast in movieMainCast"
+            v-for="cast in mainCast"
             :key="cast"
             v-slot="{ toggle, selectedClass }"
           >
@@ -264,18 +258,18 @@
       </v-sheet>
 
       <span class="ml-12 mt-5 text-h5">Reviews</span>
-      <v-sheet elevation="0" max-width="100% ">
+      <v-sheet elevation="0" max-width="100%">
         <v-slide-group
           v-model="modelReviews"
-          v-if="movieReviews.length > 0"
+          v-if="reviews.length > 0"
           class="pa-4"
           selected-class="bg-success"
           show-arrows
         >
-          <v-slide-group-item v-for="review in movieReviews" :key="review">
+          <v-slide-group-item v-for="review in reviews" :key="review">
             <v-card
               elevation="12"
-              width="1150"
+              width="600"
               border="sm"
               rounded="xl"
               class="ma-5"
@@ -301,7 +295,54 @@
         </v-card>
       </v-sheet>
 
-      <v-card v-if="movieBelongsCollection" class="my-5">
+      <v-card v-if="tvOrMovie == 'tv'" class="my-5">
+        <v-img
+          :src="`https://image.tmdb.org/t/p/original${backdropPath}`"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+          :height="
+            useDisplay.smAndDown
+              ? '50vw'
+              : useDisplay.md
+              ? '8vw'
+              : useDisplay.lg
+              ? '13vw'
+              : useDisplay.xl
+              ? '11vw'
+              : '10vw'
+          "
+          cover
+        >
+          <v-card
+            color="rgb(0,0,0,0.4)"
+            density="compact"
+            rounded="t-xl"
+            class="px-3"
+          >
+            <v-row no-gutters align="start" justify="space-between">
+              <v-col>
+                <span class="text-h6"
+                  >Temporadas
+                  {{ numberOfSeasons }}
+                </span>
+              </v-col>
+            </v-row>
+            <v-row no-gutters align="start" justify="space-between">
+              <v-col>
+                <span class="text-caption text-grey">
+                  {{ numberOfEpisodes }} episódios /
+                  {{ inProduction ? "Em produção" : "" }}
+                </span>
+              </v-col>
+              <v-col cols="4" sm="2" md="2" lg="2">
+                <v-btn variant="plain">Ver Episódios</v-btn>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-img>
+      </v-card>
+
+      <v-card v-if="tvOrMovie == 'movie' && movieBelongsCollection" class="my-5">
         <v-img
           :src="`https://image.tmdb.org/t/p/original${movieBelongsCollection.backdrop_path}`"
           class="align-end"
@@ -339,14 +380,14 @@
       <span class="ml-12 text-h5">Recomendações</span>
       <v-sheet elevation="0" max-width="100%">
         <v-slide-group
-          v-if="moviesRecommendations.length > 0"
+          v-if="recommendations.length > 0"
           v-model="modelRecommendations"
           class="pa-4"
           selected-class="bg-success"
           show-arrows
         >
           <v-slide-group-item
-            v-for="recommendation in moviesRecommendations"
+            v-for="recommendation in recommendations"
             :key="recommendation"
           >
             <v-card
@@ -387,10 +428,10 @@
       </v-sheet>
     </v-sheet>
 
-    <MoviesProviders
-      ref="MoviesProviders"
+    <WatchProviders
+      ref="WatchProviders"
       :id="id"
-      :title="movieNameTitle"
+      :title="nameTitle"
       :tvOrMovie="tvOrMovie"
     />
     <MoviesCollection ref="MoviesCollection" :collectionId="collectionId" />
@@ -400,7 +441,7 @@
 <script>
 import axios from "axios";
 import { useDisplay } from "vuetify";
-import MoviesProviders from "@/components/MoviesProviders.vue";
+import WatchProviders from "@/components/WatchProviders.vue";
 import MoviesCollection from "@/components/MoviesCollection.vue";
 
 export default {
@@ -409,7 +450,7 @@ export default {
     tvOrMovie: String,
   },
   components: {
-    MoviesProviders,
+    WatchProviders,
     MoviesCollection,
   },
   data() {
@@ -424,24 +465,26 @@ export default {
       modelPostes: undefined,
       modelBackDrops: undefined,
       modelMainCast: undefined,
-      movieNameTitle: "",
-      movieVoteAverage: "",
-      movieBackdropPath: "",
-      movieGenres: [],
-      movieReleaseDate: "",
-      movieRuntime: 0,
-      movieOverview: "",
-      movieBelongsCollection: [],
-      movieMainCast: [],
-      movieTechnicalTeam: [],
-      movieReviews: [],
-      moviesRecommendations: [],
-      tab: null,
-      moviesBackDrops: [],
-      moviesLogos: [],
-      moviesPostes: [],
-      moviesVideos: [],
+      nameTitle: "",
+      voteAverage: "",
+      backdropPath: "",
+      genres: [],
+      releaseDate: "",
+      runtime: 0,
+      overview: "",
       collectionId: 0,
+      movieBelongsCollection: [],
+      mainCast: [],
+      reviews: [],
+      recommendations: [],
+      tab: null,
+      backDrops: [],
+      logos: [],
+      postes: [],
+      videos: [],
+      numberOfSeasons: 0,
+      numberOfEpisodes: 0,
+      inProduction: false,
     };
   },
   watch: {
@@ -460,24 +503,28 @@ export default {
         )
         .then((response) => {
           console.log("MoreDetails", response);
-          this.movieNameTitle = this.tvOrMovie
-            ? response.data.name
-            : response.data.title;
-          this.movieVoteAverage = response.data.vote_average.toFixed(1);
-          this.movieBackdropPath = response.data.backdrop_path;
-          this.movieGenres = response.data.genres;
-          this.movieReleaseDate = response.data.release_date;
-          this.movieRuntime = response.data.runtime;
-          this.movieOverview = response.data.overview;
+          this.nameTitle =
+            this.tvOrMovie == "tv" ? response.data.name : response.data.title;
+          this.voteAverage = response.data.vote_average.toFixed(1);
+          this.backdropPath = response.data.backdrop_path;
+          this.genres = response.data.genres;
+          this.releaseDate = response.data.release_date;
+          this.runtime =
+            this.tvOrMovie == "movie"
+              ? response.data.runtime
+              : response.data.episode_run_time[0];
+          this.overview = response.data.overview;
           this.movieBelongsCollection = response.data.belongs_to_collection;
-          this.movieMainCast = response.data.credits.cast;
-          this.movieTechnicalTeam = response.data.credits.crew;
-          this.movieReviews = response.data.reviews.results;
-          this.moviesRecommendations = response.data.recommendations.results;
-          this.moviesBackDrops = response.data.images.backdrops;
-          this.moviesLogos = response.data.images.logos;
-          this.moviesPostes = response.data.images.posters;
-          this.moviesVideos = response.data.videos.results;
+          this.mainCast = response.data.credits.cast;
+          this.reviews = response.data.reviews.results;
+          this.recommendations = response.data.recommendations.results;
+          this.backDrops = response.data.images.backdrops;
+          this.logos = response.data.images.logos;
+          this.postes = response.data.images.posters;
+          this.videos = response.data.videos.results;
+          this.numberOfSeasons = response.data.number_of_seasons;
+          this.numberOfEpisodes = response.data.number_of_episodes;
+          this.inProduction = response.data.in_production;
           this.loading = false;
         })
         .catch((error) => {
@@ -491,7 +538,7 @@ export default {
       }, 100);
     },
     eventWatchProviders() {
-      this.$refs.MoviesProviders.dialog = true;
+      this.$refs.WatchProviders.dialog = true;
     },
     formatRuntime(runtime) {
       if (runtime != undefined) {

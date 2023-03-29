@@ -12,7 +12,7 @@
       @mouseleave="isHovering = false"
     >
       <v-carousel-item
-        v-for="(movies, index) in moviesUpcoming"
+        v-for="(movies, index) in seriesOnTheAir"
         :key="index"
         :src="`https://image.tmdb.org/t/p/original${
           movies.backdrop_path != null
@@ -40,7 +40,7 @@
           elevation="0"
           color="rgb(0, 0, 0,0.4)"
           class="mx-auto"
-          :title="movies.title"
+          :title="movies.name"
         >
           <v-card-text>
             <p v-if="isHovering" class="text-body-2">
@@ -75,17 +75,17 @@
       </v-carousel-item>
     </v-carousel>
 
-    <v-card class="mx-auto" elevation="8">
-      <h1 class="ml-10 pt-5 mb-n5">Series populares</h1>
+    <v-card class="mx-auto">
+      <h1 class="ml-10 pt-5 mb-n5">Populares</h1>
       <v-slide-group
-        v-model="model"
+        v-model="modelPopular"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
         show-arrows
       >
         <v-slide-group-item
-          v-for="(nowPlay, index) in seriesPopular"
+          v-for="(popular, index) in seriesPopular"
           :key="index"
           v-slot="{ toggle, selectedClass }"
         >
@@ -97,19 +97,19 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${nowPlay.backdrop_path}`"
+              :src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
               height="120px"
               cover
             ></v-img>
 
             <v-card-title>
-              {{ nowPlay.name }}
+              {{ popular.name }}
             </v-card-title>
 
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ nowPlay.overview }}
+                  {{ popular.overview }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -123,182 +123,138 @@
         </v-slide-group-item>
       </v-slide-group>
 
-      <v-expand-transition>
-        <v-sheet v-if="model != null" class="px-10 pb-5">
-          <v-card variant="outlined" rounded="xl">
-            <v-row no-gutters>
-              <v-col cols="12" sm="12" md="3" lg="3" xl="2">
-                <v-img
-                  :src="`https://image.tmdb.org/t/p/w300${seriesDetails.poster_path}`"
-                  class="align-end"
-                  gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)"
-                  cover
-                >
-                  <v-list-item
-                    class="mb-3 text-white"
-                    title="Assista agora"
-                    subtitle="Stream, Alugar, Comprar"
-                    @click="
-                      eventWatchProviders(
-                        this.seriesPopular[this.model].id,
-                        this.seriesPopular[this.model].name
-                      )
-                    "
-                  >
-                    <template v-slot:prepend>
-                      <v-icon icon="mdi-play-circle" size="40"></v-icon>
-                    </template>
-                  </v-list-item>
-                </v-img>
-              </v-col>
-              <v-col cols="12" sm="12" md="9" lg="9" xl="10">
-                <v-card class="pa-4" height="100%" elevation="0">
-                  <v-card-title class="text-h4">
-                    <v-row no-gutters justify="space-between" align="center">
-                      <v-col cols="10" sm="10" md="11" lg="11">
-                        <span
-                          class="text-h6 text-sm-subtitle-1 text-md-h4 text-lg-h3 text-xl-h3"
-                          >{{ seriesDetails.name }}</span
-                        >
-                      </v-col>
-                      <v-col cols="2" sm="1" md="1" lg="1">
-                        <v-avatar
-                          color="green"
-                          variant="outlined"
-                          class="d-none d-md-flex text-body-1"
-                        >
-                          {{ seriesPopular[model].vote_average }}
-                        </v-avatar>
+      <ExpandCardDetails
+        :tvOrMovie="'tv'"
+        :model="modelPopular"
+        :details="seriesDetails"
+        @eventWatchProviders="
+          eventWatchProviders(seriesDetails.id, seriesDetails.name)
+        "
+        @eventMoreDetails="eventMoreDetails(seriesDetails.id)"
+      />
+    </v-card>
 
-                        <v-avatar
-                          color="green"
-                          variant="outlined"
-                          size="small"
-                          class="d-flex d-md-none text-subtitle-2"
-                        >
-                          {{ seriesPopular[model].vote_average }}
-                        </v-avatar>
-                      </v-col>
-                    </v-row>
-                  </v-card-title>
-                  <v-card-subtitle class="mt-n2">
-                    <v-row no-gutters>
-                      <v-icon icon="mdi-calendar-month" flat></v-icon>
+    <v-card class="mx-auto">
+      <h1 class="ml-10 pt-5 mb-n5">Mais votados</h1>
+      <v-slide-group
+        v-model="modelTopRated"
+        class="pa-4"
+        selected-class="bg-grey-darken-3"
+        center-active
+        show-arrows
+      >
+        <v-slide-group-item
+          v-for="(topRated, index) in seriesTopRated"
+          :key="index"
+          v-slot="{ toggle, selectedClass }"
+        >
+          <v-card
+            color="black/80"
+            :class="['ma-4', selectedClass]"
+            height="220"
+            width="270"
+            @click="toggle"
+          >
+            <v-img
+              :src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
+              height="120px"
+              cover
+            ></v-img>
 
-                      <span>
-                        {{ formatDate(seriesDetails.release_date) }}
-                      </span>
+            <v-card-title>
+              {{ topRated.name }}
+            </v-card-title>
 
-                      <v-icon
-                        icon="mdi-ticket-confirmation-outline"
-                        class="ml-1"
-                        flat
-                      ></v-icon>
+            <v-card-subtitle class="mt-n3">
+              <v-responsive height="20px" width="100%">
+                <div class="text-truncate">
+                  {{ topRated.overview }}
+                </div>
+              </v-responsive>
+            </v-card-subtitle>
 
-                      <v-breadcrumbs
-                        density="compact"
-                        divider=","
-                        class="py-0 px-0"
-                      >
-                        <v-breadcrumbs-item
-                          v-for="(genres, index) in seriesDetails.genres"
-                          :key="index"
-                          class="px-0"
-                        >
-                          <span>{{ genres.name }}</span>
-                          <span
-                            v-if="seriesDetails.genres.length - 1 > index"
-                          ></span>
-                        </v-breadcrumbs-item>
-                      </v-breadcrumbs>
-
-                      <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
-
-                      <span>{{ seriesDetails.in_production }}</span>
-                    </v-row>
-                  </v-card-subtitle>
-
-                  <v-card-text>
-                    <p
-                      style="
-                        display: -webkit-box;
-                        max-width: 100vw;
-                        -webkit-line-clamp: 4;
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                      "
-                      class="text-body-2"
-                    >
-                      {{ seriesDetails.overview }}
-                    </p>
-
-                    <v-card
-                      :height="
-                        useDisplay.smAndDown
-                          ? '20vw'
-                          : useDisplay.md
-                          ? '8vw'
-                          : useDisplay.lg
-                          ? '15vw'
-                          : useDisplay.xl
-                          ? '11vw'
-                          : '10vw'
-                      "
-                      class="mt-2 mx-n5"
-                      rounded="lg"
-                      elevation="0"
-                    >
-                    </v-card>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-row justify="space-between" align="center">
-                      <v-col cols="12" sm="7" md="6" lg="5" xl="4">
-                        <v-btn
-                          class="mt-4 mr-2"
-                          variant="outlined"
-                          prepend-icon="mdi-plus"
-                          >Minha lista</v-btn
-                        >
-                        <v-btn
-                          class="mt-4"
-                          variant="outlined"
-                          prepend-icon="mdi-information"
-                          @click="
-                            eventMoreDetails(this.seriesPopular[this.model].id)
-                          "
-                          >Saiba mais</v-btn
-                        >
-                      </v-col>
-                      <v-col cols="12" sm="4" md="4" lg="4" xl="2">
-                        <v-row align="center" no-gutters>
-                          <span class="mr-2">Avalie:</span>
-                          <span class="text-grey-lighten-2 text-caption mr-2">
-                            ({{ rating }})
-                          </span>
-                          <v-rating
-                            v-model="rating"
-                            color="white"
-                            active-color="yellow-accent-4"
-                            half-increments
-                            hover
-                            density="compact"
-                          ></v-rating>
-                        </v-row>
-                      </v-col>
-                    </v-row>
-                  </v-card-actions>
-                </v-card>
-              </v-col>
-            </v-row>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-icon icon="mdi-menu-down" color="grey" />
+              <v-spacer></v-spacer>
+            </v-card-actions>
           </v-card>
-        </v-sheet>
-      </v-expand-transition>
+        </v-slide-group-item>
+      </v-slide-group>
+
+      <ExpandCardDetails
+        :tvOrMovie="'tv'"
+        :model="modelTopRated"
+        :details="seriesDetails"
+        @eventWatchProviders="
+          eventWatchProviders(seriesDetails.id, seriesDetails.name)
+        "
+        @eventMoreDetails="eventMoreDetails(seriesDetails.id)"
+      />
+    </v-card>
+
+    <v-card class="mx-auto">
+      <h1 class="ml-10 pt-5 mb-n5">No ar</h1>
+      <v-slide-group
+        v-model="modelAiringToday"
+        class="pa-4"
+        selected-class="bg-grey-darken-3"
+        center-active
+        show-arrows
+      >
+        <v-slide-group-item
+          v-for="(airingToday, index) in seriesAiringToday"
+          :key="index"
+          v-slot="{ toggle, selectedClass }"
+        >
+          <v-card
+            color="black/80"
+            :class="['ma-4', selectedClass]"
+            height="220"
+            width="270"
+            @click="toggle"
+          >
+            <v-img
+              :src="`https://image.tmdb.org/t/p/w300${airingToday.backdrop_path}`"
+              height="120px"
+              cover
+            ></v-img>
+
+            <v-card-title>
+              {{ airingToday.name }}
+            </v-card-title>
+
+            <v-card-subtitle class="mt-n3">
+              <v-responsive height="20px" width="100%">
+                <div class="text-truncate">
+                  {{ airingToday.overview }}
+                </div>
+              </v-responsive>
+            </v-card-subtitle>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-icon icon="mdi-menu-down" color="grey" />
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-slide-group-item>
+      </v-slide-group>
+
+      <ExpandCardDetails
+        :tvOrMovie="'tv'"
+        :model="modelAiringToday"
+        :details="seriesDetails"
+        @eventWatchProviders="
+          eventWatchProviders(seriesDetails.id, seriesDetails.name)
+        "
+        @eventMoreDetails="eventMoreDetails(seriesDetails.id)"
+      />
     </v-card>
   </div>
 
-  <MoviesProviders
-    ref="MoviesProviders"
+  <WatchProviders
+    ref="WatchProviders"
     :id="movieId"
     :title="movieTitle"
     :tvOrMovie="'tv'"
@@ -312,23 +268,28 @@ import { useLoginStore } from "@/store/LoginStore";
 import { useDisplay } from "vuetify";
 
 import MoreDetails from "@/components/MoreDetails.vue";
-import MoviesProviders from "@/components/MoviesProviders.vue";
+import WatchProviders from "@/components/WatchProviders.vue";
+import ExpandCardDetails from "@/components/ExpandCardDetails.vue";
 
 export default {
   components: {
     MoreDetails,
-    MoviesProviders,
+    WatchProviders,
+    ExpandCardDetails,
   },
   data() {
     return {
       useDisplay: useDisplay(),
       loginStore: useLoginStore(),
       modelCarousel: 0,
-      model: undefined,
-      moviesUpcoming: [],
+      seriesOnTheAir: [],
       seriesPopular: [],
+      modelPopular: undefined,
+      seriesTopRated: [],
+      modelTopRated: undefined,
+      seriesAiringToday: [],
+      modelAiringToday: undefined,
       seriesDetails: [],
-      movieReview: [],
       rating: 3,
       movieId: 0,
       movieTitle: "",
@@ -337,31 +298,49 @@ export default {
     };
   },
   created() {
-    this.getFilmesLancamentos();
-    this.getFilmesPopular();
+    this.getSeriesOnTheAir();
+    this.getSeriesPopular();
+    this.getSeriesTopRated();
+    this.getSeriesAiringToday();
   },
   watch: {
-    model(val) {
+    modelPopular(val) {
       if (val != undefined) {
-        this.getDetailsMovies();
+        this.modelTopRated = undefined;
+        this.modelAiringToday = undefined;
+        this.getDetailsSeries(this.seriesPopular[this.modelPopular].id);
+      }
+    },
+    modelTopRated(val) {
+      if (val != undefined) {
+        this.modelPopular = undefined;
+        this.modelAiringToday = undefined;
+        this.getDetailsSeries(this.seriesTopRated[this.modelTopRated].id);
+      }
+    },
+    modelAiringToday(val) {
+      if (val != undefined) {
+        this.modelPopular = undefined;
+        this.modelTopRated = undefined;
+        this.getDetailsSeries(this.seriesAiringToday[this.modelAiringToday].id);
       }
     },
   },
   methods: {
-    getFilmesLancamentos() {
+    getSeriesOnTheAir() {
       axios
         .get(
           "https://api.themoviedb.org/3/tv/on_the_air?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
         )
         .then((response) => {
-          console.log("Lancamentos", response);
-          this.moviesUpcoming = response.data.results;
+          console.log("No ar", response);
+          this.seriesOnTheAir = response.data.results;
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    getFilmesPopular() {
+    getSeriesPopular() {
       axios
         .get(
           "https://api.themoviedb.org/3/tv/popular?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
@@ -374,17 +353,40 @@ export default {
           console.log(error);
         });
     },
-    getDetailsMovies() {
+    getSeriesTopRated() {
       axios
         .get(
-          `https://api.themoviedb.org/3/tv/${
-            this.seriesPopular[this.model].id
-          }?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=reviews`
+          "https://api.themoviedb.org/3/tv/top_rated?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
+        )
+        .then((response) => {
+          console.log("topRated", response);
+          this.seriesTopRated = response.data.results;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getSeriesAiringToday() {
+      axios
+        .get(
+          "https://api.themoviedb.org/3/tv/airing_today?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
+        )
+        .then((response) => {
+          console.log("AiringToday", response);
+          this.seriesAiringToday = response.data.results;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getDetailsSeries(id) {
+      axios
+        .get(
+          `https://api.themoviedb.org/3/tv/${id}?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=reviews`
         )
         .then((response) => {
           console.log("Detalhes", response);
           this.seriesDetails = response.data;
-          this.movieReview = response.data.reviews.results[0];
         })
         .catch((error) => {
           console.log(error);
@@ -394,7 +396,7 @@ export default {
       this.movieId = id;
       this.movieTitle = title;
       setTimeout(() => {
-        this.$refs.MoviesProviders.dialog = true;
+        this.$refs.WatchProviders.dialog = true;
       }, 100);
     },
     eventMoreDetails(id) {
@@ -418,6 +420,10 @@ export default {
       return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(
         date
       );
+    },
+    formatDateMin(dateString) {
+      const date = dateString != undefined ? new Date(dateString) : "";
+      return new Intl.DateTimeFormat("pt-Br").format(date);
     },
   },
   computed: {

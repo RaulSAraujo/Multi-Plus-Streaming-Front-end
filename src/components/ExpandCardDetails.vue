@@ -195,7 +195,7 @@
                           </span>
                         </v-col>
                         <v-col cols="4" sm="2" md="2" lg="2">
-                          <v-btn variant="plain">Ver Episódios</v-btn>
+                          <v-btn variant="plain" @click="eventEmitEpisodios">Ver Episódios</v-btn>
                         </v-col>
                       </v-row>
                     </v-card>
@@ -333,6 +333,9 @@ export default {
     },
     eventEmitMoreDetails() {
       this.$emit("eventMoreDetails");
+    },
+    eventEmitEpisodios(){
+      this.$emit('episodios')
     },
     formatAverage(voteAverage) {
       if (voteAverage != undefined) {

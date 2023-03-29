@@ -130,6 +130,7 @@
         @eventWatchProviders="
           eventWatchProviders(seriesDetails.id, seriesDetails.name)
         "
+        @episodios="eventEpisodios(seriesDetails.id, seriesDetails.seasons)"
         @eventMoreDetails="eventMoreDetails(seriesDetails.id)"
       />
     </v-card>
@@ -189,6 +190,7 @@
         @eventWatchProviders="
           eventWatchProviders(seriesDetails.id, seriesDetails.name)
         "
+        @episodios="eventEpisodios(seriesDetails.id, seriesDetails.seasons)"
         @eventMoreDetails="eventMoreDetails(seriesDetails.id)"
       />
     </v-card>
@@ -248,6 +250,7 @@
         @eventWatchProviders="
           eventWatchProviders(seriesDetails.id, seriesDetails.name)
         "
+        @episodios="eventEpisodios(seriesDetails.id, seriesDetails.seasons)"
         @eventMoreDetails="eventMoreDetails(seriesDetails.id)"
       />
     </v-card>
@@ -259,7 +262,8 @@
     :title="movieTitle"
     :tvOrMovie="'tv'"
   />
-  <MoreDetails ref="MoreDetails" :id="movieId" :tvOrMovie="'tv'" />
+  <MoreDetails ref="MoreDetails" :id="movieId" :tvOrMovie="'tv'" @episodios="eventEpisodios(seriesDetails.id, seriesDetails.seasons)" />
+  <Episodios ref="Episodios" :serieId="serieId" :seasons="seasons" />
 </template>
 
 <script>
@@ -270,12 +274,14 @@ import { useDisplay } from "vuetify";
 import MoreDetails from "@/components/MoreDetails.vue";
 import WatchProviders from "@/components/WatchProviders.vue";
 import ExpandCardDetails from "@/components/ExpandCardDetails.vue";
+import Episodios from "@/components/Episodios.vue";
 
 export default {
   components: {
     MoreDetails,
     WatchProviders,
     ExpandCardDetails,
+    Episodios,
   },
   data() {
     return {
@@ -295,6 +301,8 @@ export default {
       movieTitle: "",
       collectionId: 0,
       isHovering: false,
+      serieId: 0,
+      seasons: [],
     };
   },
   created() {
@@ -404,6 +412,11 @@ export default {
       setTimeout(() => {
         this.$refs.MoreDetails.dialog = true;
       }, 100);
+    },
+    eventEpisodios(id, seasons) {
+      this.serieId = id;
+      this.seasons = seasons;
+      this.$refs.Episodios.dialog = true;
     },
     formatRuntime(runtime) {
       if (runtime != undefined) {

@@ -34,7 +34,15 @@
           elevation="0"
           color="rgb(0, 0, 0, 0.8)"
         >
-          <v-card-title class="text-h4">
+          <template v-slot:append>
+            <v-btn
+              icon="mdi-close"
+              variant="plain"
+              @click="dialog = false"
+            ></v-btn>
+          </template>
+
+          <v-card-title class="text-h4 mt-n4">
             <v-row no-gutters justify="space-between" align="center">
               <v-col cols="10" sm="10" md="11" lg="11">
                 <span
@@ -85,7 +93,7 @@
           </v-card-subtitle>
 
           <v-card-text>
-            <v-responsive height="10vh">
+            <v-responsive height="4vh">
               <p
                 style="
                   display: -webkit-box;
@@ -335,14 +343,19 @@
                 </span>
               </v-col>
               <v-col cols="4" sm="2" md="2" lg="2">
-                <v-btn variant="plain">Ver Episódios</v-btn>
+                <v-btn variant="plain" @click="eventEmitEpisodios()"
+                  >Ver Episódios</v-btn
+                >
               </v-col>
             </v-row>
           </v-card>
         </v-img>
       </v-card>
 
-      <v-card v-if="tvOrMovie == 'movie' && movieBelongsCollection" class="my-5">
+      <v-card
+        v-if="tvOrMovie == 'movie' && movieBelongsCollection"
+        class="my-5"
+      >
         <v-img
           :src="`https://image.tmdb.org/t/p/original${movieBelongsCollection.backdrop_path}`"
           class="align-end"
@@ -539,6 +552,9 @@ export default {
     },
     eventWatchProviders() {
       this.$refs.WatchProviders.dialog = true;
+    },
+    eventEmitEpisodios() {
+      this.$emit("episodios");
     },
     formatRuntime(runtime) {
       if (runtime != undefined) {

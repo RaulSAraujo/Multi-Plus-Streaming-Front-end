@@ -194,68 +194,6 @@
         @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
       />
     </v-card>
-
-    <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Mais votados</h1>
-      <v-slide-group
-        v-model="modelTopRated"
-        class="pa-4"
-        selected-class="bg-grey-darken-3"
-        center-active
-        show-arrows
-      >
-        <v-slide-group-item
-          v-for="(topRated, index) in moviesTopRated"
-          :key="index"
-          v-slot="{ toggle, selectedClass }"
-        >
-          <v-card
-            color="black/80"
-            :class="['ma-4', selectedClass]"
-            height="220"
-            width="270"
-            @click="toggle"
-          >
-            <v-img
-              :src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
-              height="120px"
-              cover
-            ></v-img>
-
-            <v-card-title>
-              {{ topRated.title }}
-            </v-card-title>
-
-            <v-card-subtitle class="mt-n3">
-              <v-responsive height="20px" width="100%">
-                <div class="text-truncate">
-                  {{ topRated.overview }}
-                </div>
-              </v-responsive>
-            </v-card-subtitle>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-icon icon="mdi-menu-down" color="grey" />
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-slide-group-item>
-      </v-slide-group>
-
-      <ExpandCardDetails
-        :tvOrMovie="'movie'"
-        :model="modelTopRated"
-        :details="moviesDetails"
-        @eventWatchProviders="
-          eventWatchProviders(moviesDetails.id, moviesDetails.title)
-        "
-        @eventWatchColection="
-          eventWatchColection(moviesDetails.belongs_to_collection.id)
-        "
-        @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
-      />
-    </v-card>
   </div>
 
   <MoviesCollection ref="MoviesCollection" :collectionId="collectionId" />

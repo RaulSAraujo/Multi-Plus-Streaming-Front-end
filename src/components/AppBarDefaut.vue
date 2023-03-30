@@ -62,8 +62,8 @@
             append-icon="mdi-magnify"
             label="Pesquisar"
             type="text"
-            @click:append="searchMovie"
-            @keypress.enter="searchMovie"
+            @click:append="searchMulti"
+            @keypress.enter="searchMulti"
           ></v-text-field>
         </v-responsive>
 
@@ -135,8 +135,8 @@
                 append-icon="mdi-magnify"
                 label="Pesquisar"
                 type="text"
-                @click:append="searchMovie"
-                @keypress.enter="searchMovie"
+                @click:append="searchMulti"
+                @keypress.enter="searchMulti"
               ></v-text-field>
             </v-card-text>
           </v-card>
@@ -239,7 +239,7 @@
             gradient="to bottom, rgba(0,0,0,.9), rgba(0,0,0,.5)"
             cover
           >
-            <v-card-title>{{ movies.title }}</v-card-title>
+            <v-card-title>{{ movies.title != undefined ? movies.title : movies.name }}</v-card-title>
             <v-card-subtitle class="mt-n1">
               {{
                 movies.release_date != "" ? formatDate(movies.release_date) : ""
@@ -304,11 +304,11 @@ export default {
     };
   },
   methods: {
-    searchMovie() {
+    searchMulti() {
       if (this.search != "") {
         axios
           .get(
-            `https://api.themoviedb.org/3/search/movie?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&page=${this.page}&query=${this.search}`
+            `https://api.themoviedb.org/3/search/multi?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR&page=${this.page}&query=${this.search}`
           )
           .then((response) => {
             console.log("Search", response);

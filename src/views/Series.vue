@@ -12,12 +12,12 @@
       @mouseleave="isHovering = false"
     >
       <v-carousel-item
-        v-for="(movies, index) in seriesOnTheAir"
+        v-for="(series, index) in seriesOnTheAir"
         :key="index"
         :src="`https://image.tmdb.org/t/p/original${
-          movies.backdrop_path != null
-            ? movies.backdrop_path
-            : movies.poster_path
+          series.backdrop_path != null
+            ? series.backdrop_path
+            : series.poster_path
         }`"
         cover
         class="justify-center align-end"
@@ -40,14 +40,10 @@
           elevation="0"
           color="rgb(0, 0, 0,0.4)"
           class="mx-auto pl-12"
-          :title="movies.name"
+          :title="series.name"
         >
           <v-card-text>
-            <p v-if="isHovering" class="text-body-2">
-              {{ movies.overview }}
-            </p>
-            <p
-              v-else
+           <p
               style="
                 display: -webkit-box;
                 max-width: 50vw;
@@ -57,9 +53,9 @@
               "
               class="text-body-2"
             >
-              {{ movies.overview }}
+              {{ series.overview }}
             </p>
-
+            
             <v-btn class="mt-4 mr-2" variant="outlined" prepend-icon="mdi-plus"
               >Minha lista</v-btn
             >
@@ -67,7 +63,7 @@
               class="mt-4"
               variant="outlined"
               prepend-icon="mdi-information"
-              @click="eventMoreDetails(movies.id)"
+              @click="eventMoreDetails(series.id)"
               >Saiba mais</v-btn
             >
           </v-card-text>

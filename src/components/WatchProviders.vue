@@ -1,8 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" width="70vw" scrim="black">
-    <v-card width="100%" rounded="xl" append-icon="">
+  <v-dialog
+    v-model="dialog"
+    :width="!useDisplay.xs ? '70vw' : ''"
+    :fullscreen="useDisplay.xs"
+    scrim="black"
+  >
+    <v-card width="100%" :rounded="!useDisplay.xs ? 'xl' : ''">
       <template v-slot:title>
-        <span class="text-h5">{{ this.title }} </span>
+        <span :class="!useDisplay.xs ? 'text-h5' : ''">{{ this.title }} </span>
       </template>
 
       <template v-slot:subtitle>
@@ -30,7 +35,7 @@
             md="2"
             lg="1"
           >
-            <v-avatar rounded="lg" size="65">
+            <v-avatar rounded="lg" :size="!useDisplay.xs ? '65' : '50'">
               <v-img
                 :src="`https://image.tmdb.org/t/p/w300${providers.logo_path}`"
                 :alt="providers.provider_name"
@@ -55,7 +60,7 @@
             md="2"
             lg="1"
           >
-            <v-avatar rounded="lg" size="65">
+            <v-avatar rounded="lg" :size="!useDisplay.xs ? '65' : '50'">
               <v-img
                 :src="`https://image.tmdb.org/t/p/w300${providers.logo_path}`"
                 :alt="providers.provider_name"
@@ -63,7 +68,11 @@
             </v-avatar>
           </v-col>
         </v-row>
-        <p v-else>Infelizmente {{this.tvOrMovie == 'movie' ? 'este filme' : 'esta serie'}} não esta disponivel para alugar.</p>
+        <p v-else>
+          Infelizmente
+          {{ this.tvOrMovie == "movie" ? "este filme" : "esta serie" }} não esta
+          disponivel para alugar.
+        </p>
 
         <span class="text-h5">Comprar</span>
         <v-row
@@ -81,7 +90,7 @@
             md="2"
             lg="1"
           >
-            <v-avatar rounded="lg" size="65">
+            <v-avatar rounded="lg" :size="!useDisplay.xs ? '65' : '50'">
               <v-img
                 :src="`https://image.tmdb.org/t/p/w300${providers.logo_path}`"
                 :alt="providers.provider_name"
@@ -89,14 +98,20 @@
             </v-avatar>
           </v-col>
         </v-row>
-        <p v-else>Infelizmente {{this.tvOrMovie == 'movie' ? 'este filme' : 'esta serie'}} não esta disponivel para compra.</p>
+        <p v-else>
+          Infelizmente
+          {{ this.tvOrMovie == "movie" ? "este filme" : "esta serie" }} não esta
+          disponivel para compra.
+        </p>
       </v-card-text>
 
       <v-card-text v-else>
         <div class="d-flex flex-column justify-center align-center mb-5">
           <v-icon icon="mdi-alert-circle" size="50"></v-icon>
-          <p class="text-h6">
-            Infelizmente {{this.tvOrMovie == 'movie' ? 'este filme' : 'esta serie'}} não esta disponivel no Brasil.
+          <p :class="!useDisplay.xs ? 'text-h6' : 'text-center'">
+            Infelizmente
+            {{ this.tvOrMovie == "movie" ? "este filme" : "esta serie" }} não
+            esta disponivel no Brasil.
           </p>
         </div>
       </v-card-text>
@@ -106,16 +121,18 @@
 
 <script>
 import axios from "axios";
+import { useDisplay } from "vuetify";
 export default {
   props: {
     id: Number,
     title: String,
-    tvOrMovie: String
+    tvOrMovie: String,
   },
   data() {
     return {
       dialog: false,
       movieProviders: [],
+      useDisplay: useDisplay(),
     };
   },
   watch: {

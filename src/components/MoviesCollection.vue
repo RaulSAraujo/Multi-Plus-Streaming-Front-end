@@ -2,18 +2,19 @@
   <v-dialog
     v-model="dialog"
     scrollable
-    height="70vh"
-    width="80vw"
+    :height="!useDisplay.xs ? '70vh' : ''"
+    :width="!useDisplay.xs ? '80vw' : ''"
     scrim="black"
+    :fullscreen="useDisplay.xs"
   >
     <v-card
-      rounded="xl"
+      :rounded="!useDisplay.xs ? 'xl' : ''"
       border="sm"
       color="black"
     >
       <v-card-title style="background: rgb(0, 0, 0, 0.9)" class="text-h5 py-4">
         <v-row no-gutters>
-          <span class="text-h4"> {{ collectionMovies.name }}</span>
+          <span :class="!useDisplay.xs ? 'text-h4' : ''"> {{ collectionMovies.name }}</span>
           <v-spacer></v-spacer>
           <v-icon
             icon="mdi-close"
@@ -30,7 +31,7 @@
           elevation="5"
           border="sm"
           rounded="xl"
-          height="250"
+          :height="!useDisplay.xs ? '250' : '300'"
           class="ma-3"
         >
           <v-img
@@ -63,41 +64,6 @@
             <v-btn variant="plain">Ver mais</v-btn>
           </v-row>
         </v-card>
-
-        <!-- <v-banner
-          class="my-4"
-          rounded="xl"
-          elevation="8"
-          border="sm"
-          style="background: rgb(0, 0, 0, 0.9)"
-        >
-          <template v-slot:prepend>
-            <v-avatar size="130">
-              <v-img
-                v-if="parts.poster_path"
-                :src="`https://image.tmdb.org/t/p/w200${parts.poster_path}`"
-                :alt="parts.title"
-                cover
-              ></v-img>
-              <v-icon v-else icon="mdi-cancel" size="80"></v-icon>
-            </v-avatar>
-          </template>
-
-          <v-banner-text>
-            <p class="text-h6">{{ parts.title }}</p>
-
-            <p class="text-caption-2">
-              {{
-                parts.release_date != "" ? formatDate(parts.release_date) : ""
-              }}
-            </p>
-            <span class="text-body-1">{{ parts.overview }}</span>
-          </v-banner-text>
-
-          <template v-slot:actions>
-            <v-btn color="primary" variant="plain">Veja mais</v-btn>
-          </template>
-        </v-banner> -->
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -105,6 +71,7 @@
 
 <script>
 import axios from "axios";
+import { useDisplay } from "vuetify";
 export default {
   props: {
     collectionId: Number,
@@ -113,6 +80,7 @@ export default {
     return {
       dialog: false,
       collectionMovies: [],
+      useDisplay: useDisplay(),
     };
   },
   watch: {

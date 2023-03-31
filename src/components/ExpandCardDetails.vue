@@ -1,6 +1,9 @@
 <template>
   <v-expand-transition>
-    <v-sheet v-if="model != null" class="px-10 pb-5">
+    <v-sheet
+      v-if="model != null"
+      :class="!useDisplay.xs ? 'px-10 pb-5' : 'px-2 '"
+    >
       <v-card variant="outlined" rounded="xl">
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="3" lg="3" xl="2">
@@ -24,30 +27,36 @@
           </v-col>
           <v-col cols="12" sm="12" md="9" lg="9" xl="10">
             <v-card class="pa-4" height="100%" elevation="0">
-              <v-card-title class="text-h4">
+              <v-card-title>
                 <v-row no-gutters justify="space-between" align="center">
                   <v-col cols="10" sm="10" md="11" lg="11">
-                    <span
-                      class="text-h6 text-sm-subtitle-1 text-md-h4 text-lg-h3 text-xl-h3"
-                      >{{
-                        tvOrMovie == "movie" ? details.title : details.name
-                      }}</span
-                    >
+                    <v-responsive>
+                      <div class="text-truncate mr-2">
+                        <span
+                          class="text-xs-subtitle-1 text-sm-h5 text-md-h4 text-lg-h3 text-xl-h3"
+                          >{{
+                            tvOrMovie == "movie" ? details.title : details.name
+                          }}</span
+                        >
+                      </div>
+                    </v-responsive>
                   </v-col>
                   <v-col cols="2" sm="1" md="1" lg="1">
                     <v-avatar
+                      v-if="!useDisplay.xs"
                       color="green"
                       variant="outlined"
-                      class="d-none d-md-flex text-body-1"
+                      class="text-body-1"
                     >
                       {{ formatAverage(details.vote_average) }}
                     </v-avatar>
 
                     <v-avatar
+                      v-else
                       color="green"
                       variant="outlined"
-                      size="small"
-                      class="d-flex d-md-none text-subtitle-2"
+                      size="x-small"
+                      class="text-caption"
                     >
                       {{ formatAverage(details.vote_average) }}
                     </v-avatar>
@@ -55,8 +64,8 @@
                 </v-row>
               </v-card-title>
               <v-card-subtitle class="mt-n2">
-                <v-row no-gutters>
-                  <v-icon icon="mdi-calendar-month" flat></v-icon>
+                <v-row v-if="!useDisplay.xs" no-gutters align="center">
+                  <v-icon class="mr-1" icon="mdi-calendar-month" flat></v-icon>
 
                   <span>
                     {{
@@ -68,7 +77,7 @@
 
                   <v-icon
                     icon="mdi-ticket-confirmation-outline"
-                    class="ml-1"
+                    class="mx-1"
                     flat
                   ></v-icon>
 
@@ -83,12 +92,12 @@
                       class="px-0"
                     >
                       <span>{{ genres.name }}</span>
-                      <span v-if="details.genres.length - 1 > index"></span>
+                      <span v-if="details.genres.length - 1 > index">/</span>
                     </v-breadcrumbs-item>
                   </v-breadcrumbs>
 
                   <v-responsive v-if="tvOrMovie == 'movie'">
-                    <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
+                    <v-icon icon="mdi-timer-sand" class="mx-1" flat></v-icon>
                     <span
                       >{{
                         details.runtime ? formatRuntime(details.runtime) : ""
@@ -100,7 +109,7 @@
                     <v-icon
                       v-if="details.episode_run_time[0]"
                       icon="mdi-timer-sand"
-                      class="ml-1"
+                      class="mx-1"
                       flat
                     ></v-icon>
                     <span v-if="details.episode_run_time[0]"
@@ -111,6 +120,76 @@
                       }}m</span
                     >
                   </v-responsive>
+                </v-row>
+                <v-row v-else no-gutters align="center" class="text-caption">
+                  <v-col cols="12">
+                    <v-icon
+                      class="mr-1"
+                      icon="mdi-calendar-month"
+                      flat
+                      size="15"
+                    ></v-icon>
+
+                    <span>
+                      {{
+                        tvOrMovie == "movie"
+                          ? formatDate(details.release_date)
+                          : formatDate(details.first_air_date)
+                      }}
+                    </span>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-row no-gutters align="center">
+                      <v-icon
+                        icon="mdi-ticket-confirmation-outline"
+                        class="mr-1"
+                        flat
+                      ></v-icon>
+
+                      <v-breadcrumbs
+                        density="compact"
+                        divider=","
+                        class="py-0 px-0"
+                      >
+                        <v-breadcrumbs-item
+                          v-for="(genres, index) in details.genres"
+                          :key="index"
+                          class="px-0"
+                        >
+                          <span>{{ genres.name }}</span>
+                          <span v-if="details.genres.length - 1 > index"
+                            >/</span
+                          >
+                        </v-breadcrumbs-item>
+                      </v-breadcrumbs>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-responsive v-if="tvOrMovie == 'movie'">
+                      <v-icon icon="mdi-timer-sand" class="mr-1" flat></v-icon>
+                      <span
+                        >{{
+                          details.runtime ? formatRuntime(details.runtime) : ""
+                        }}m</span
+                      >
+                    </v-responsive>
+
+                    <v-responsive v-else-if="details.episode_run_time">
+                      <v-icon
+                        v-if="details.episode_run_time[0]"
+                        icon="mdi-timer-sand"
+                        class="mx-1"
+                        flat
+                      ></v-icon>
+                      <span v-if="details.episode_run_time[0]"
+                        >{{
+                          details.episode_run_time
+                            ? formatRuntime(details.episode_run_time[0])
+                            : ""
+                        }}m</span
+                      >
+                    </v-responsive>
+                  </v-col>
                 </v-row>
               </v-card-subtitle>
 
@@ -123,7 +202,7 @@
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                   "
-                  class="text-body-2"
+                  class="'text-body-2'"
                 >
                   {{ details.overview }}
                 </p>
@@ -151,18 +230,22 @@
                     cover
                   >
                     <v-card-title class="text-white">
-                      <v-row no-gutters>
-                        <span class="text-h5">{{
-                          details.belongs_to_collection.name
-                        }}</span>
+                      <v-row no-gutters justify="space-between">
+                        <span
+                          :class="!useDisplay.xs ? 'text-h5' : 'text-body-2'"
+                          >{{ details.belongs_to_collection.name }}</span
+                        >
 
-                        <v-spacer></v-spacer>
                         <v-btn
                           rounded="xl"
-                          variant="outlined"
+                          variant="plain"
                           flat
+                          :class="
+                            !useDisplay.xs ? 'text-overline' : 'text-overline'
+                          "
+                          :size="!useDisplay.xs ? '' : 'x-small'"
                           @click="eventEmitWatchColection()"
-                          >MOSTRAR A COLETÂNEA</v-btn
+                          >VER COLETÂNEA</v-btn
                         >
                       </v-row>
                     </v-card-title>
@@ -170,7 +253,11 @@
                 </v-card>
 
                 <v-card
-                  v-if="tvOrMovie == 'movie' && !details.belongs_to_collection"
+                  v-if="
+                    tvOrMovie == 'movie' &&
+                    !details.belongs_to_collection &&
+                    !useDisplay.xs
+                  "
                   :height="
                     useDisplay.smAndDown
                       ? '20vw'
@@ -252,7 +339,7 @@
                     >
                       <v-row no-gutters align="start" justify="space-between">
                         <v-col>
-                          <span class="text-h6"
+                          <span :class="!useDisplay.xs ? 'text-h6' : ''"
                             >Temporadas
                             {{ details.number_of_seasons }}
                           </span>
@@ -266,7 +353,7 @@
                           </span>
                         </v-col>
                         <v-col cols="4" sm="2" md="2" lg="2">
-                          <v-btn variant="plain" @click="eventEmitEpisodios"
+                          <v-btn :size="!useDisplay.xs ? '' : 'small'" variant="plain" @click="eventEmitEpisodios"
                             >Ver Episódios</v-btn
                           >
                         </v-col>
@@ -276,7 +363,29 @@
                 </v-card>
               </v-card-text>
 
-              <v-card-actions>
+              <v-divider class="mb-2" v-if="useDisplay.xs"></v-divider>
+              <v-row
+                v-if="useDisplay.xs"
+                align="center"
+                justify="center"
+                no-gutters
+              >
+                <span class="mr-2 text-h6">Avalie:</span>
+                <span class="text-grey-lighten-2 text-body-2 mr-2">
+                  ({{ rating }})
+                </span>
+                <v-rating
+                  v-model="rating"
+                  color="white"
+                  active-color="yellow-accent-4"
+                  half-increments
+                  hover
+                  density="compact"
+                ></v-rating>
+              </v-row>
+              <v-divider class="mt-2" v-if="useDisplay.xs"></v-divider>
+
+              <v-card-actions v-if="!useDisplay.xs">
                 <v-row justify="space-between" align="center">
                   <v-col cols="12" sm="7" md="6" lg="5" xl="4">
                     <v-btn
@@ -309,6 +418,24 @@
                       ></v-rating>
                     </v-row>
                   </v-col>
+                </v-row>
+              </v-card-actions>
+
+              <v-card-actions v-else>
+                <v-row justify="center" align="center">
+                  <v-btn
+                    class="mt-4 mr-2"
+                    variant="plain"
+                    prepend-icon="mdi-plus"
+                    >Minha lista</v-btn
+                  >
+                  <v-btn
+                    class="mt-4"
+                    variant="plain"
+                    prepend-icon="mdi-information"
+                    @click="eventEmitMoreDetails()"
+                    >Saiba mais</v-btn
+                  >
                 </v-row>
               </v-card-actions>
             </v-card>

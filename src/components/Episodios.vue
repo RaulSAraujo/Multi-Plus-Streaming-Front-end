@@ -2,11 +2,12 @@
   <v-dialog
     v-model="dialog"
     scrollable
-    height="70vh"
-    width="80vw"
+    :height="!useDisplay.xs ? '70vh' : ''"
+    :width="!useDisplay.xs ? '80vw' : ''"
     scrim="black"
+    :fullscreen="useDisplay.xs"
   >
-    <v-card rounded="xl" border="sm" color="surface">
+    <v-card :rounded="!useDisplay.xs ? 'xl' : ''" border="sm" color="surface">
       <v-card-title class="bg-surface text-h5 py-4">
         <v-row no-gutters>
           <span class="text-h5">Temporadas/Episodios</span>
@@ -23,40 +24,6 @@
           <v-row>
             <v-col v-for="(season, i) in seasons" :key="i" cols="12">
               <v-item v-slot="{ isSelected, toggle }">
-                <!-- <v-banner
-                  class="my-4"
-                  rounded="xl"
-                  elevation="8"
-                  border="sm"
-                  style="background: rgb(0, 0, 0, 0.3)"
-                >
-                  <template v-slot:prepend>
-                    <v-avatar size="130">
-                      <v-img
-                        v-if="season.poster_path"
-                        :src="`https://image.tmdb.org/t/p/w200${season.poster_path}`"
-                        :alt="season.name"
-                        cover
-                      ></v-img>
-                      <v-icon v-else icon="mdi-cancel" size="80"></v-icon>
-                    </v-avatar>
-                  </template>
-
-                  <v-banner-text>
-                    <p class="text-h6">{{ season.name }}</p>
-                    <p class="text-caption-2">
-                      {{
-                        season.air_date != "" ? formatDate(season.air_date) : ""
-                      }}
-                    </p>
-                    <span class="text-body-1">{{ season.overview }}</span>
-                  </v-banner-text>
-
-                  <template v-slot:actions>
-                   
-                  </template>
-                </v-banner> -->
-
                 <v-card
                   elevation="5"
                   border="sm"
@@ -107,7 +74,7 @@
                       v-model="model"
                       class="pa-4"
                       selected-class="bg-success"
-                      show-arrows
+                      :show-arrows="!useDisplay.xs"
                     >
                       <v-slide-group-item
                         v-for="episodio in episodios"
@@ -201,11 +168,12 @@
     <v-dialog
       v-model="dialogCredit"
       scrollable
-      height="90vh"
-      width="40vw"
+      :height="!useDisplay.xs ? '90vh' : ''"
+      :width="!useDisplay.xs ? '40vw' : ''"
       scrim="black"
+      :fullscreen="useDisplay.xs"
     >
-      <v-card rounded="xl">
+      <v-card :rounded="!useDisplay.xs ? 'xl' : ''">
         <v-card-title>
           <v-row no-gutters>
             <span class="text-h5">Participantes</span>
@@ -247,6 +215,7 @@
 
 <script>
 import axios from "axios";
+import { useDisplay } from "vuetify";
 export default {
   props: {
     serieId: Number,
@@ -254,6 +223,7 @@ export default {
   },
   data() {
     return {
+      useDisplay: useDisplay(),
       dialog: false,
       episodios: [],
       selection: undefined,

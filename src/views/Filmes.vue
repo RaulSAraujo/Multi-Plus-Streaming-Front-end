@@ -78,7 +78,7 @@
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
-        show-arrows
+        :show-arrows="useDisplay.xs ? false : true"
       >
         <v-slide-group-item
           v-for="(nowPlaying, index) in moviesNowPlaying"
@@ -140,7 +140,7 @@
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
-        show-arrows
+        :show-arrows="useDisplay.xs ? false : true"
       >
         <v-slide-group-item
           v-for="(popular, index) in moviesPopular"
@@ -202,7 +202,7 @@
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
-        show-arrows
+        :show-arrows="useDisplay.xs ? false : true"
       >
         <v-slide-group-item
           v-for="(topRated, index) in moviesTopRated"

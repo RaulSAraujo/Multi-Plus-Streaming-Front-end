@@ -1,10 +1,11 @@
 <template>
   <v-dialog
     v-model="dialog"
-    width="90vw"
-    height="90vh"
+    :width="!useDisplay.xs ? '90vw' : ''"
+    :height="!useDisplay.xs ? '90vh' : ''"
     scrim="black"
     scrollable
+    :fullscreen="useDisplay.xs"
   >
     <v-row v-if="loading" justify="center" align="center">
       <v-sheet width="200" height="200" rounded="xl" border="sm" elevation="6">
@@ -21,11 +22,10 @@
       </v-sheet>
     </v-row>
 
-    <v-sheet v-else rounded="xl" elevation="0">
+    <v-sheet v-else :rounded="!useDisplay.xs ? 'xl' : ''" elevation="0">
       <v-img
-        class="mb-5"
         :src="`https://image.tmdb.org/t/p/original${backdropPath}`"
-        height="320px"
+        :height="!useDisplay.xs ? '320px' : ''"
         cover
       >
         <v-card
@@ -42,27 +42,42 @@
             ></v-btn>
           </template>
 
-          <v-card-title class="text-h4 mt-n4">
+          <v-card-title>
             <v-row no-gutters justify="space-between" align="center">
               <v-col cols="10" sm="10" md="11" lg="11">
-                <span
-                  class="text-h6 text-sm-subtitle-1 text-md-h4 text-lg-h3 text-xl-h3"
-                  >{{ nameTitle }}</span
-                >
+                <v-responsive>
+                  <div class="text-truncate mr-2">
+                    <span
+                      class="text-xs-subtitle-1 text-sm-h5 text-md-h4 text-lg-h3 text-xl-h3"
+                      >{{ nameTitle }}</span
+                    >
+                  </div>
+                </v-responsive>
               </v-col>
               <v-col cols="2" sm="1" md="1" lg="1">
                 <v-avatar
+                  v-if="!useDisplay.xs"
                   color="green"
                   variant="outlined"
-                  class="d-none d-md-flex text-body-1"
+                  class="text-body-1"
+                >
+                  {{ voteAverage }}
+                </v-avatar>
+
+                <v-avatar
+                  v-else
+                  color="green"
+                  variant="outlined"
+                  size="x-small"
+                  class="text-caption"
                 >
                   {{ voteAverage }}
                 </v-avatar>
               </v-col>
             </v-row>
           </v-card-title>
-          <v-card-subtitle class="mt-n1 text-white">
-            <v-row no-gutters>
+          <v-card-subtitle class="mt-n2">
+            <v-row v-if="!useDisplay.xs" no-gutters align="center">
               <v-icon icon="mdi-calendar-month" flat></v-icon>
 
               <span>
@@ -82,7 +97,7 @@
                   class="px-0"
                 >
                   <span>{{ genres.name }}</span>
-                  <span v-if="genres.length - 1 > index">,</span>
+                  <span v-if="genres.length - 1 > index">/</span>
                 </v-breadcrumbs-item>
               </v-breadcrumbs>
 
@@ -90,10 +105,60 @@
 
               <span>{{ formatRuntime(runtime) }}m</span>
             </v-row>
+            <v-row v-else no-gutters align="center" class="text-caption">
+              <v-col cols="12">
+                <v-icon
+                  class="mr-1"
+                  icon="mdi-calendar-month"
+                  flat
+                  size="15"
+                ></v-icon>
+
+                <span>
+                  {{ releaseDate != "" ? formatDate(releaseDate) : "" }}
+                </span>
+              </v-col>
+              <v-col cols="12">
+                <v-row no-gutters align="center">
+                  <v-icon
+                    icon="mdi-ticket-confirmation-outline"
+                    class="mr-1"
+                    flat
+                    size="15"
+                  ></v-icon>
+
+                  <v-breadcrumbs
+                    density="compact"
+                    divider=","
+                    class="py-0 px-0"
+                  >
+                    <v-breadcrumbs-item
+                      v-for="(genres, index) in genres"
+                      :key="index"
+                      class="px-0"
+                    >
+                      <span>{{ genres.name }}</span>
+                      <span v-if="genres.length - 1 > index">/</span>
+                    </v-breadcrumbs-item>
+                  </v-breadcrumbs>
+                </v-row>
+              </v-col>
+              <v-col v-if="runtime" cols="12">
+                <v-responsive>
+                  <v-icon
+                    size="15"
+                    icon="mdi-timer-sand"
+                    class="mr-1"
+                    flat
+                  ></v-icon>
+                  <span>{{ runtime ? formatRuntime(runtime) : "" }}m</span>
+                </v-responsive>
+              </v-col>
+            </v-row>
           </v-card-subtitle>
 
           <v-card-text>
-            <v-responsive height="4vh">
+            <v-responsive>
               <p
                 style="
                   display: -webkit-box;
@@ -109,7 +174,7 @@
             </v-responsive>
           </v-card-text>
 
-          <v-card-actions>
+          <v-card-actions v-if="!useDisplay.xs">
             <v-btn
               class="mt-4 mr-2"
               variant="plain"
@@ -136,8 +201,42 @@
               ></v-rating>
             </v-row>
           </v-card-actions>
+
+          <v-card-actions v-else>
+            <v-row justify="center">
+              <v-btn
+                class="mt-4 mr-2"
+                variant="plain"
+                prepend-icon="mdi-play-circle"
+                @click="eventWatchProviders()"
+                >Assista agora</v-btn
+              >
+              <v-btn class="mt-4 mr-2" variant="plain" prepend-icon="mdi-plus"
+                >Minha lista</v-btn
+              >
+            </v-row>
+          </v-card-actions>
         </v-card>
       </v-img>
+
+      <v-divider class="mb-2" v-if="useDisplay.xs"></v-divider>
+
+      <v-row v-if="useDisplay.xs" align="center" justify="center" no-gutters>
+        <span class="mr-2 text-h6">Avalie:</span>
+        <span class="text-grey-lighten-2 text-body-2 mr-2">
+          ({{ rating }})
+        </span>
+        <v-rating
+          v-model="rating"
+          color="white"
+          active-color="yellow-accent-4"
+          half-increments
+          hover
+          density="compact"
+        ></v-rating>
+      </v-row>
+
+      <v-divider class="mt-2 mb-5" v-if="useDisplay.xs"></v-divider>
 
       <span class="ml-12 text-h5">Midia</span>
       <v-card elevation="0">
@@ -154,7 +253,7 @@
                 <v-slide-group
                   v-model="modelBackDrops"
                   selected-class="bg-success"
-                  show-arrows
+                  :show-arrows="!useDisplay.xs"
                 >
                   <v-slide-group-item
                     v-for="backdrops in backDrops"
@@ -163,8 +262,9 @@
                     <v-card
                       color="grey-lighten-3"
                       class="ma-4"
-                      height="250"
-                      width="400"
+                      :width="!useDisplay.xs ? '450' : '60vw'"
+                      :height="!useDisplay.xs ? '250' : '150'"
+                      rounded="lg"
                     >
                       <v-img
                         :src="`https://image.tmdb.org/t/p/w500${backdrops.file_path}`"
@@ -181,18 +281,18 @@
                 <v-slide-group
                   v-model="modelVideos"
                   selected-class="bg-success"
-                  show-arrows
+                  :show-arrows="!useDisplay.xs"
                 >
                   <v-slide-group-item v-for="video in videos" :key="video">
                     <v-card
                       color="grey-lighten-3"
                       class="ma-4"
-                      width="450"
-                      height="250"
+                      :width="!useDisplay.xs ? '450' : '200'"
+                      :height="!useDisplay.xs ? '250' : '200'"
                     >
                       <iframe
-                        width="450"
-                        height="250"
+                        :width="!useDisplay.xs ? '450' : '200'"
+                        :height="!useDisplay.xs ? '250' : '200'"
                         :src="`https://www.youtube-nocookie.com/embed/${video.key}`"
                         frameborder="0"
                         allow="autoplay; encrypted-media"
@@ -208,7 +308,7 @@
                 <v-slide-group
                   v-model="modelPostes"
                   selected-class="bg-success"
-                  show-arrows
+                  :show-arrows="!useDisplay.xs"
                 >
                   <v-slide-group-item v-for="postes in postes" :key="postes">
                     <v-card
@@ -237,7 +337,7 @@
           v-model="modelMainCast"
           class="pa-4"
           selected-class="bg-success"
-          show-arrows
+          :show-arrows="!useDisplay.xs"
         >
           <v-slide-group-item
             v-for="cast in mainCast"
@@ -375,15 +475,17 @@
         >
           <v-card-title class="text-white">
             <v-row no-gutters>
-              <span class="text-h5">{{ movieBelongsCollection.name }}</span>
+              <span :class="!useDisplay.xs ? 'text-h5' : 'text-body-2'">{{ movieBelongsCollection.name }}</span>
 
               <v-spacer></v-spacer>
               <v-btn
                 rounded="xl"
                 variant="outlined"
                 flat
+                :class="!useDisplay.xs ? 'text-button px-2' : 'text-caption'"
+                :size="!useDisplay.xs ? '' : 'x-small'"
                 @click="eventWatchColection(movieBelongsCollection.id)"
-                >MOSTRAR A COLETÂNEA</v-btn
+                >VER COLETÂNEA</v-btn
               >
             </v-row>
           </v-card-title>
@@ -397,7 +499,7 @@
           v-model="modelRecommendations"
           class="pa-4"
           selected-class="bg-success"
-          show-arrows
+          :show-arrows="!useDisplay.xs"
         >
           <v-slide-group-item
             v-for="recommendation in recommendations"
@@ -457,7 +559,7 @@ import axios from "axios";
 import { useDisplay } from "vuetify";
 import WatchProviders from "@/components/WatchProviders.vue";
 import MoviesCollection from "@/components/MoviesCollection.vue";
-import Episodios from './Episodios.vue';
+import Episodios from "./Episodios.vue";
 
 export default {
   props: {

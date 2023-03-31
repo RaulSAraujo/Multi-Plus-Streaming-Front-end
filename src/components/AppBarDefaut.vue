@@ -113,6 +113,7 @@
         <v-spacer></v-spacer>
 
         <v-menu
+          v-model="menuSearch"
           location="bottom"
           :width="useDisplay.xs ? '100%' : '50%'"
           :close-on-content-click="false"
@@ -205,14 +206,15 @@
   <v-dialog
     v-model="dialog"
     scrollable
-    height="70vh"
-    width="80vw"
+    :width="!useDisplay.xs ? '80vw' : ''"
+    :height="!useDisplay.xs ? '70vh' : ''"
     scrim="black"
+    :fullscreen="useDisplay.xs"
   >
-    <v-card rounded="xl" border="sm" color="black">
+    <v-card :rounded="!useDisplay.xs ? 'xl' : ''" border="sm" color="black">
       <v-card-title class="bg-surface text-h5 py-4">
         <v-row no-gutters>
-          <span class="text-h5">
+          <span :class="!useDisplay.xs ? 'text-h5' : ''">
             Sua pesquisa retornou: {{ totalResults }}</span
           >
           <v-spacer></v-spacer>
@@ -239,7 +241,9 @@
             gradient="to bottom, rgba(0,0,0,.9), rgba(0,0,0,.5)"
             cover
           >
-            <v-card-title>{{ movies.title != undefined ? movies.title : movies.name }}</v-card-title>
+            <v-card-title>{{
+              movies.title != undefined ? movies.title : movies.name
+            }}</v-card-title>
             <v-card-subtitle class="mt-n1">
               {{
                 movies.release_date != "" ? formatDate(movies.release_date) : ""
@@ -277,11 +281,11 @@ export default {
     return {
       useDisplay: useDisplay(),
       dialog: false,
+      menuSearch: false,
       search: "",
       page: 1,
       resultSearch: [],
       totalResults: 0,
-
       drawer: false,
       items: [
         {
@@ -314,6 +318,8 @@ export default {
             console.log("Search", response);
             this.resultSearch = response.data.results;
             this.totalResults = response.data.total_results;
+            this.search = "";
+            this.menuSearch = false;
             this.dialog = true;
           })
           .catch((error) => {

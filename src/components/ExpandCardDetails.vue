@@ -97,7 +97,12 @@
                   </v-responsive>
 
                   <v-responsive v-else-if="details.episode_run_time">
-                    <v-icon v-if="details.episode_run_time[0]" icon="mdi-timer-sand" class="ml-1" flat></v-icon>
+                    <v-icon
+                      v-if="details.episode_run_time[0]"
+                      icon="mdi-timer-sand"
+                      class="ml-1"
+                      flat
+                    ></v-icon>
                     <span v-if="details.episode_run_time[0]"
                       >{{
                         details.episode_run_time
@@ -164,57 +169,8 @@
                   </v-img>
                 </v-card>
 
-                <v-card v-if="tvOrMovie == 'tv'" class="mt-2" rounded="lg">
-                  <v-img
-                    :src="`https://image.tmdb.org/t/p/original${details.backdrop_path}`"
-                    class="align-end"
-                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                    :height="
-                      useDisplay.smAndDown
-                        ? '50vw'
-                        : useDisplay.md
-                        ? '8vw'
-                        : useDisplay.lg
-                        ? '13vw'
-                        : useDisplay.xl
-                        ? '11vw'
-                        : '10vw'
-                    "
-                    cover
-                  >
-                    <v-card
-                      color="rgb(0,0,0,0.4)"
-                      density="compact"
-                      rounded="t-xl"
-                      class="px-3"
-                    >
-                      <v-row no-gutters align="start" justify="space-between">
-                        <v-col>
-                          <span class="text-h6"
-                            >Temporadas
-                            {{ details.number_of_seasons }}
-                          </span>
-                        </v-col>
-                      </v-row>
-                      <v-row no-gutters align="start" justify="space-between">
-                        <v-col>
-                          <span class="text-caption text-grey">
-                            {{ details.number_of_episodes }} episódios
-                            {{ details.in_production ? "/ Em produção" : "" }}
-                          </span>
-                        </v-col>
-                        <v-col cols="4" sm="2" md="2" lg="2">
-                          <v-btn variant="plain" @click="eventEmitEpisodios"
-                            >Ver Episódios</v-btn
-                          >
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </v-img>
-                </v-card>
-
                 <v-card
-                  v-else
+                  v-if="tvOrMovie == 'movie' && !details.belongs_to_collection"
                   :height="
                     useDisplay.smAndDown
                       ? '20vw'
@@ -268,6 +224,55 @@
                       </v-icon>
                     </v-row>
                   </v-card-text>
+                </v-card>
+
+                <v-card v-if="tvOrMovie == 'tv'" class="mt-2" rounded="lg">
+                  <v-img
+                    :src="`https://image.tmdb.org/t/p/original${details.backdrop_path}`"
+                    class="align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                    :height="
+                      useDisplay.smAndDown
+                        ? '50vw'
+                        : useDisplay.md
+                        ? '8vw'
+                        : useDisplay.lg
+                        ? '13vw'
+                        : useDisplay.xl
+                        ? '11vw'
+                        : '10vw'
+                    "
+                    cover
+                  >
+                    <v-card
+                      color="rgb(0,0,0,0.4)"
+                      density="compact"
+                      rounded="t-xl"
+                      class="px-3"
+                    >
+                      <v-row no-gutters align="start" justify="space-between">
+                        <v-col>
+                          <span class="text-h6"
+                            >Temporadas
+                            {{ details.number_of_seasons }}
+                          </span>
+                        </v-col>
+                      </v-row>
+                      <v-row no-gutters align="start" justify="space-between">
+                        <v-col>
+                          <span class="text-caption text-grey">
+                            {{ details.number_of_episodes }} episódios
+                            {{ details.in_production ? "/ Em produção" : "" }}
+                          </span>
+                        </v-col>
+                        <v-col cols="4" sm="2" md="2" lg="2">
+                          <v-btn variant="plain" @click="eventEmitEpisodios"
+                            >Ver Episódios</v-btn
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card>
+                  </v-img>
                 </v-card>
               </v-card-text>
 

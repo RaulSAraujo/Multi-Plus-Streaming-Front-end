@@ -63,7 +63,7 @@
             </v-avatar>
           </v-col>
         </v-row>
-        <p v-else>Infelizmente este filme não esta disponivel para alugar.</p>
+        <p v-else>Infelizmente {{this.tvOrMovie == 'movie' ? 'este filme' : 'esta serie'}} não esta disponivel para alugar.</p>
 
         <span class="text-h5">Comprar</span>
         <v-row
@@ -89,14 +89,14 @@
             </v-avatar>
           </v-col>
         </v-row>
-        <p v-else>Infelizmente este filme não esta disponivel para compra.</p>
+        <p v-else>Infelizmente {{this.tvOrMovie == 'movie' ? 'este filme' : 'esta serie'}} não esta disponivel para compra.</p>
       </v-card-text>
 
       <v-card-text v-else>
         <div class="d-flex flex-column justify-center align-center mb-5">
           <v-icon icon="mdi-alert-circle" size="50"></v-icon>
           <p class="text-h6">
-            Infelizmente este filme não esta disponivel no Brasil.
+            Infelizmente {{this.tvOrMovie == 'movie' ? 'este filme' : 'esta serie'}} não esta disponivel no Brasil.
           </p>
         </div>
       </v-card-text>

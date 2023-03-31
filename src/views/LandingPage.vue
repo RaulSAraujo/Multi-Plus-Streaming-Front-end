@@ -2,104 +2,106 @@
   <div fluid id="background"></div>
 
   <v-responsive height="100vh" class="d-flex justify-center align-center">
-    <div
-      style="
-        min-width: 350px;
-        width: 50vw;
-        height: 80vh;
-        top: -400px;
-        right: -110px;
-        position: absolute;
-        background: rgb(0, 0, 0);
-        filter: blur(80px);
-      "
-    ></div>
-    <v-responsive>
-      <v-row align="center" justify="center">
-        <v-col cols="8" class="text-center">
-          <span
-            class="text-h6 text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+    <v-row no-gutters align="center" justify="center">
+      <v-card color="rgb(0,0,0,0)" :width="!useDisplay.xs ? '50%' : '70%'">
+        <v-card-title class="text-center">
+          <p
+            class="text-h5 text-sm-h5 text-md-h5 text-lg-h4 text-xl-h2 font-weight-medium text-white"
             style="font-family: 'Yantramanav', sans-serif !important"
-            >Seus filmes, séries e livros favoritos <br />
-            em um só lugar</span
           >
-        </v-col>
-      </v-row>
-    </v-responsive>
+            Seus filmes, séries e livros favoritos
+          </p>
+          <p
+            class="text-h5 text-sm-h5 text-md-h5 text-lg-h4 text-xl-h2 font-weight-medium text-white"
+            style="font-family: 'Yantramanav', sans-serif !important"
+          >
+            em um só lugar
+          </p>
+        </v-card-title>
+      </v-card>
+    </v-row>
   </v-responsive>
 
   <v-responsive height="100vh" class="d-flex justify-center align-center">
     <div
-      style="
-        width: 55vw;
-        min-width: 500px;
-        height: 70vh;
-        top: 120px;
-        left: -130px;
-        position: absolute;
-        background: rgb(0, 0, 0, 0.9);
-        filter: blur(80px);
-        transition: filter 0.5s ease-in-out;
+      :style="
+        !useDisplay.xs
+          ? 'width: 40vw;min-width: 350px;max-height: 400px;min-height: 350px;top: 260px;left: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
+          : 'width: 450px;min-width: 350px;max-height: 400px;min-height: 360px;top: 280px;left: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
       "
     ></div>
-    <v-responsive>
-      <v-row align="start" justify="start">
-        <v-col cols="6" class="text-center">
-          <span
-            class="text-h6 text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+    <v-row no-gutters align="center" justify="start">
+      <v-card color="rgb(0,0,0,0)" :width="!useDisplay.xs ? '35%' : '70%'">
+        <v-card-title class="text-center">
+          <p
+            class="text-h5 text-sm-h5 text-md-h5 text-lg-h4 text-xl-h2 font-weight-medium text-white"
             style="font-family: 'Yantramanav', sans-serif !important"
-            >Salve e acompanhe seu <br />
-            progresso a cada episódio</span
           >
-          <v-img
-            class="mx-auto mt-5"
-            src="@/assets/img/icon-1.png"
-            width="12vw"
-            min-width="80px"
-          />
-        </v-col>
-      </v-row>
-    </v-responsive>
+            Salve e acompanhe seu
+          </p>
+          <p
+            class="text-h5 text-sm-h5 text-md-h5 text-lg-h4 text-xl-h2 font-weight-medium text-white"
+            style="font-family: 'Yantramanav', sans-serif !important"
+          >
+            progresso a cada episódio
+          </p>
+        </v-card-title>
+        <v-img
+          class="mx-auto mt-5"
+          src="@/assets/img/icon-1.png"
+          height="100"
+          :width="!useDisplay.xs ? '12vw' : '100'"
+          min-width="80px"
+        >
+        </v-img>
+      </v-card>
+    </v-row>
   </v-responsive>
 
   <v-responsive height="100vh" class="d-flex justify-center align-center">
     <div
-      style="
-        width: 55vw;
-        min-width: 500px;
-        height: 70vh;
-        top: 120px;
-        right: -120px;
-        position: absolute;
-        background: rgb(0, 0, 0);
-        filter: blur(80px);
-        transition: filter 0.5s ease-in-out;
+      :style="
+        !useDisplay.xs
+          ? 'width: 40vw;min-width: 350px;max-height: 400px;min-height: 350px;top: 260px;right: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
+          : 'width: 450px;min-width: 350px;max-height: 400px;min-height: 350px;top: 280px;right: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
       "
     ></div>
-    <v-responsive>
-      <v-row align="center" justify="end">
-        <v-col cols="6" class="text-center">
-          <span
-            class="text-h6 text-sm-h5 text-md-h4 text-lg-h3 text-xl-h2 font-weight-medium text-white"
+    <v-row no-gutters align="center" justify="end">
+      <v-card color="rgb(0,0,0,0)" :width="!useDisplay.xs ? '35%' : '70%'">
+        <v-card-title class="text-center">
+          <p
+            class="text-h5 text-sm-h5 text-md-h5 text-lg-h4 text-xl-h2 font-weight-medium text-white"
             style="font-family: 'Yantramanav', sans-serif !important"
-            >Veja comentários, <br />resenhas e avaliações</span
           >
-          <v-img
-            class="mx-auto mt-5"
-            src="@/assets/img/icon-2.png"
-            width="12vw"
-            min-width="80px"
-          />
-        </v-col>
-      </v-row>
-    </v-responsive>
+            Veja comentários
+          </p>
+          <p
+            class="text-h5 text-sm-h5 text-md-h5 text-lg-h4 text-xl-h2 font-weight-medium text-white"
+            style="font-family: 'Yantramanav', sans-serif !important"
+          >
+            resenhas e avaliações
+          </p>
+        </v-card-title>
+        <v-img
+          class="mx-auto mt-5"
+          src="@/assets/img/icon-2.png"
+          height="100"
+          :width="!useDisplay.xs ? '12vw' : '100'"
+          min-width="80px"
+        >
+        </v-img>
+      </v-card>
+    </v-row>
   </v-responsive>
 </template>
 
 <script>
+import { useDisplay } from "vuetify";
 export default {
   data() {
-    return {};
+    return {
+      useDisplay: useDisplay(),
+    };
   },
   methods: {},
 };

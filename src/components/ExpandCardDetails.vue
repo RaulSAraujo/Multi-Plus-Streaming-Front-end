@@ -55,8 +55,8 @@
                       v-else
                       color="green"
                       variant="outlined"
-                      size="x-small"
-                      class="text-caption"
+                      size="small"
+                      class="text-body-2"
                     >
                       {{ formatAverage(details.vote_average) }}
                     </v-avatar>
@@ -121,7 +121,7 @@
                     >
                   </v-responsive>
                 </v-row>
-                <v-row v-else no-gutters align="center" class="text-caption">
+                <v-row v-else no-gutters class="text-caption">
                   <v-col cols="12">
                     <v-icon
                       class="mr-1"
@@ -139,7 +139,7 @@
                     </span>
                   </v-col>
                   <v-col cols="12">
-                    <v-row no-gutters align="center">
+                    <v-row no-gutters align="center" justify="start">
                       <v-icon
                         icon="mdi-ticket-confirmation-outline"
                         class="mr-1"
@@ -165,20 +165,30 @@
                     </v-row>
                   </v-col>
                   <v-col cols="12">
-                    <v-responsive v-if="tvOrMovie == 'movie'">
+                    <v-row
+                      v-if="tvOrMovie == 'movie'"
+                      no-gutters
+                      align="center"
+                      justify="start"
+                    >
                       <v-icon icon="mdi-timer-sand" class="mr-1" flat></v-icon>
                       <span
                         >{{
                           details.runtime ? formatRuntime(details.runtime) : ""
                         }}m</span
                       >
-                    </v-responsive>
+                    </v-row>
 
-                    <v-responsive v-else-if="details.episode_run_time">
+                    <v-row
+                      v-else-if="details.episode_run_time"
+                      no-gutters
+                      align="center"
+                      justify="start"
+                    >
                       <v-icon
                         v-if="details.episode_run_time[0]"
                         icon="mdi-timer-sand"
-                        class="mx-1"
+                        class="mr-1"
                         flat
                       ></v-icon>
                       <span v-if="details.episode_run_time[0]"
@@ -188,7 +198,7 @@
                             : ""
                         }}m</span
                       >
-                    </v-responsive>
+                    </v-row>
                   </v-col>
                 </v-row>
               </v-card-subtitle>
@@ -237,12 +247,8 @@
                         >
 
                         <v-btn
-                          rounded="xl"
                           variant="plain"
                           flat
-                          :class="
-                            !useDisplay.xs ? 'text-overline' : 'text-overline'
-                          "
                           :size="!useDisplay.xs ? '' : 'x-small'"
                           @click="eventEmitWatchColection()"
                           >VER COLETÂNEA</v-btn
@@ -353,7 +359,10 @@
                           </span>
                         </v-col>
                         <v-col cols="4" sm="2" md="2" lg="2">
-                          <v-btn :size="!useDisplay.xs ? '' : 'small'" variant="plain" @click="eventEmitEpisodios"
+                          <v-btn
+                            :size="!useDisplay.xs ? '' : 'small'"
+                            variant="plain"
+                            @click="eventEmitEpisodios"
                             >Ver Episódios</v-btn
                           >
                         </v-col>

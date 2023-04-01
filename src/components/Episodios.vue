@@ -20,7 +20,7 @@
         </v-row>
       </v-card-title>
       <v-card-text>
-        <v-item-group v-model="selection">
+        <v-item-group v-if="!useDisplay.xs" v-model="selection">
           <v-row>
             <v-col v-for="(season, i) in seasons" :key="i" cols="12">
               <v-item v-slot="{ isSelected, toggle }">
@@ -74,7 +74,6 @@
                       v-model="model"
                       class="pa-4"
                       selected-class="bg-success"
-                      :show-arrows="!useDisplay.xs"
                     >
                       <v-slide-group-item
                         v-for="episodio in episodios"
@@ -162,6 +161,80 @@
             </v-col>
           </v-row>
         </v-item-group>
+
+        <div v-else>
+          <v-select
+            v-model="selectSeason"
+            :items="seasons"
+            item-title="name"
+            item-value="season_number"
+            return-object
+          ></v-select>
+          <v-row v-for="episodio in episodios" :key="episodio">
+            <v-card
+              elevation="5"
+              width="410"
+              border="sm"
+              rounded="xl"
+              class="ma-3"
+            >
+              <v-img
+                :src="`https://image.tmdb.org/t/p/original${episodio.still_path}`"
+                gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.7)"
+                cover
+              >
+                <v-card-title>
+                  <v-row no-gutters justify="space-between" align="center">
+                    <v-col cols="10" sm="10" md="11" lg="11">
+                      <div class="text-h5 text-truncate">
+                        <v-avatar
+                          color="white"
+                          variant="outlined"
+                          class="text-body-2 mr-2 mt-n1"
+                          size="x-small"
+                        >
+                          {{ episodio.episode_number }}
+                        </v-avatar>
+                        <span>{{ episodio.name }}</span>
+                      </div>
+                    </v-col>
+                    <v-col cols="2" sm="1" md="1" lg="1">
+                      <v-avatar
+                        color="white"
+                        variant="outlined"
+                        class="text-body-2"
+                        size="small"
+                      >
+                        {{ formatAverage(episodio.vote_average) }}
+                      </v-avatar>
+                    </v-col>
+                  </v-row>
+                </v-card-title>
+                <v-card-subtitle class="mt-n1">
+                  <v-icon icon="mdi-calendar-month" flat></v-icon>
+                  <span>
+                    {{ formatDate(episodio.air_date) }}
+                  </span>
+                  <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
+
+                  <span
+                    >{{
+                      episodio.runtime ? formatRuntime(episodio.runtime) : ""
+                    }}m</span
+                  >
+                </v-card-subtitle>
+                <v-card-text>{{ episodio.overview }}</v-card-text>
+              </v-img>
+              <v-row class="mt-n9" no-gutters justify="end">
+                <v-btn
+                  variant="plain"
+                  @click="getEpisodiosCredits(episodio.episode_number)"
+                  >Participantes</v-btn
+                >
+              </v-row>
+            </v-card>
+          </v-row>
+        </div>
       </v-card-text>
     </v-card>
 
@@ -230,16 +303,27 @@ export default {
       model: undefined,
       dialogCredit: false,
       guestStars: [],
+      selectSeason: [],
     };
   },
   watch: {
     dialog(val) {
       if (val == false) {
         this.selection = undefined;
+      } else {
+        if (this.useDisplay.xs) {
+          this.selectSeason = this.seasons[0];
+        }
       }
     },
     selection(val) {
       if (val != undefined) {
+        this.getEpisodios();
+      }
+    },
+    selectSeason(val) {
+      if (val.name.length > 0) {
+        this.selection = val.season_number;
         this.getEpisodios();
       }
     },
@@ -276,7 +360,6 @@ export default {
           console.log(error);
         });
     },
-
     formatDate(dateString) {
       const date = dateString != undefined ? new Date(dateString) : "";
       return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(

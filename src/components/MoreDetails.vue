@@ -68,8 +68,8 @@
                   v-else
                   color="green"
                   variant="outlined"
-                  size="x-small"
-                  class="text-caption"
+                  size="small"
+                  class="text-body-2"
                 >
                   {{ voteAverage }}
                 </v-avatar>
@@ -281,24 +281,18 @@
                 <v-slide-group
                   v-model="modelVideos"
                   selected-class="bg-success"
-                  :show-arrows="!useDisplay.xs"
+                  show-arrows
                 >
                   <v-slide-group-item v-for="video in videos" :key="video">
-                    <v-card
-                      color="grey-lighten-3"
-                      class="ma-4"
-                      :width="!useDisplay.xs ? '450' : '200'"
-                      :height="!useDisplay.xs ? '250' : '200'"
-                    >
-                      <iframe
-                        :width="!useDisplay.xs ? '450' : '200'"
-                        :height="!useDisplay.xs ? '250' : '200'"
-                        :src="`https://www.youtube-nocookie.com/embed/${video.key}`"
-                        frameborder="0"
-                        allow="autoplay; encrypted-media"
-                        allowfullscreen
-                      ></iframe>
-                    </v-card>
+                    <iframe
+                      class="my-4 mr-2"
+                      :width="!useDisplay.xs ? '450' : '300'"
+                      :height="!useDisplay.xs ? '250' : '170'"
+                      :src="`https://www.youtube-nocookie.com/embed/${video.key}`"
+                      frameborder="0"
+                      allow="autoplay; encrypted-media"
+                      allowfullscreen
+                    ></iframe>
                   </v-slide-group-item>
                 </v-slide-group>
               </v-sheet>
@@ -339,17 +333,12 @@
           selected-class="bg-success"
           :show-arrows="!useDisplay.xs"
         >
-          <v-slide-group-item
-            v-for="cast in mainCast"
-            :key="cast"
-            v-slot="{ toggle, selectedClass }"
-          >
+          <v-slide-group-item v-for="cast in mainCast" :key="cast">
             <v-card
+              class="ma-4"
               color="grey-lighten-3"
-              :class="['ma-4', selectedClass]"
               height="200"
               width="170"
-              @click="toggle"
             >
               <v-img
                 :src="`https://image.tmdb.org/t/p/w300${cast.profile_path}`"
@@ -475,7 +464,9 @@
         >
           <v-card-title class="text-white">
             <v-row no-gutters>
-              <span :class="!useDisplay.xs ? 'text-h5' : 'text-body-2'">{{ movieBelongsCollection.name }}</span>
+              <span :class="!useDisplay.xs ? 'text-h5' : 'text-body-2'">{{
+                movieBelongsCollection.name
+              }}</span>
 
               <v-spacer></v-spacer>
               <v-btn
@@ -610,6 +601,8 @@ export default {
     dialog(val) {
       if (val == true) {
         this.getMoreDetails();
+      } else {
+        this.tab = null;
       }
     },
   },
@@ -684,4 +677,18 @@ export default {
 </script>
 
 <style>
+::-webkit-scrollbar-track {
+  background-color: rgba(94, 94, 94, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  margin: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(94, 93, 93, 0.2);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(94, 93, 93, 0.4);
+}
 </style>

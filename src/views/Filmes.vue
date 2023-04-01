@@ -39,15 +39,30 @@
           width="100%"
           elevation="0"
           color="rgb(0, 0, 0,0.4)"
-          class="mx-auto pl-12"
+          :class="!useDisplay.xs ? 'mx-auto pl-12' : ''"
           :title="movies.title"
         >
           <v-card-text>
             <p
+              v-if="!useDisplay.xs"
               style="
                 display: -webkit-box;
                 max-width: 50vw;
                 -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+              "
+              class="text-body-2"
+            >
+              {{ movies.overview }}
+            </p>
+
+             <p
+              v-else
+              style="
+                display: -webkit-box;
+                max-width: 100vw;
+                -webkit-line-clamp: 3;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
               "
@@ -86,6 +101,7 @@
           v-slot="{ toggle, selectedClass }"
         >
           <v-card
+            v-if="!useDisplay.xs"
             color="black/80"
             :class="['ma-4', selectedClass]"
             height="220"
@@ -115,6 +131,21 @@
               <v-icon icon="mdi-menu-down" color="grey" />
               <v-spacer></v-spacer>
             </v-card-actions>
+          </v-card>
+
+          <v-card
+            v-else
+            color="black/80"
+            :class="['ma-2', selectedClass]"
+            height="220"
+            width="150"
+            @click="toggle"
+          >
+            <v-img
+              :src="`https://image.tmdb.org/t/p/w300${nowPlaying.poster_path}`"
+              height="220px"
+              cover
+            ></v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -148,6 +179,7 @@
           v-slot="{ toggle, selectedClass }"
         >
           <v-card
+            v-if="!useDisplay.xs"
             color="black/80"
             :class="['ma-4', selectedClass]"
             height="220"
@@ -177,6 +209,21 @@
               <v-icon icon="mdi-menu-down" color="grey" />
               <v-spacer></v-spacer>
             </v-card-actions>
+          </v-card>
+
+          <v-card
+            v-else
+            color="black/80"
+            :class="['ma-2', selectedClass]"
+            height="220"
+            width="150"
+            @click="toggle"
+          >
+            <v-img
+              :src="`https://image.tmdb.org/t/p/w300${popular.poster_path}`"
+              height="220px"
+              cover
+            ></v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -210,6 +257,7 @@
           v-slot="{ toggle, selectedClass }"
         >
           <v-card
+            v-if="!useDisplay.xs"
             color="black/80"
             :class="['ma-4', selectedClass]"
             height="220"
@@ -239,6 +287,21 @@
               <v-icon icon="mdi-menu-down" color="grey" />
               <v-spacer></v-spacer>
             </v-card-actions>
+          </v-card>
+
+          <v-card
+            v-else
+            color="black/80"
+            :class="['ma-2', selectedClass]"
+            height="220"
+            width="150"
+            @click="toggle"
+          >
+            <v-img
+              :src="`https://image.tmdb.org/t/p/w300${topRated.poster_path}`"
+              height="220px"
+              cover
+            ></v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>

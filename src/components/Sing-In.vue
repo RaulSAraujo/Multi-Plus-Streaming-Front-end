@@ -7,7 +7,9 @@
           src="@/assets/img/logo.png"
           height="80px"
         ></v-img>
-        <p class="text-subtitle-1 text-sm-h6 text-md-h6 text-lg-h6 text-xl-h6">Entrar no Multi Plus Streaming</p>
+        <p class="text-subtitle-1 text-sm-h6 text-md-h6 text-lg-h6 text-xl-h6">
+          Entrar no Multi Plus Streaming
+        </p>
       </v-card-title>
       <v-card-text>
         <v-text-field
@@ -26,16 +28,14 @@
           color="pink"
         />
       </v-card-text>
-      <v-row no-gutters>
+      <v-row no-gutters class="px-12 mb-5">
         <v-btn
           id="gradient-button"
-          class="mx-12 text-sm-body-1 text-md-h6 text-lg-h5 text-xl-h4 mx-8 mb-5"
           dark
           variant="flat"
           rounded="lg"
           block
-          min-width="50px"
-          height="40px"
+          size="x-large"
           to="/Inicio"
           @click="getToken"
           >LOGIN</v-btn
@@ -65,7 +65,7 @@ export default {
           "https://api.themoviedb.org/3/authentication/token/new?api_key=9f9a623c8918bc56839f26a94b5507aa"
         )
         .then((response) => {
-          console.log('token',response);
+          console.log("token", response);
           localStorage.setItem("jwt", response.data.request_token);
         })
         .catch((error) => {

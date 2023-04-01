@@ -16,32 +16,30 @@
 
     <template v-slot:append v-if="!useDisplay.xs">
       <v-btn
-        class="mr-1 text-sm-body-1 text-md-h7 text-lg-h6 text-xl-h5"
+        class="mr-1"
         variant="outlined"
         rounded="lg"
         color="pink"
-        width="8vw"
-        min-width="80px"
-        height="50px"
+        size="large"
+        height="40"
         @click="activeSingIn"
         >Entrar</v-btn
       >
       <v-btn
         id="gradient-button"
-        class="mr-12 text-sm-body-1 text-md-h6 text-lg-h5 text-xl-h4"
+        class="mr-12"
         dark
         variant="flat"
         rounded="lg"
-        width="14vw"
-        min-width="100px"
-        height="50px"
+        size="x-large"
+        height="40"
         @click="activeSingUp"
         >Cadastrar</v-btn
       >
     </template>
 
     <template v-slot:append v-else>
-      <v-menu >
+      <v-menu>
         <template v-slot:activator="{ props }">
           <v-icon v-bind="props" icon="mdi-menu" size="35"></v-icon>
         </template>

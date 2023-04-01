@@ -3,13 +3,13 @@
 
   <v-responsive height="100vh" class="d-flex justify-center align-center">
     <v-row no-gutters align="center" justify="center">
-      <v-card color="rgb(0,0,0,0)" :width="!useDisplay.xs ? '50%' : '70%'">
+      <v-card color="rgb(0,0,0,0)" :width="!useDisplay.xs ? '50%' : '90%'">
         <v-card-title class="text-center">
           <p
             class="text-h5 text-sm-h5 text-md-h5 text-lg-h4 text-xl-h2 font-weight-medium text-white"
             style="font-family: 'Yantramanav', sans-serif !important"
           >
-            Seus filmes, séries e livros favoritos
+            Seus filmes, séries e livros
           </p>
           <p
             class="text-h5 text-sm-h5 text-md-h5 text-lg-h4 text-xl-h2 font-weight-medium text-white"
@@ -26,7 +26,7 @@
     <div
       :style="
         !useDisplay.xs
-          ? 'width: 40vw;min-width: 350px;max-height: 400px;min-height: 350px;top: 260px;left: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
+          ? 'width: 45vw;min-width: 350px;max-height: 400px;min-height: 350px;top: 260px;left: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
           : 'width: 450px;min-width: 350px;max-height: 400px;min-height: 360px;top: 280px;left: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
       "
     ></div>
@@ -62,7 +62,7 @@
     <div
       :style="
         !useDisplay.xs
-          ? 'width: 40vw;min-width: 350px;max-height: 400px;min-height: 350px;top: 260px;right: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
+          ? 'width: 45vw;min-width: 350px;max-height: 400px;min-height: 350px;top: 260px;right: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
           : 'width: 450px;min-width: 350px;max-height: 400px;min-height: 350px;top: 280px;right: -120px;position: absolute;background: rgb(0, 0, 0);filter: blur(80px);'
       "
     ></div>

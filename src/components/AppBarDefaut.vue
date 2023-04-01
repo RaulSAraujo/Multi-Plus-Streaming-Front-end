@@ -165,7 +165,7 @@
                 <v-divider class="my-3"></v-divider>
                 <v-btn rounded variant="text"> Editar conta </v-btn>
                 <v-divider class="my-3"></v-divider>
-                <v-btn rounded variant="text"> Desconectar </v-btn>
+                <v-btn rounded variant="text" to="/"> Desconectar </v-btn>
               </div>
             </v-card-text>
           </v-card>

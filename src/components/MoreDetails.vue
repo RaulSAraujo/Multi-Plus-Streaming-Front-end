@@ -24,6 +24,7 @@
 
     <v-sheet v-else :rounded="!useDisplay.xs ? 'xl' : ''" elevation="0">
       <v-img
+        :class="!useDisplay.xs ? 'mb-4' : ''"
         :src="`https://image.tmdb.org/t/p/original${backdropPath}`"
         :height="!useDisplay.xs ? '320px' : ''"
         cover
@@ -501,9 +502,13 @@
               class="ma-4"
               height="190"
               width="270"
+              :to="{
+                name: 'Detalhes',
+                params: { id: recommendation.id, movieOrTv: recommendation.media_type },
+              }"
             >
               <v-img
-                :src="`https://image.tmdb.org/t/p/w300${recommendation.backdrop_path}`"
+                :src="`https://image.tmdb.org/t/p/original${recommendation.backdrop_path}`"
                 height="120px"
                 cover
               ></v-img>

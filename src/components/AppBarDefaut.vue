@@ -89,7 +89,7 @@
                 <v-divider class="my-3"></v-divider>
                 <v-btn rounded variant="text"> Editar conta </v-btn>
                 <v-divider class="my-3"></v-divider>
-                <v-btn rounded variant="text"> Desconectar </v-btn>
+                <v-btn rounded variant="text" to="/"> Desconectar </v-btn>
               </div>
             </v-card-text>
           </v-card>
@@ -265,7 +265,18 @@
             </v-card-text>
           </v-img>
           <v-row class="mt-n9" no-gutters justify="end">
-            <v-btn variant="plain">Ver mais</v-btn>
+            <v-btn
+              variant="plain"
+              @click.native="dialog = false"
+              :to="{
+                name: 'Detalhes',
+                params: {
+                  id: movies.id,
+                  movieOrTv: movies.media_type,
+                },
+              }"
+              >Ver mais</v-btn
+            >
           </v-row>
         </v-card>
       </v-card-text>

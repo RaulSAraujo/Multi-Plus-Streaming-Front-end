@@ -1,18 +1,20 @@
 <template>
-  <v-row v-if="loading" justify="center" align="center" class="mt-16">
-    <v-sheet width="200" height="200" rounded="xl" border="sm" elevation="6">
-      <v-row class="mt-7" align="center" justify="center" no-gutters>
-        <v-progress-circular
-          size="100"
-          indeterminate
-          color="primary"
-        ></v-progress-circular>
-      </v-row>
-      <v-row class="mt-5" align="center" justify="center" no-gutters>
-        <span>Carregando...</span>
-      </v-row>
-    </v-sheet>
-  </v-row>
+  <v-app v-if="loading">
+    <v-row justify="center" align="center">
+      <v-sheet width="200" height="200" rounded="xl" border="sm" elevation="6">
+        <v-row class="mt-7" align="center" justify="center" no-gutters>
+          <v-progress-circular
+            size="100"
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
+        </v-row>
+        <v-row class="mt-5" align="center" justify="center" no-gutters>
+          <span>Carregando...</span>
+        </v-row>
+      </v-sheet>
+    </v-row>
+  </v-app>
 
   <v-sheet v-else elevation="0">
     <v-img
@@ -21,20 +23,7 @@
       :height="!useDisplay.xs ? '350px' : ''"
       cover
     >
-      <v-card
-        class="pa-4"
-        height="100%"
-        elevation="0"
-        color="rgb(0, 0, 0, 0.8)"
-      >
-        <template v-slot:append>
-          <v-btn
-            icon="mdi-close"
-            variant="plain"
-            @click="dialog = false"
-          ></v-btn>
-        </template>
-
+      <v-card class="pa-4" height="100%" elevation="0" color="rgb(0, 0, 0, 0.8)">
         <v-card-title>
           <v-row no-gutters justify="space-between" align="center">
             <v-col cols="10" sm="10" md="11" lg="11">
@@ -77,20 +66,16 @@
               {{ releaseDate != "" ? formatDate(releaseDate) : "" }}
             </span>
 
-            <v-icon
-              icon="mdi-ticket-confirmation-outline"
-              class="ml-1"
-              flat
-            ></v-icon>
+            <v-icon icon="mdi-ticket-confirmation-outline" class="ml-1" flat></v-icon>
 
-            <v-breadcrumbs density="compact" divider="," class="py-0 px-0">
+            <v-breadcrumbs density="compact" divider="/" class="py-0 px-0">
               <v-breadcrumbs-item
-                v-for="(genres, index) in genres"
+                v-for="(genre, index) in genres"
                 :key="index"
                 class="px-0"
               >
-                <span>{{ genres.name }}</span>
-                <span v-if="genres.length - 1 > index">/</span>
+                <span>{{ genre.name }}</span>
+                <span v-if="genre.length - 1 > index">/</span>
               </v-breadcrumbs-item>
             </v-breadcrumbs>
 
@@ -100,12 +85,7 @@
           </v-row>
           <v-row v-else no-gutters align="center" class="text-caption">
             <v-col cols="12">
-              <v-icon
-                class="mr-1"
-                icon="mdi-calendar-month"
-                flat
-                size="15"
-              ></v-icon>
+              <v-icon class="mr-1" icon="mdi-calendar-month" flat size="15"></v-icon>
 
               <span>
                 {{ releaseDate != "" ? formatDate(releaseDate) : "" }}
@@ -122,24 +102,19 @@
 
                 <v-breadcrumbs density="compact" divider="," class="py-0 px-0">
                   <v-breadcrumbs-item
-                    v-for="(genres, index) in genres"
+                    v-for="(genre, index) in genres"
                     :key="index"
                     class="px-0"
                   >
-                    <span>{{ genres.name }}</span>
-                    <span v-if="genres.length - 1 > index">/</span>
+                    <span>{{ genre.name }}</span>
+                    <span v-if="genre.length - 1 > index">/</span>
                   </v-breadcrumbs-item>
                 </v-breadcrumbs>
               </v-row>
             </v-col>
             <v-col v-if="runtime" cols="12">
               <v-responsive>
-                <v-icon
-                  size="15"
-                  icon="mdi-timer-sand"
-                  class="mr-1"
-                  flat
-                ></v-icon>
+                <v-icon size="15" icon="mdi-timer-sand" class="mr-1" flat></v-icon>
                 <span>{{ runtime ? formatRuntime(runtime) : "" }}m</span>
               </v-responsive>
             </v-col>
@@ -177,9 +152,7 @@
 
           <v-row align="center" justify="end" no-gutters>
             <span class="mr-2">Avalie:</span>
-            <span class="text-grey-lighten-2 text-caption mr-2">
-              ({{ rating }})
-            </span>
+            <span class="text-grey-lighten-2 text-caption mr-2"> ({{ rating }}) </span>
             <v-rating
               v-model="rating"
               color="white"
@@ -242,10 +215,7 @@
                 selected-class="bg-success"
                 :show-arrows="!useDisplay.xs"
               >
-                <v-slide-group-item
-                  v-for="backdrops in backDrops"
-                  :key="backdrops"
-                >
+                <v-slide-group-item v-for="backdrops in backDrops" :key="backdrops">
                   <v-card
                     color="grey-lighten-3"
                     class="ma-4"
@@ -292,12 +262,7 @@
                 :show-arrows="!useDisplay.xs"
               >
                 <v-slide-group-item v-for="postes in postes" :key="postes">
-                  <v-card
-                    color="grey-lighten-3"
-                    class="ma-4"
-                    height="250"
-                    width="150"
-                  >
+                  <v-card color="grey-lighten-3" class="ma-4" height="250" width="150">
                     <v-img
                       :src="`https://image.tmdb.org/t/p/w300${postes.file_path}`"
                       height="100%"
@@ -328,9 +293,7 @@
               cover
             ></v-img>
             <v-card-title>{{ cast.name }}</v-card-title>
-            <v-card-subtitle class="mt-n3">{{
-              cast.character
-            }}</v-card-subtitle>
+            <v-card-subtitle class="mt-n3">{{ cast.character }}</v-card-subtitle>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -346,13 +309,7 @@
         show-arrows
       >
         <v-slide-group-item v-for="review in reviews" :key="review">
-          <v-card
-            elevation="12"
-            width="600"
-            border="sm"
-            rounded="xl"
-            class="ma-5"
-          >
+          <v-card elevation="12" width="600" border="sm" rounded="xl" class="ma-5">
             <v-card-title class="text-white">
               <v-row v-if="review" no-gutters>
                 <p class="text-h6">Resenha de {{ review.author }}</p>
@@ -392,12 +349,7 @@
         "
         cover
       >
-        <v-card
-          color="rgb(0,0,0,0.4)"
-          density="compact"
-          rounded="t-xl"
-          class="px-3"
-        >
+        <v-card color="rgb(0,0,0,0.4)" density="compact" rounded="t-xl" class="px-3">
           <v-row no-gutters align="start" justify="space-between">
             <v-col>
               <span class="text-h6"
@@ -414,9 +366,7 @@
               </span>
             </v-col>
             <v-col cols="4" sm="2" md="2" lg="2">
-              <v-btn variant="plain" @click="eventEmitEpisodios()"
-                >Ver Episódios</v-btn
-              >
+              <v-btn variant="plain" @click="eventEmitEpisodios()">Ver Episódios</v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -669,17 +619,10 @@ export default {
     },
     formatDate(dateString) {
       const date = dateString != undefined ? new Date(dateString) : "";
-      return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(
-        date
-      );
+      return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(date);
     },
   },
 };
 </script>
 
-<style>
-</style>
-
-
-
-
+<style></style>

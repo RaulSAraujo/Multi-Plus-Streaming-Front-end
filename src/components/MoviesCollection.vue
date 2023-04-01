@@ -61,7 +61,10 @@
             </v-card-text>
           </v-img>
           <v-row class="mt-n9" no-gutters justify="end">
-            <v-btn variant="plain">Ver mais</v-btn>
+            <v-btn variant="plain" :to="{
+                name: 'Detalhes',
+                params: { id: parts.id, movieOrTv: parts.media_type },
+              }">Ver mais</v-btn>
           </v-row>
         </v-card>
       </v-card-text>

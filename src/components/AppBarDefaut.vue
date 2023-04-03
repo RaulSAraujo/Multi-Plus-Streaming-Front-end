@@ -206,8 +206,8 @@
   <v-dialog
     v-model="dialog"
     scrollable
-    :width="!useDisplay.xs ? '80vw' : ''"
-    :height="!useDisplay.xs ? '70vh' : ''"
+    :width="!useDisplay.xs ? '95vw' : ''"
+    :height="!useDisplay.xs ? '95vh' : ''"
     scrim="black"
     :fullscreen="useDisplay.xs"
   >

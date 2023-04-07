@@ -402,7 +402,7 @@ export default {
     getSeriesOnTheAir() {
       axios
         .get(
-          "https://api.themoviedb.org/3/tv/on_the_air?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
+          "https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&sort_by=popularity.desc&with_original_language=en&screened_theatrically=true"
         )
         .then((response) => {
           console.log("No ar", response);
@@ -415,7 +415,7 @@ export default {
     getSeriesPopular() {
       axios
         .get(
-          "https://api.themoviedb.org/3/tv/popular?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
+          "https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&with_original_language=en&watch_region=BR&sort_by=popularity.desc&"
         )
         .then((response) => {
           console.log("Popular", response);
@@ -428,7 +428,7 @@ export default {
     getSeriesTopRated() {
       axios
         .get(
-          "https://api.themoviedb.org/3/tv/top_rated?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
+          "https://api.themoviedb.org/3/tv/top_rated?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR"
         )
         .then((response) => {
           console.log("topRated", response);
@@ -439,9 +439,16 @@ export default {
         });
     },
     getSeriesAiringToday() {
+      const dataAtual = new Date();
+      const ano = dataAtual.getFullYear();
+      const mes = String(dataAtual.getMonth() + 1).padStart(2, "0");
+      const dia = String(dataAtual.getDate()).padStart(2, "0");
+
+      const dataFormatada = `${ano}-${mes}-${dia}`;
+
       axios
         .get(
-          "https://api.themoviedb.org/3/tv/airing_today?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
+          `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&watch_region=BR&sort_by=popularity.desc&with_original_language=pt&air_date.gte=${dataFormatada}&air_date.lte=${dataFormatada}`
         )
         .then((response) => {
           console.log("AiringToday", response);

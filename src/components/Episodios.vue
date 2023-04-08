@@ -23,7 +23,7 @@
         <v-item-group v-if="!useDisplay.xs" v-model="selection">
           <v-row>
             <v-col v-for="(season, i) in seasons" :key="i" cols="12">
-              <v-item v-slot="{ isSelected, toggle }">
+              <v-item v-if="season.air_date" v-slot="{ isSelected, toggle }">
                 <v-card
                   elevation="5"
                   border="sm"
@@ -90,6 +90,7 @@
                             :src="`https://image.tmdb.org/t/p/original${episodio.still_path}`"
                             gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.7)"
                             cover
+                            height="100%"
                           >
                             <v-card-title>
                               <v-row

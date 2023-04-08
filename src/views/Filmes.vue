@@ -57,7 +57,7 @@
               {{ movies.overview }}
             </p>
 
-             <p
+            <p
               v-else
               style="
                 display: -webkit-box;
@@ -87,9 +87,35 @@
     </v-carousel>
 
     <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Em cartaz</h1>
+      <v-row v-if="!useDisplay.xs" no-gutters class="mt-2">
+        <v-col>
+          <h1 class="ml-10 pt-5 mb-n5">Lançamentos</h1>
+        </v-col>
+        <v-col cols="5" sm="4" md="3" lg="2" xl="2">
+          <v-select
+            class="pt-3 mr-7"
+            v-model="selectedGenre"
+            label="Generos"
+            color="primary"
+            density="compact"
+            :items="genres"
+            item-title="name"
+            item-value="id"
+            return-object
+            clearable
+            persistent-clear
+            hide-details
+            single-line
+            hide-selected
+          ></v-select>
+        </v-col>
+      </v-row>
+
+      <h1 v-else class="ml-10 pt-5 mb-n5">Lançamentos</h1>
+
       <v-slide-group
         v-model="modelNowPlaying"
+        ref="slideGroupNowPlaying"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
@@ -121,7 +147,7 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ nowPlaying.overview }}
+                  {{ formatDate(nowPlaying.release_date) }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -168,6 +194,7 @@
       <h1 class="ml-10 pt-5 mb-n5">Populares</h1>
       <v-slide-group
         v-model="modelPopular"
+        ref="slideGroupPopular"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
@@ -199,7 +226,7 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ popular.overview }}
+                  {{ formatDate(popular.release_date) }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -246,6 +273,7 @@
       <h1 class="ml-10 pt-5 mb-n5">Mais votados</h1>
       <v-slide-group
         v-model="modelTopRated"
+        ref="slideGroupTopRated"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
@@ -277,7 +305,7 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ topRated.overview }}
+                  {{ formatDate(topRated.release_date) }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -319,6 +347,13 @@
         @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
       />
     </v-card>
+
+    <FilterMobile
+      v-if="useDisplay.xs"
+      ref="FilterMobile"
+      :genres="genres"
+      @eventChangeGenre="selectedGenre = $event"
+    />
   </div>
 
   <MoviesCollection ref="MoviesCollection" :collectionId="collectionId" />
@@ -340,6 +375,7 @@ import MoreDetails from "@/components/MoreDetails.vue";
 import WatchProviders from "@/components/WatchProviders.vue";
 import MoviesCollection from "@/components/MoviesCollection.vue";
 import ExpandCardDetails from "@/components/ExpandCardDetails.vue";
+import FilterMobile from "@/components/FilterMobile.vue";
 
 export default {
   components: {
@@ -347,6 +383,7 @@ export default {
     WatchProviders,
     MoviesCollection,
     ExpandCardDetails,
+    FilterMobile,
   },
   data() {
     return {
@@ -361,6 +398,8 @@ export default {
       moviesNowPlaying: [],
       modelNowPlaying: undefined,
       moviesDetails: [],
+      genres: [],
+      selectedGenre: null,
       rating: 3,
       movieId: 0,
       movieTitle: "",
@@ -373,6 +412,7 @@ export default {
     this.getFilmesPopular();
     this.getFilmesTopRated();
     this.getFilmesNowPlaying();
+    this.getGenre();
   },
   watch: {
     modelPopular(val) {
@@ -396,6 +436,17 @@ export default {
         this.getDetailsMovies(this.moviesNowPlaying[this.modelNowPlaying].id);
       }
     },
+    selectedGenre() {
+      this.modelPopular = undefined;
+      this.modelTopRated = undefined;
+      this.modelNowPlaying = undefined;
+      this.$refs.slideGroupPopular.scrollOffset = 0;
+      this.$refs.slideGroupTopRated.scrollOffset = 0;
+      this.$refs.slideGroupNowPlaying.scrollOffset = 0;
+      this.getFilmesPopular();
+      this.getFilmesTopRated();
+      this.getFilmesNowPlaying();
+    },
   },
   methods: {
     getFilmesLancamentos() {
@@ -412,10 +463,18 @@ export default {
         });
     },
     getFilmesPopular() {
+      let url = `https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      url = `${url}&language=pt-BR`;
+      url = `${url}&sort_by=popularity.desc`;
+      url = `${url}&with_original_language=en`;
+      url = `${url}&watch_region=BR`;
+
+      if (this.selectedGenre != null) {
+        url = `${url}&with_genres=${this.selectedGenre.id}`;
+      }
+
       axios
-        .get(
-          "https://api.themoviedb.org/3/movie/popular?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
-        )
+        .get(url)
         .then((response) => {
           console.log("Popular", response);
           this.moviesPopular = response.data.results;
@@ -425,10 +484,18 @@ export default {
         });
     },
     getFilmesTopRated() {
+      let url = `https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      url = `${url}&language=pt-BR`;
+      url = `${url}&sort_by=vote_average.desc`;
+      url = `${url}&vote_count.gte=200`;
+      url = `${url}&watch_region=BR`;
+
+      if (this.selectedGenre != null) {
+        url = `${url}&with_genres=${this.selectedGenre.id}`;
+      }
+
       axios
-        .get(
-          "https://api.themoviedb.org/3/movie/top_rated?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
-        )
+        .get(url)
         .then((response) => {
           console.log("Top rated", response);
           this.moviesTopRated = response.data.results;
@@ -438,13 +505,34 @@ export default {
         });
     },
     getFilmesNowPlaying() {
+      let url = `https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      url = `${url}&language=pt-BR`;
+      url = `${url}&sort_by=popularity.desc`;
+      url = `${url}&release_date.gte=2023-03-01&release_date.lte=2023-04-12`;
+      url = `${url}&watch_region=BR`;
+
+      if (this.selectedGenre != null) {
+        url = `${url}&with_genres=${this.selectedGenre.id}`;
+      }
+
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("Now playing", response);
+          this.moviesNowPlaying = response.data.results;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getGenre() {
       axios
         .get(
-          "https://api.themoviedb.org/3/movie/now_playing?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
+          `https://api.themoviedb.org/3/genre/movie/list?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
         )
         .then((response) => {
-          console.log("Top rated", response);
-          this.moviesNowPlaying = response.data.results;
+          console.log("genre", response);
+          this.genres = response.data.genres;
         })
         .catch((error) => {
           console.log(error);

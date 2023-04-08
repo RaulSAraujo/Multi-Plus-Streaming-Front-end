@@ -8,10 +8,11 @@
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="3" lg="3" xl="2">
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${details.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/original${details.poster_path}`"
               class="align-end"
               gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)"
               cover
+              height="100%"
             >
               <v-list-item
                 class="mb-3 text-white"
@@ -70,8 +71,12 @@
                   <span>
                     {{
                       tvOrMovie == "movie"
-                        ? formatDate(details.release_date)
-                        : formatDate(details.first_air_date)
+                        ? details.release_date
+                          ? formatDate(details.release_date)
+                          : ""
+                        : details.first_air_date
+                        ? formatDate(details.first_air_date)
+                        : ""
                     }}
                   </span>
 
@@ -81,20 +86,10 @@
                     flat
                   ></v-icon>
 
-                  <v-breadcrumbs
-                    density="compact"
-                    divider=","
-                    class="py-0 px-0"
-                  >
-                    <v-breadcrumbs-item
-                      v-for="(genres, index) in details.genres"
-                      :key="index"
-                      class="px-0"
-                    >
-                      <span>{{ genres.name }}</span>
-                      <span v-if="details.genres.length - 1 > index">/</span>
-                    </v-breadcrumbs-item>
-                  </v-breadcrumbs>
+                  <span v-for="(genre, index) in details.genres" :key="index">
+                    {{ genre.name }}
+                    <span v-if="details.genres.length > index + 1">/</span>
+                  </span>
 
                   <v-responsive v-if="tvOrMovie == 'movie'">
                     <v-icon icon="mdi-timer-sand" class="mx-1" flat></v-icon>
@@ -133,8 +128,12 @@
                     <span>
                       {{
                         tvOrMovie == "movie"
-                          ? formatDate(details.release_date)
-                          : formatDate(details.first_air_date)
+                          ? details.release_date
+                            ? formatDate(details.release_date)
+                            : ""
+                          : details.first_air_date
+                          ? formatDate(details.first_air_date)
+                          : ""
                       }}
                     </span>
                   </v-col>
@@ -208,6 +207,7 @@
                   style="
                     display: -webkit-box;
                     max-width: 100vw;
+                    min-height: 60px;
                     -webkit-line-clamp: 4;
                     -webkit-box-orient: vertical;
                     overflow: hidden;
@@ -464,6 +464,12 @@ export default {
     model: undefined,
     details: Object,
   },
+  emits: [
+    "eventWatchProviders",
+    "eventWatchColection",
+    "eventMoreDetails",
+    "episodios",
+  ],
   data() {
     return {
       useDisplay: useDisplay(),

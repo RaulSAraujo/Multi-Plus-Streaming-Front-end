@@ -87,9 +87,34 @@
     </v-carousel>
 
     <v-card class="mx-auto">
-      <h1 class="ml-10 pt-5 mb-n5">Populares</h1>
+      <v-row v-if="!useDisplay.xs" no-gutters class="mt-2">
+        <v-col>
+          <h1 class="ml-10 pt-5 mb-n5">Populares</h1>
+        </v-col>
+        <v-col cols="5" sm="4" md="3" lg="2" xl="2">
+          <v-select
+            class="pt-3 mr-7"
+            v-model="selectedGenre"
+            label="Generos"
+            color="primary"
+            density="compact"
+            :items="genres"
+            item-title="name"
+            item-value="id"
+            return-object
+            clearable
+            hide-details
+            single-line
+            hide-selected
+          ></v-select>
+        </v-col>
+      </v-row>
+
+      <h1 v-else class="ml-10 pt-5 mb-n5">Populares</h1>
+
       <v-slide-group
         v-model="modelPopular"
+        ref="slideGroupPopular"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
@@ -121,7 +146,7 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ popular.overview }}
+                  {{ popular.first_air_date ? formatDate(popular.first_air_date) : '' }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -166,6 +191,7 @@
       <h1 class="ml-10 pt-5 mb-n5">Mais votados</h1>
       <v-slide-group
         v-model="modelTopRated"
+        ref="slideGroupTopRated"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
@@ -197,7 +223,8 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ topRated.overview }}
+
+                  {{  topRated.first_air_date ? formatDate(topRated.first_air_date) : '' }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -239,9 +266,10 @@
     </v-card>
 
     <v-card class="mx-auto">
-      <h1 class="ml-10 pt-5 mb-n5">No ar</h1>
+      <h1 class="ml-10 pt-5 mb-n5">Minisérie</h1>
       <v-slide-group
         v-model="modelAiringToday"
+        ref="slideGroupAiringToday"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
@@ -273,7 +301,7 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ airingToday.overview }}
+                  {{ airingToday.first_air_date ? formatDate(airingToday.first_air_date) : '' }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -313,6 +341,13 @@
         @eventMoreDetails="eventMoreDetails(seriesDetails.id)"
       />
     </v-card>
+
+    <FilterMobile
+      v-if="useDisplay.xs"
+      ref="FilterMobile"
+      :genres="genres"
+      @eventChangeGenre="selectedGenre = $event"
+    />
   </div>
 
   <WatchProviders
@@ -327,6 +362,7 @@
     :tvOrMovie="'tv'"
     @episodios="eventEpisodios(seriesDetails.id, seriesDetails.seasons)"
   />
+
   <Episodios ref="Episodios" :serieId="serieId" :seasons="seasons" />
 </template>
 
@@ -339,6 +375,7 @@ import MoreDetails from "@/components/MoreDetails.vue";
 import WatchProviders from "@/components/WatchProviders.vue";
 import ExpandCardDetails from "@/components/ExpandCardDetails.vue";
 import Episodios from "@/components/Episodios.vue";
+import FilterMobile from "@/components/FilterMobile.vue";
 
 export default {
   components: {
@@ -346,6 +383,7 @@ export default {
     WatchProviders,
     ExpandCardDetails,
     Episodios,
+    FilterMobile,
   },
   data() {
     return {
@@ -367,6 +405,8 @@ export default {
       isHovering: false,
       serieId: 0,
       seasons: [],
+      genres: [],
+      selectedGenre: null,
     };
   },
   created() {
@@ -374,6 +414,7 @@ export default {
     this.getSeriesPopular();
     this.getSeriesTopRated();
     this.getSeriesAiringToday();
+    this.getGenre();
   },
   watch: {
     modelPopular(val) {
@@ -397,6 +438,17 @@ export default {
         this.getDetailsSeries(this.seriesAiringToday[this.modelAiringToday].id);
       }
     },
+    selectedGenre() {
+      this.modelPopular = undefined;
+      this.modelTopRated = undefined;
+      this.modelAiringToday = undefined;
+      this.$refs.slideGroupPopular.scrollOffset = 0;
+      this.$refs.slideGroupTopRated.scrollOffset = 0;
+      this.$refs.slideGroupAiringToday.scrollOffset = 0;
+      this.getSeriesPopular();
+      this.getSeriesTopRated();
+      this.getSeriesAiringToday();
+    },
   },
   methods: {
     getSeriesOnTheAir() {
@@ -413,10 +465,18 @@ export default {
         });
     },
     getSeriesPopular() {
+      let url = `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      url = `${url}&language=pt-BR`;
+      url = `${url}&sort_by=popularity.desc`;
+      url = `${url}&with_original_language=en`;
+      url = `${url}&watch_region=BR`;
+
+      if (this.selectedGenre != null) {
+        url = `${url}&with_genres=${this.selectedGenre.id}`;
+      }
+
       axios
-        .get(
-          "https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&with_original_language=en&watch_region=BR&sort_by=popularity.desc&"
-        )
+        .get(url)
         .then((response) => {
           console.log("Popular", response);
           this.seriesPopular = response.data.results;
@@ -426,10 +486,18 @@ export default {
         });
     },
     getSeriesTopRated() {
+      let url = `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      url = `${url}&language=pt-BR`;
+      url = `${url}&sort_by=vote_average.desc`;
+      url = `${url}&vote_count.gte=200`;
+      url = `${url}&watch_region=BR`;
+
+      if (this.selectedGenre != null) {
+        url = `${url}&with_genres=${this.selectedGenre.id}`;
+      }
+
       axios
-        .get(
-          "https://api.themoviedb.org/3/tv/top_rated?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR"
-        )
+        .get(url)
         .then((response) => {
           console.log("topRated", response);
           this.seriesTopRated = response.data.results;
@@ -439,17 +507,19 @@ export default {
         });
     },
     getSeriesAiringToday() {
-      const dataAtual = new Date();
-      const ano = dataAtual.getFullYear();
-      const mes = String(dataAtual.getMonth() + 1).padStart(2, "0");
-      const dia = String(dataAtual.getDate()).padStart(2, "0");
+      let url = `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      url = `${url}&language=pt-BR`;
+      url = `${url}&sort_by=popularity.desc`;
+      url = `${url}&with_original_language=pt`;
+      url = `${url}&watch_region=BR`;
+      url = `${url}&with_type=2`;
 
-      const dataFormatada = `${ano}-${mes}-${dia}`;
+      if (this.selectedGenre != null) {
+        url = `${url}&with_genres=${this.selectedGenre.id}`;
+      }
 
       axios
-        .get(
-          `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&watch_region=BR&sort_by=popularity.desc&with_original_language=pt&air_date.gte=${dataFormatada}&air_date.lte=${dataFormatada}`
-        )
+        .get(url)
         .then((response) => {
           console.log("AiringToday", response);
           this.seriesAiringToday = response.data.results;
@@ -466,6 +536,19 @@ export default {
         .then((response) => {
           console.log("Detalhes", response);
           this.seriesDetails = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getGenre() {
+      axios
+        .get(
+          `https://api.themoviedb.org/3/genre/tv/list?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
+        )
+        .then((response) => {
+          console.log("genre", response);
+          this.genres = response.data.genres;
         })
         .catch((error) => {
           console.log(error);

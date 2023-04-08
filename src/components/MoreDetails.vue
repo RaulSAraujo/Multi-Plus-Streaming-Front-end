@@ -87,20 +87,14 @@
 
               <v-icon
                 icon="mdi-ticket-confirmation-outline"
-                class="ml-1"
+                class="mx-1"
                 flat
               ></v-icon>
 
-              <v-breadcrumbs density="compact" divider="," class="py-0 px-0">
-                <v-breadcrumbs-item
-                  v-for="(genres, index) in genres"
-                  :key="index"
-                  class="px-0"
-                >
-                  <span>{{ genres.name }}</span>
-                  <span v-if="genres.length - 1 > index">/</span>
-                </v-breadcrumbs-item>
-              </v-breadcrumbs>
+              <span v-for="(genre, index) in genres" :key="index">
+                {{ genre.name }}
+                <span v-if="genres.length > index + 1">/</span>
+              </span>
 
               <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
 
@@ -123,25 +117,15 @@
                 <v-row no-gutters align="center">
                   <v-icon
                     icon="mdi-ticket-confirmation-outline"
-                    class="mr-1"
+                    class="mx-1"
                     flat
                     size="15"
                   ></v-icon>
 
-                  <v-breadcrumbs
-                    density="compact"
-                    divider=","
-                    class="py-0 px-0"
-                  >
-                    <v-breadcrumbs-item
-                      v-for="(genres, index) in genres"
-                      :key="index"
-                      class="px-0"
-                    >
-                      <span>{{ genres.name }}</span>
-                      <span v-if="genres.length - 1 > index">/</span>
-                    </v-breadcrumbs-item>
-                  </v-breadcrumbs>
+                  <span v-for="(genre, index) in genres" :key="index">
+                    {{ genre.name }}
+                    <span v-if="genres.length > index + 1">/</span>
+                  </span>
                 </v-row>
               </v-col>
               <v-col v-if="runtime" cols="12">
@@ -504,7 +488,10 @@
               width="270"
               :to="{
                 name: 'Detalhes',
-                params: { id: recommendation.id, movieOrTv: recommendation.media_type },
+                params: {
+                  id: recommendation.id,
+                  movieOrTv: recommendation.media_type,
+                },
               }"
             >
               <v-img

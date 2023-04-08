@@ -111,7 +111,7 @@
           <p :class="!useDisplay.xs ? 'text-h6' : 'text-center'">
             Infelizmente
             {{ this.tvOrMovie == "movie" ? "este filme" : "esta serie" }} não
-            esta disponivel no Brasil.
+            esta disponivel no momento.
           </p>
         </div>
       </v-card-text>
@@ -146,7 +146,7 @@ export default {
     getWatchProviders() {
       axios
         .get(
-          `https://api.themoviedb.org/3/${this.tvOrMovie}/${this.id}/watch/providers?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
+          `https://api.themoviedb.org/3/${this.tvOrMovie}/${this.id}/watch/providers?api_key=9f9a623c8918bc56839f26a94b5507aa`
         )
         .then((response) => {
           this.movieProviders = response.data.results.BR;

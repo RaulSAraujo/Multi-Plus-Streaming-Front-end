@@ -1,386 +1,185 @@
 <template>
   <div>
-    <v-carousel
-      v-model="modelCarousel"
-      cycle
-      height="420"
-      hide-delimiter-background
-      hide-delimiters
-      show-arrows="hover"
-      :interval="isHovering ? 50000 : 6000"
-      @mouseenter="isHovering = true"
-      @mouseleave="isHovering = false"
-    >
-      <v-carousel-item
-        v-for="(movies, index) in moviesUpcoming"
-        :key="index"
-        :src="`https://image.tmdb.org/t/p/original${
-          movies.backdrop_path != null
-            ? movies.backdrop_path
-            : movies.poster_path
-        }`"
-        cover
-        class="justify-center align-end"
-      >
-        <v-responsive height="100vh" width="100vw" class="d-flex">
-          <div
-            style="
-              width: 100vw;
-              height: 100vh;
-              position: absolute;
-              background: rgb(0, 0, 0, 0.4);
-              filter: blur(0px);
-            "
-          ></div>
-        </v-responsive>
-
-        <v-card
-          height="180px"
-          width="100%"
-          elevation="0"
-          color="rgb(0, 0, 0,0.4)"
-          :class="!useDisplay.xs ? 'mx-auto pl-12' : ''"
-          :title="movies.title"
-        >
-          <v-card-text>
-            <p
-              v-if="!useDisplay.xs"
-              style="
-                display: -webkit-box;
-                max-width: 50vw;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-              "
-              class="text-body-2"
-            >
-              {{ movies.overview }}
-            </p>
-
-            <p
-              v-else
-              style="
-                display: -webkit-box;
-                max-width: 100vw;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-              "
-              class="text-body-2"
-            >
-              {{ movies.overview }}
-            </p>
-
-            <v-btn class="mt-4 mr-2" variant="outlined" prepend-icon="mdi-plus"
-              >Minha lista</v-btn
-            >
-            <v-btn
-              class="mt-4"
-              variant="outlined"
-              prepend-icon="mdi-information"
-              @click="eventMoreDetails(movies.id)"
-              >Saiba mais</v-btn
-            >
-          </v-card-text>
-        </v-card>
-      </v-carousel-item>
-    </v-carousel>
-
     <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Descobrir filmes</h1>
+      <v-row no-gutters>
+        <h1 class="ml-10 pt-5 mb-n5">Os Mais Populares</h1>
+
+        <v-btn-toggle
+          v-model="tabsPopulares"
+          class="mt-6 mb-n5 ml-12"
+          rounded="xl"
+          color="primary"
+          variant="outlined"
+          density="compact"
+        >
+          <v-btn value="flatrate">Streaming</v-btn>
+          <v-btn value="rent"> Para alugar </v-btn>
+          <v-btn value="buy"> Comprar </v-btn>
+        </v-btn-toggle>
+      </v-row>
+
+      <v-row no-gutters class="mt-5 mb-n4">
+        <v-progress-linear
+          v-if="loadingPopulares"
+          indeterminate
+          color="primary"
+        ></v-progress-linear>
+      </v-row>
+
       <v-slide-group
-        v-model="modelNowPlaying"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
         :show-arrows="useDisplay.xs ? false : true"
       >
-        <v-slide-group-item
-          v-for="(nowPlaying, index) in moviesNowPlaying"
-          :key="index"
-          v-slot="{ toggle, selectedClass }"
-        >
-          <v-card
-            color="black/80"
-            :class="['ma-2', selectedClass]"
-            height="220"
-            width="150"
-            @click="toggle"
-          >
+        <v-slide-group-item v-for="(pop, index) in populares" :key="index">
+          <v-card color="black/80" class="ma-2" height="220" width="150">
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${nowPlaying.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/original${pop.poster_path}`"
               height="220px"
               cover
             ></v-img>
-
-            <!-- <v-card-title>
-              {{ nowPlaying.title }}
-            </v-card-title>
-
-            <v-card-subtitle class="mt-n3">
-              <v-responsive height="20px" width="100%">
-                <div class="text-truncate">
-                  {{ nowPlaying.overview }}
-                </div>
-              </v-responsive>
-            </v-card-subtitle>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-icon icon="mdi-menu-down" color="grey" />
-              <v-spacer></v-spacer>
-            </v-card-actions> -->
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
-
-      <ExpandCardDetails
-        :tvOrMovie="'movie'"
-        :model="modelNowPlaying"
-        :details="moviesDetails"
-        @eventWatchProviders="
-          eventWatchProviders(moviesDetails.id, moviesDetails.title)
-        "
-        @eventWatchColection="
-          eventWatchColection(moviesDetails.belongs_to_collection.id)
-        "
-        @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
-      />
     </v-card>
 
-    <!-- <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Descobrir series</h1>
+    <v-card class="mx-auto" elevation="0">
+      <v-row no-gutters>
+        <h1 class="ml-10 pt-5 mb-n5">Grátis para Assistir</h1>
+
+        <v-btn-toggle
+          v-model="tabsMovieTvFree"
+          class="mt-6 mb-n5 ml-12"
+          rounded="xl"
+          color="primary"
+          variant="outlined"
+          density="compact"
+          divided
+        >
+          <v-btn value="movie">Filmes</v-btn>
+          <v-btn value="tv"> Series </v-btn>
+        </v-btn-toggle>
+      </v-row>
+
+      <v-row no-gutters class="mt-5 mb-n4">
+        <v-progress-linear
+          v-if="loadingMovieTvFree"
+          indeterminate
+          color="primary"
+        ></v-progress-linear>
+      </v-row>
+
       <v-slide-group
-        v-model="modelPopular"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
         :show-arrows="useDisplay.xs ? false : true"
       >
-        <v-slide-group-item
-          v-for="(popular, index) in moviesPopular"
-          :key="index"
-          v-slot="{ toggle, selectedClass }"
-        >
-          <v-card
-            color="black/80"
-            :class="['ma-4', selectedClass]"
-            height="220"
-            width="270"
-            @click="toggle"
-          >
+        <v-slide-group-item v-for="(free, index) in movieTvFree" :key="index">
+          <v-card color="black/80" class="ma-2" height="220" width="150">
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
-              height="120px"
+              :src="`https://image.tmdb.org/t/p/original${free.poster_path}`"
+              height="220px"
               cover
             ></v-img>
-
-            <v-card-title>
-              {{ popular.title }}
-            </v-card-title>
-
-            <v-card-subtitle class="mt-n3">
-              <v-responsive height="20px" width="100%">
-                <div class="text-truncate">
-                  {{ popular.overview }}
-                </div>
-              </v-responsive>
-            </v-card-subtitle>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-icon icon="mdi-menu-down" color="grey" />
-              <v-spacer></v-spacer>
-            </v-card-actions>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
-
-      <ExpandCardDetails
-        :tvOrMovie="'movie'"
-        :model="modelPopular"
-        :details="moviesDetails"
-        @eventWatchProviders="
-          eventWatchProviders(moviesDetails.id, moviesDetails.title)
-        "
-        @eventWatchColection="
-          eventWatchColection(moviesDetails.belongs_to_collection.id)
-        "
-        @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
-      />
-    </v-card> -->
+    </v-card>
   </div>
-
-  <MoviesCollection ref="MoviesCollection" :collectionId="collectionId" />
-  <WatchProviders
-    ref="WatchProviders"
-    :id="movieId"
-    :title="movieTitle"
-    :tvOrMovie="'movie'"
-  />
-  <MoreDetails ref="MoreDetails" :id="movieId" :tvOrMovie="'movie'" />
 </template>
 
 <script>
 import axios from "axios";
-import { useLoginStore } from "@/store/LoginStore";
 import { useDisplay } from "vuetify";
 
-import MoreDetails from "@/components/MoreDetails.vue";
-import WatchProviders from "@/components/WatchProviders.vue";
-import MoviesCollection from "@/components/MoviesCollection.vue";
-import ExpandCardDetails from "@/components/ExpandCardDetails.vue";
-
 export default {
-  components: {
-    MoreDetails,
-    WatchProviders,
-    MoviesCollection,
-    ExpandCardDetails,
-  },
   data() {
     return {
       useDisplay: useDisplay(),
-      loginStore: useLoginStore(),
-      modelCarousel: 0,
-      moviesUpcoming: [],
-      moviesPopular: [],
-      modelPopular: undefined,
-      moviesTopRated: [],
-      modelTopRated: undefined,
-      moviesNowPlaying: [],
-      modelNowPlaying: undefined,
-      moviesDetails: [],
-      rating: 3,
-      movieId: 0,
-      movieTitle: "",
-      collectionId: 0,
-      isHovering: false,
+      tabsMovieTvFree: "movie",
+      movieTvFree: [],
+      loadingMovieTvFree: false,
+      tabsPopulares: "flatrate",
+      populares: [],
+      loadingPopulares: false,
     };
   },
   created() {
-    this.getFilmesLancamentos();
-    this.getFilmesPopular();
-    this.getFilmesTopRated();
-    this.getFilmesNowPlaying();
+    this.getMovieTvFree();
+    this.getPopulares();
   },
   watch: {
-    modelPopular(val) {
-      if (val != undefined) {
-        this.modelTopRated = undefined;
-        this.modelNowPlaying = undefined;
-        this.getDetailsMovies(this.moviesPopular[this.modelPopular].id);
-      }
+    tabsMovieTvFree() {
+      this.getMovieTvFree();
     },
-    modelTopRated(val) {
-      if (val != undefined) {
-        this.modelPopular = undefined;
-        this.modelNowPlaying = undefined;
-        this.getDetailsMovies(this.moviesTopRated[this.modelTopRated].id);
-      }
-    },
-    modelNowPlaying(val) {
-      if (val != undefined) {
-        this.modelPopular = undefined;
-        this.modelTopRated = undefined;
-        this.getDetailsMovies(this.moviesNowPlaying[this.modelNowPlaying].id);
-      }
+    tabsPopulares() {
+      this.getPopulares();
     },
   },
   methods: {
-    getFilmesLancamentos() {
-      axios
-        .get(
-          "https://api.themoviedb.org/3/movie/upcoming?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
-        )
-        .then((response) => {
-          console.log("Lancamentos", response);
-          this.moviesUpcoming = response.data.results;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getFilmesPopular() {
-      axios
-        .get(
-          "https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
-        )
-        .then((response) => {
-          console.log("Popular", response);
-          this.moviesPopular = response.data.results;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getFilmesTopRated() {
-      axios
-        .get(
-          "https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
-        )
-        .then((response) => {
-          console.log("Top rated", response);
-          this.moviesTopRated = response.data.results;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getFilmesNowPlaying() {
-      axios
-        .get(
-          "https://api.themoviedb.org/3/movie/now_playing?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR"
-        )
-        .then((response) => {
-          console.log("Top rated", response);
-          this.moviesNowPlaying = response.data.results;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getDetailsMovies(id) {
-      axios
-        .get(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=reviews`
-        )
-        .then((response) => {
-          console.log("Detalhes", response);
-          this.moviesDetails = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    eventWatchColection(collectionId) {
-      this.collectionId = collectionId;
-      setTimeout(() => {
-        this.$refs.MoviesCollection.dialog = true;
-      }, 100);
-    },
-    eventWatchProviders(id, title) {
-      this.movieId = id;
-      this.movieTitle = title;
-      setTimeout(() => {
-        this.$refs.WatchProviders.dialog = true;
-      }, 100);
-    },
-    eventMoreDetails(id) {
-      this.movieId = id;
-      setTimeout(() => {
-        this.$refs.MoreDetails.dialog = true;
-      }, 100);
-    },
-    formatRuntime(runtime) {
-      if (runtime != undefined) {
-        const horas = Math.floor(runtime / 60);
-        const min = runtime % 60;
-        const textoHoras = `00${horas}`.slice(-2);
-        const textoMinutos = `00${min}`.slice(-2);
+    getPopulares() {
+      let url = `https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      url = `${url}&language=pt-BR`;
+      url = `${url}&sort_by=popularity.desc`;
+      url = `${url}&with_original_language=en`;
+      url = `${url}&with_watch_monetization_types=${this.tabsPopulares}`;
+      url = `${url}&watch_region=BR`;
 
-        return `${textoHoras}:${textoMinutos}`;
-      }
+      axios
+        .get(url)
+        .then((response1) => {
+          console.log("PopularesMovie", response1);
+          const data1 = response1.data.results;
+
+          let url2 = `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+          url2 = `${url2}&language=pt-BR`;
+          url2 = `${url2}&sort_by=popularity.desc`;
+          url2 = `${url2}&with_original_language=en`;
+          url2 = `${url2}&with_watch_monetization_types=${this.tabsPopulares}`;
+          url2 = `${url2}&watch_region=BR`;
+
+          axios
+            .get(url2)
+            .then((response2) => {
+              console.log("PopularesTv", response2);
+              const data2 = response2.data.results;
+
+              const mergedData = data1.concat(data2);
+
+              this.populares = mergedData.filter(
+                (item) => item.popularity > 700
+              );
+              this.populares.sort((a, b) => b.popularity - a.popularity);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getMovieTvFree() {
+      this.loadingMovieTvFree = true;
+      let url = `https://api.themoviedb.org/3/discover/${this.tabsMovieTvFree}?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      url = `${url}&language=pt-BR`;
+      url = `${url}&sort_by=popularity.desc`;
+      url = `${url}&with_original_language=en`;
+      url = `${url}&with_watch_monetization_types=free`;
+      url = `${url}&watch_region=BR`;
+
+      axios
+        .get(url)
+        .then((response) => {
+          console.log("Free", response);
+          this.movieTvFree = response.data.results;
+          this.loadingMovieTvFree = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     formatDate(dateString) {
       const date = dateString != undefined ? new Date(dateString) : "";
@@ -389,13 +188,12 @@ export default {
       );
     },
   },
-  computed: {
-    formattedDate() {
-      return this.formatDate(this.date);
-    },
-  },
 };
 </script>
 
 <style scoped>
+.styleTabs {
+  border: 1px solid white;
+  padding: 0px 20px 0px 20px;
+}
 </style>

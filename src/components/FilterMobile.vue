@@ -9,7 +9,7 @@
   <v-dialog v-model="dialog" scrim="black" scrollable fullscreen>
     <v-sheet>
       <v-toolbar density="compact">
-        <v-toolbar-title> Filtros </v-toolbar-title>
+        <v-toolbar-title> Generos </v-toolbar-title>
         <v-toolbar-items>
           <v-btn
             icon="mdi-close"
@@ -28,11 +28,11 @@
           color="primary"
           @click="changeGenreList(genre)"
         >
-          <template v-slot:prepend="{ isActive }">
+          <!-- <template v-slot:prepend="{ isActive }">
             <v-list-item-action start>
               <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
             </v-list-item-action>
-          </template>
+          </template> -->
         </v-list-item>
       </v-list>
     </v-sheet>

@@ -473,9 +473,16 @@
       </v-sheet>
 
       <v-list v-else>
-        <v-list-item link @click="dialogReviews = true">
+        <v-list-item v-if="reviews.length > 0" link @click="dialogReviews = true">
           <v-list-item-title class="text-h5">Veja as reviews</v-list-item-title>
           <v-list-item-subtitle>Click aqui</v-list-item-subtitle>
+        </v-list-item>
+        <v-list-item v-else>
+          <v-list-item-title class="text-h5">Veja as reviews</v-list-item-title>
+          <v-list-item-subtitle
+            >Ainda não temos uma resenha para
+            {{ nameTitle }}.</v-list-item-subtitle
+          >
         </v-list-item>
       </v-list>
 

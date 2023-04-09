@@ -409,8 +409,8 @@
     <span v-if="!useDisplay.xs" class="ml-12 mt-5 text-h5">Reviews</span>
     <v-sheet v-if="!useDisplay.xs" elevation="0" max-width="100%">
       <v-slide-group
-        v-model="modelReviews"
         v-if="reviews.length > 0"
+        v-model="modelReviews"
         class="pa-4"
         selected-class="bg-success"
         show-arrows
@@ -445,9 +445,16 @@
     </v-sheet>
 
     <v-list v-else>
-      <v-list-item link @click="dialogReviews = true">
+      <v-list-item v-if="reviews.length > 0" link @click="dialogReviews = true">
         <v-list-item-title class="text-h5">Veja as reviews</v-list-item-title>
         <v-list-item-subtitle>Click aqui</v-list-item-subtitle>
+      </v-list-item>
+      <v-list-item v-else>
+        <v-list-item-title class="text-h5">Veja as reviews</v-list-item-title>
+        <v-list-item-subtitle
+          >Ainda não temos uma resenha para
+          {{ nameTitle }}.</v-list-item-subtitle
+        >
       </v-list-item>
     </v-list>
 

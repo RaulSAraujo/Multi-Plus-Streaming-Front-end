@@ -19,11 +19,34 @@
   <v-sheet v-else elevation="0">
     <v-img
       :class="!useDisplay.xs ? 'mb-4' : ''"
-      :src="`https://image.tmdb.org/t/p/original${backdropPath}`"
+      :src="
+        backdropPath
+          ? `https://image.tmdb.org/t/p/original${backdropPath}`
+          : `https://image.tmdb.org/t/p/original${posterPath}`
+      "
+      :lazy-src="
+        backdropPath
+          ? `https://image.tmdb.org/t/p/w300${backdropPath}`
+          : `https://image.tmdb.org/t/p/w300${posterPath}`
+      "
       :height="!useDisplay.xs ? '350px' : ''"
       cover
     >
-      <v-card class="pa-4" height="100%" elevation="0" color="rgb(0, 0, 0, 0.8)">
+      <template v-slot:placeholder>
+        <div class="d-flex align-center justify-center fill-height">
+          <v-progress-circular
+            color="grey-lighten-4"
+            indeterminate
+          ></v-progress-circular>
+        </div>
+      </template>
+
+      <v-card
+        class="pa-4"
+        height="100%"
+        elevation="0"
+        color="rgb(0, 0, 0, 0.8)"
+      >
         <v-card-title>
           <v-row no-gutters justify="space-between" align="center">
             <v-col cols="10" sm="10" md="11" lg="11">
@@ -66,7 +89,11 @@
               {{ releaseDate != "" ? formatDate(releaseDate) : "" }}
             </span>
 
-            <v-icon icon="mdi-ticket-confirmation-outline" class="ml-1" flat></v-icon>
+            <v-icon
+              icon="mdi-ticket-confirmation-outline"
+              class="ml-1"
+              flat
+            ></v-icon>
 
             <v-breadcrumbs density="compact" divider="/" class="py-0 px-0">
               <v-breadcrumbs-item
@@ -85,7 +112,12 @@
           </v-row>
           <v-row v-else no-gutters align="center" class="text-caption">
             <v-col cols="12">
-              <v-icon class="mr-1" icon="mdi-calendar-month" flat size="15"></v-icon>
+              <v-icon
+                class="mr-1"
+                icon="mdi-calendar-month"
+                flat
+                size="15"
+              ></v-icon>
 
               <span>
                 {{ releaseDate != "" ? formatDate(releaseDate) : "" }}
@@ -114,7 +146,12 @@
             </v-col>
             <v-col v-if="runtime" cols="12">
               <v-responsive>
-                <v-icon size="15" icon="mdi-timer-sand" class="mr-1" flat></v-icon>
+                <v-icon
+                  size="15"
+                  icon="mdi-timer-sand"
+                  class="mr-1"
+                  flat
+                ></v-icon>
                 <span>{{ runtime ? formatRuntime(runtime) : "" }}m</span>
               </v-responsive>
             </v-col>
@@ -127,6 +164,7 @@
               style="
                 display: -webkit-box;
                 max-width: 100vw;
+                min-height: 100px;
                 -webkit-line-clamp: 4;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
@@ -152,7 +190,9 @@
 
           <v-row align="center" justify="end" no-gutters>
             <span class="mr-2">Avalie:</span>
-            <span class="text-grey-lighten-2 text-caption mr-2"> ({{ rating }}) </span>
+            <span class="text-grey-lighten-2 text-caption mr-2">
+              ({{ rating }})
+            </span>
             <v-rating
               v-model="rating"
               color="white"
@@ -211,11 +251,15 @@
           <v-window-item value="Imagens" disabled>
             <v-sheet elevation="0" max-width="100%">
               <v-slide-group
+                v-if="backDrops.length > 0"
                 v-model="modelBackDrops"
                 selected-class="bg-success"
                 :show-arrows="!useDisplay.xs"
               >
-                <v-slide-group-item v-for="backdrops in backDrops" :key="backdrops">
+                <v-slide-group-item
+                  v-for="backdrops in backDrops"
+                  :key="backdrops"
+                >
                   <v-card
                     color="grey-lighten-3"
                     class="ma-4"
@@ -224,45 +268,103 @@
                     rounded="lg"
                   >
                     <v-img
-                      :src="`https://image.tmdb.org/t/p/w500${backdrops.file_path}`"
+                      :src="`https://image.tmdb.org/t/p/original${backdrops.file_path}`"
+                      :lazy-src="`https://image.tmdb.org/t/p/w300${backdrops.file_path}`"
                       height="100%"
                       cover
-                    ></v-img>
+                    >
+                      <template v-slot:placeholder>
+                        <div
+                          class="d-flex align-center justify-center fill-height"
+                        >
+                          <v-progress-circular
+                            color="grey-lighten-4"
+                            indeterminate
+                          ></v-progress-circular>
+                        </div>
+                      </template>
+                    </v-img>
                   </v-card>
                 </v-slide-group-item>
               </v-slide-group>
+
+              <span v-else class="ml-5 text-body-1"
+                >Nenhuma imagem de fundo foram adicionadas em
+                {{ nameTitle }}.</span
+              >
             </v-sheet>
           </v-window-item>
           <v-window-item value="Videos">
             <v-sheet elevation="0" max-width="100%">
               <v-slide-group
+                v-if="videos.length > 0"
                 v-model="modelVideos"
                 selected-class="bg-success"
-                show-arrows
+                :show-arrows="!useDisplay.xs"
               >
-                <v-slide-group-item v-for="video in videos" :key="video">
-                  <iframe
-                    class="my-4 mr-2"
-                    :width="!useDisplay.xs ? '450' : '300'"
-                    :height="!useDisplay.xs ? '250' : '170'"
-                    :src="`https://www.youtube-nocookie.com/embed/${video.key}`"
-                    frameborder="0"
-                    allow="autoplay; encrypted-media"
-                    allowfullscreen
-                  ></iframe>
+                <v-slide-group-item
+                  v-for="(video, index) in videos"
+                  :key="index"
+                >
+                  <v-card
+                    class="ma-4"
+                    :width="!useDisplay.xs ? '450' : '60vw'"
+                    :height="!useDisplay.xs ? '250' : '150'"
+                    @click="playDialog(video)"
+                  >
+                    <v-img
+                      :src="`https://image.tmdb.org/t/p/original${backDrops[index].file_path}`"
+                      :lazy-src="`https://image.tmdb.org/t/p/w300${backDrops[index].file_path}`"
+                      height="100%"
+                      cover
+                    >
+                      <template v-slot:placeholder>
+                        <div
+                          class="d-flex align-center justify-center fill-height"
+                        >
+                          <v-progress-circular
+                            color="grey-lighten-4"
+                            indeterminate
+                          ></v-progress-circular>
+                        </div>
+                      </template>
+
+                      <v-card height="100%" color="rgb(0,0,0,0.5)">
+                        <div
+                          class="d-flex align-center justify-center fill-height"
+                        >
+                          <v-icon
+                            icon="mdi-youtube"
+                            size="80"
+                            color="red"
+                          ></v-icon>
+                        </div>
+                      </v-card>
+                    </v-img>
+                  </v-card>
                 </v-slide-group-item>
               </v-slide-group>
+
+              <span v-else class="ml-5 text-body-1"
+                >Nenhuma video foi adicionados em {{ nameTitle }}.</span
+              >
             </v-sheet>
           </v-window-item>
           <v-window-item value="Pôsteres">
             <v-sheet elevation="0" max-width="100%">
               <v-slide-group
+                v-if="postes.length > 0"
                 v-model="modelPostes"
                 selected-class="bg-success"
                 :show-arrows="!useDisplay.xs"
               >
                 <v-slide-group-item v-for="postes in postes" :key="postes">
-                  <v-card color="grey-lighten-3" class="ma-4" height="250" width="150">
+                  <v-card
+                    color="grey-lighten-3"
+                    class="ma-4"
+                    height="250"
+                    width="150"
+                  >
                     <v-img
                       :src="`https://image.tmdb.org/t/p/w300${postes.file_path}`"
                       height="100%"
@@ -271,6 +373,9 @@
                   </v-card>
                 </v-slide-group-item>
               </v-slide-group>
+              <span v-else class="ml-5 text-body-1"
+                >Nenhum posteres foram adicionado em {{ nameTitle }}.</span
+              >
             </v-sheet>
           </v-window-item>
         </v-window>
@@ -293,14 +398,16 @@
               cover
             ></v-img>
             <v-card-title>{{ cast.name }}</v-card-title>
-            <v-card-subtitle class="mt-n3">{{ cast.character }}</v-card-subtitle>
+            <v-card-subtitle class="mt-n3">{{
+              cast.character
+            }}</v-card-subtitle>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
     </v-sheet>
 
-    <span class="ml-12 mt-5 text-h5">Reviews</span>
-    <v-sheet elevation="0" max-width="100%">
+    <span v-if="!useDisplay.xs" class="ml-12 mt-5 text-h5">Reviews</span>
+    <v-sheet v-if="!useDisplay.xs" elevation="0" max-width="100%">
       <v-slide-group
         v-model="modelReviews"
         v-if="reviews.length > 0"
@@ -309,7 +416,13 @@
         show-arrows
       >
         <v-slide-group-item v-for="review in reviews" :key="review">
-          <v-card elevation="12" width="600" border="sm" rounded="xl" class="ma-5">
+          <v-card
+            elevation="12"
+            width="600"
+            border="sm"
+            rounded="xl"
+            class="ma-5"
+          >
             <v-card-title class="text-white">
               <v-row v-if="review" no-gutters>
                 <p class="text-h6">Resenha de {{ review.author }}</p>
@@ -326,10 +439,17 @@
       </v-slide-group>
       <v-card v-else elevation="0" class="ml-8">
         <v-card-title class="text-body-1"
-          >Infelizmente este filme não possui resenhas.</v-card-title
+          >Ainda não temos uma resenha para {{ nameTitle }}.</v-card-title
         >
       </v-card>
     </v-sheet>
+
+    <v-list v-else>
+      <v-list-item link @click="dialogReviews = true">
+        <v-list-item-title class="text-h5">Veja as reviews</v-list-item-title>
+        <v-list-item-subtitle>Click aqui</v-list-item-subtitle>
+      </v-list-item>
+    </v-list>
 
     <v-card v-if="tvOrMovie == 'tv'" class="my-5">
       <v-img
@@ -349,7 +469,12 @@
         "
         cover
       >
-        <v-card color="rgb(0,0,0,0.4)" density="compact" rounded="t-xl" class="px-3">
+        <v-card
+          color="rgb(0,0,0,0.4)"
+          density="compact"
+          rounded="t-xl"
+          class="px-3"
+        >
           <v-row no-gutters align="start" justify="space-between">
             <v-col>
               <span class="text-h6"
@@ -366,7 +491,9 @@
               </span>
             </v-col>
             <v-col cols="4" sm="2" md="2" lg="2">
-              <v-btn variant="plain" @click="eventEmitEpisodios()">Ver Episódios</v-btn>
+              <v-btn variant="plain" @click="eventEmitEpisodios()"
+                >Ver Episódios</v-btn
+              >
             </v-col>
           </v-row>
         </v-card>
@@ -464,11 +591,75 @@
       </v-slide-group>
       <v-card v-else elevation="0" class="ml-8">
         <v-card-title class="text-body-1"
-          >Não possuimos recomendações no momento</v-card-title
+          >Ainda não temos dados o suficiente para sugerir filmes com base em
+          {{ nameTitle }}</v-card-title
         >
       </v-card>
     </v-sheet>
   </v-sheet>
+
+  <v-dialog v-model="dialogPlay" scrim="black">
+    <v-row justify="center">
+      <v-card color="black" height="50" width="80vw" rounded="t-xl">
+        <v-row no-gutters justify="end" class="mr-6 mt-2 mb-n3">
+          <v-icon
+            icon="mdi-close"
+            size="large"
+            color="grey"
+            @click="dialogPlay = false"
+          ></v-icon>
+        </v-row>
+      </v-card>
+    </v-row>
+
+    <v-row justify="center" align="center">
+      <v-card color="black" width="80vw" height="70vh" rounded="b-xl">
+        <iframe
+          class="my-4 mr-2"
+          width="100%"
+          height="100%"
+          :src="`https://www.youtube-nocookie.com/embed/${selectPlay.key}`"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+        ></iframe>
+      </v-card>
+    </v-row>
+  </v-dialog>
+
+  <v-dialog v-model="dialogReviews" scrim="black" fullscreen>
+    <v-card>
+      <v-card-title class="bg-surface text-h5 py-4">
+        <v-row no-gutters>
+          <span class="text-h5">Reviews</span>
+          <v-spacer></v-spacer>
+          <v-btn
+            icon="mdi-close"
+            variant="plain"
+            @click="dialogReviews = false"
+          ></v-btn>
+        </v-row>
+      </v-card-title>
+      <v-card-text>
+        <div v-for="(review, index) in reviews" :key="index">
+          <v-card elevation="0" width="100%">
+            <v-card-title class="text-white">
+              <v-row v-if="review" no-gutters>
+                <p class="text-h6">Resenha de {{ review.author }}</p>
+              </v-row>
+            </v-card-title>
+
+            <v-card-text>
+              <p class="text-body-2">
+                {{ review.content }}
+              </p>
+            </v-card-text>
+          </v-card>
+          <v-divider v-if="reviews.length > index + 1"></v-divider>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 
   <WatchProviders
     ref="WatchProviders"
@@ -511,6 +702,7 @@ export default {
       nameTitle: "",
       voteAverage: "",
       backdropPath: "",
+      posterPath: "",
       genres: [],
       releaseDate: "",
       runtime: 0,
@@ -529,6 +721,9 @@ export default {
       numberOfEpisodes: 0,
       inProduction: false,
       seasons: [],
+      dialogPlay: false,
+      selectPlay: [],
+      dialogReviews: false,
     };
   },
   created() {
@@ -558,6 +753,7 @@ export default {
             this.tvOrMovie == "tv" ? response.data.name : response.data.title;
           this.voteAverage = response.data.vote_average.toFixed(1);
           this.backdropPath = response.data.backdrop_path;
+          this.posterPath = response.data.poster_path;
           this.genres = response.data.genres;
           this.releaseDate = response.data.release_date;
           this.runtime =
@@ -595,6 +791,10 @@ export default {
     eventEmitEpisodios() {
       this.$refs.Episodios.dialog = true;
     },
+    playDialog(video) {
+      this.selectPlay = video;
+      this.dialogPlay = true;
+    },
     goRouter(id, mediaType) {
       setTimeout(() => {
         this.$router.replace({
@@ -619,7 +819,9 @@ export default {
     },
     formatDate(dateString) {
       const date = dateString != undefined ? new Date(dateString) : "";
-      return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(date);
+      return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(
+        date
+      );
     },
   },
 };

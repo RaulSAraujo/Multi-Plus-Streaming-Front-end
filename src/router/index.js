@@ -4,7 +4,6 @@ import Landing from '@/views/LandingPage.vue';
 import Inicio from '@/views/Inicio.vue';
 import Filmes from "@/views/Filmes.vue";
 import Series from "@/views/Series.vue";
-import Livros from "@/views/Livros.vue"
 import Details from "@/views/Details.vue"
 
 const routes = [
@@ -27,11 +26,6 @@ const routes = [
     path: '/Series',
     name: 'Series',
     component: Series,
-  },
-  {
-    path: '/Livros',
-    name: 'Livros',
-    component: Livros,
   },
   {
     path: '/Detalhes/:movieOrTv/:id',

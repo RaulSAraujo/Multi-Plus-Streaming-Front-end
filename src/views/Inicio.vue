@@ -1,12 +1,28 @@
 <template>
   <div>
     <v-card class="mx-auto" elevation="0">
-      <v-row no-gutters>
+      <v-row v-if="!useDisplay.xs" no-gutters>
         <h1 class="ml-10 pt-5 mb-n5">Tendências</h1>
 
         <v-btn-toggle
           v-model="tabsTendencias"
           class="mt-6 mb-n5 ml-12"
+          rounded="xl"
+          color="primary"
+          variant="outlined"
+          density="compact"
+          divided
+        >
+          <v-btn value="day">Hoje</v-btn>
+          <v-btn value="week">Nesta semana </v-btn>
+        </v-btn-toggle>
+      </v-row>
+      <v-row v-if="useDisplay.xs" justify="center" class="pt-6 mb-n5">
+        <h1>Tendências</h1>
+      </v-row>
+      <v-row v-if="useDisplay.xs" justify="center" class="mt-6 mb-n5">
+        <v-btn-toggle
+          v-model="tabsTendencias"
           rounded="xl"
           color="primary"
           variant="outlined"
@@ -67,12 +83,28 @@
     </v-card>
 
     <v-card class="mx-auto" elevation="0">
-      <v-row no-gutters>
+      <v-row v-if="!useDisplay.xs" no-gutters>
         <h1 class="ml-10 pt-5 mb-n5">Os Mais Populares</h1>
 
         <v-btn-toggle
           v-model="tabsPopulares"
           class="mt-6 mb-n5 ml-12"
+          rounded="xl"
+          color="primary"
+          variant="outlined"
+          density="compact"
+        >
+          <v-btn value="flatrate">Streaming</v-btn>
+          <v-btn value="rent"> Para alugar </v-btn>
+          <v-btn value="buy"> Comprar </v-btn>
+        </v-btn-toggle>
+      </v-row>
+      <v-row v-if="useDisplay.xs" justify="center" class="pt-5 mb-n5">
+        <h1>Os Mais Populares</h1>
+      </v-row>
+      <v-row v-if="useDisplay.xs" justify="center" class="mt-6 mb-n5">
+        <v-btn-toggle
+          v-model="tabsPopulares"
           rounded="xl"
           color="primary"
           variant="outlined"
@@ -134,12 +166,28 @@
     </v-card>
 
     <v-card class="mx-auto" elevation="0">
-      <v-row no-gutters>
+      <v-row v-if="!useDisplay.xs" no-gutters>
         <h1 class="ml-10 pt-5 mb-n5">Grátis para Assistir</h1>
 
         <v-btn-toggle
           v-model="tabsMovieTvFree"
           class="mt-6 mb-n5 ml-12"
+          rounded="xl"
+          color="primary"
+          variant="outlined"
+          density="compact"
+          divided
+        >
+          <v-btn value="movie">Filmes</v-btn>
+          <v-btn value="tv"> Series </v-btn>
+        </v-btn-toggle>
+      </v-row>
+      <v-row v-if="useDisplay.xs" justify="center" class="pt-5 mb-n5">
+        <h1>Grátis para Assistir</h1>
+      </v-row>
+      <v-row v-if="useDisplay.xs" justify="center" class="mt-6 mb-n5">
+        <v-btn-toggle
+          v-model="tabsMovieTvFree"
           rounded="xl"
           color="primary"
           variant="outlined"

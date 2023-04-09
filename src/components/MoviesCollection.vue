@@ -7,14 +7,12 @@
     scrim="black"
     :fullscreen="useDisplay.xs"
   >
-    <v-card
-      :rounded="!useDisplay.xs ? 'xl' : ''"
-      border="sm"
-      color="black"
-    >
+    <v-card :rounded="!useDisplay.xs ? 'xl' : ''" border="sm" color="black">
       <v-card-title style="background: rgb(0, 0, 0, 0.9)" class="text-h5 py-4">
         <v-row no-gutters>
-          <span :class="!useDisplay.xs ? 'text-h4' : ''"> {{ collectionMovies.name }}</span>
+          <span :class="!useDisplay.xs ? 'text-h4' : ''">
+            {{ collectionMovies.name }}</span
+          >
           <v-spacer></v-spacer>
           <v-icon
             icon="mdi-close"
@@ -61,10 +59,15 @@
             </v-card-text>
           </v-img>
           <v-row class="mt-n9" no-gutters justify="end">
-            <v-btn variant="plain" :to="{
+            <v-btn
+              variant="plain"
+              @click="dialog = false"
+              :to="{
                 name: 'Detalhes',
                 params: { id: parts.id, movieOrTv: parts.media_type },
-              }">Ver mais</v-btn>
+              }"
+              >Ver mais</v-btn
+            >
           </v-row>
         </v-card>
       </v-card-text>

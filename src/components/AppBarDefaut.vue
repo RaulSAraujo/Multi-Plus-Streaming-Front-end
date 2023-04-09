@@ -38,14 +38,6 @@
           to="/Series"
           >Séries</v-btn
         >
-        <v-btn
-          flat
-          variant="plain"
-          size="x-large"
-          class="text-h5 mx-1"
-          to="/Livros"
-          >Livros</v-btn
-        >
         <v-spacer></v-spacer>
 
         <v-responsive width="0px" class="my-auto ml-12 pl-12 mr-2">

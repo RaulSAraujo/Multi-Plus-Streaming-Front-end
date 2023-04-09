@@ -25,8 +25,16 @@
     <v-sheet v-else :rounded="!useDisplay.xs ? 'xl' : ''" elevation="0">
       <v-img
         :class="!useDisplay.xs ? 'mb-4' : ''"
-        :src="`https://image.tmdb.org/t/p/original${backdropPath}`"
-        :lazy-src="`https://image.tmdb.org/t/p/w300${backdropPath}`"
+        :src="
+          backdropPath
+            ? `https://image.tmdb.org/t/p/original${backdropPath}`
+            : `https://image.tmdb.org/t/p/original${posterPath}`
+        "
+        :lazy-src="
+          backdropPath
+            ? `https://image.tmdb.org/t/p/w300${backdropPath}`
+            : `https://image.tmdb.org/t/p/w300${posterPath}`
+        "
         :height="!useDisplay.xs ? '320px' : ''"
         cover
       >
@@ -246,6 +254,7 @@
             <v-window-item value="Imagens" disabled>
               <v-sheet elevation="0" max-width="100%">
                 <v-slide-group
+                  v-if="backDrops.length > 0"
                   v-model="modelBackDrops"
                   selected-class="bg-success"
                   :show-arrows="!useDisplay.xs"
@@ -281,11 +290,16 @@
                     </v-card>
                   </v-slide-group-item>
                 </v-slide-group>
+                <span v-else class="ml-5 text-body-1"
+                  >Nenhuma imagem de fundo foram adicionadas em
+                  {{ nameTitle }}.</span
+                >
               </v-sheet>
             </v-window-item>
             <v-window-item value="Videos">
               <v-sheet elevation="0" max-width="100%">
                 <v-slide-group
+                  v-if="videos.length > 0"
                   v-model="modelVideos"
                   selected-class="bg-success"
                   :show-arrows="!useDisplay.xs"
@@ -332,11 +346,15 @@
                     </v-card>
                   </v-slide-group-item>
                 </v-slide-group>
+                <span v-else class="ml-5 text-body-1"
+                  >Nenhuma video foi adicionados em {{ nameTitle }}.</span
+                >
               </v-sheet>
             </v-window-item>
             <v-window-item value="Pôsteres">
               <v-sheet elevation="0" max-width="100%">
                 <v-slide-group
+                  v-if="postes.length > 0"
                   v-model="modelPostes"
                   selected-class="bg-success"
                   :show-arrows="!useDisplay.xs"
@@ -368,6 +386,9 @@
                     </v-card>
                   </v-slide-group-item>
                 </v-slide-group>
+                <span v-else class="ml-5 text-body-1"
+                  >Nenhum posteres foram adicionado em {{ nameTitle }}.</span
+                >
               </v-sheet>
             </v-window-item>
           </v-window>
@@ -446,12 +467,12 @@
         </v-slide-group>
         <v-card v-else elevation="0" class="ml-8">
           <v-card-title class="text-body-1"
-            >Infelizmente este filme não possui resenhas.</v-card-title
+            >Ainda não temos uma resenha para {{ nameTitle }}.</v-card-title
           >
         </v-card>
       </v-sheet>
 
-      <v-list v-if="useDisplay.xs">
+      <v-list v-else>
         <v-list-item link @click="dialogReviews = true">
           <v-list-item-title class="text-h5">Veja as reviews</v-list-item-title>
           <v-list-item-subtitle>Click aqui</v-list-item-subtitle>
@@ -621,7 +642,8 @@
         </v-slide-group>
         <v-card v-else elevation="0" class="ml-8">
           <v-card-title class="text-body-1"
-            >Não possuimos recomendações no momento</v-card-title
+            >Ainda não temos dados o suficiente para sugerir filmes com base em
+            {{ nameTitle }}</v-card-title
           >
         </v-card>
       </v-sheet>
@@ -733,6 +755,7 @@ export default {
       nameTitle: "",
       voteAverage: "",
       backdropPath: "",
+      posterPath: "",
       genres: [],
       releaseDate: "",
       runtime: 0,
@@ -778,6 +801,7 @@ export default {
             this.tvOrMovie == "tv" ? response.data.name : response.data.title;
           this.voteAverage = response.data.vote_average.toFixed(1);
           this.backdropPath = response.data.backdrop_path;
+          this.posterPath = response.data.poster_path;
           this.genres = response.data.genres;
           this.releaseDate = response.data.release_date;
           this.runtime =

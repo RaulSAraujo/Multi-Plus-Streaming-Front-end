@@ -7,7 +7,7 @@
       hide-delimiter-background
       hide-delimiters
       show-arrows="hover"
-      :interval="isHovering ? 50000 : 6000"
+      :interval="isHovering ? 50000 : 10000"
       @mouseenter="isHovering = true"
       @mouseleave="isHovering = false"
     >
@@ -19,9 +19,23 @@
             ? series.backdrop_path
             : series.poster_path
         }`"
+        :lazy-src="`https://image.tmdb.org/t/p/w300${
+          series.backdrop_path != null
+            ? series.backdrop_path
+            : series.poster_path
+        }`"
         cover
         class="justify-center align-end"
       >
+        <template v-slot:placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular
+              color="grey-lighten-4"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
+
         <v-responsive height="100vh" width="100vw" class="d-flex">
           <div
             style="
@@ -134,10 +148,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
+              :src="`https://image.tmdb.org/t/p/original${popular.backdrop_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
               height="120px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
 
             <v-card-title>
               {{ popular.name }}
@@ -146,7 +170,11 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ popular.first_air_date ? formatDate(popular.first_air_date) : '' }}
+                  {{
+                    popular.first_air_date
+                      ? formatDate(popular.first_air_date)
+                      : ""
+                  }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -167,10 +195,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${popular.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/original${popular.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${popular.poster_path}`"
               height="220px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -211,10 +249,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
+              :src="`https://image.tmdb.org/t/p/original${topRated.backdrop_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
               height="120px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
 
             <v-card-title>
               {{ topRated.name }}
@@ -223,8 +271,11 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-
-                  {{  topRated.first_air_date ? formatDate(topRated.first_air_date) : '' }}
+                  {{
+                    topRated.first_air_date
+                      ? formatDate(topRated.first_air_date)
+                      : ""
+                  }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -245,10 +296,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${topRated.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/original${topRated.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.poster_path}`"
               height="220px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -289,10 +350,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${airingToday.backdrop_path}`"
+              :src="`https://image.tmdb.org/t/p/original${airingToday.backdrop_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${airingToday.backdrop_path}`"
               height="120px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
 
             <v-card-title>
               {{ airingToday.name }}
@@ -301,7 +372,11 @@
             <v-card-subtitle class="mt-n3">
               <v-responsive height="20px" width="100%">
                 <div class="text-truncate">
-                  {{ airingToday.first_air_date ? formatDate(airingToday.first_air_date) : '' }}
+                  {{
+                    airingToday.first_air_date
+                      ? formatDate(airingToday.first_air_date)
+                      : ""
+                  }}
                 </div>
               </v-responsive>
             </v-card-subtitle>
@@ -322,10 +397,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${airingToday.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/original${airingToday.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${airingToday.poster_path}`"
               height="220px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>

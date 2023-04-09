@@ -26,9 +26,19 @@
       <v-img
         :class="!useDisplay.xs ? 'mb-4' : ''"
         :src="`https://image.tmdb.org/t/p/original${backdropPath}`"
+        :lazy-src="`https://image.tmdb.org/t/p/w300${backdropPath}`"
         :height="!useDisplay.xs ? '320px' : ''"
         cover
       >
+        <template v-slot:placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular
+              color="grey-lighten-4"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
+
         <v-card
           class="pa-4"
           height="100%"
@@ -252,10 +262,22 @@
                       rounded="lg"
                     >
                       <v-img
-                        :src="`https://image.tmdb.org/t/p/w500${backdrops.file_path}`"
+                        :src="`https://image.tmdb.org/t/p/original${backdrops.file_path}`"
+                        :lazy-src="`https://image.tmdb.org/t/p/w300${backdrops.file_path}`"
                         height="100%"
                         cover
-                      ></v-img>
+                      >
+                        <template v-slot:placeholder>
+                          <div
+                            class="d-flex align-center justify-center fill-height"
+                          >
+                            <v-progress-circular
+                              color="grey-lighten-4"
+                              indeterminate
+                            ></v-progress-circular>
+                          </div>
+                        </template>
+                      </v-img>
                     </v-card>
                   </v-slide-group-item>
                 </v-slide-group>
@@ -266,18 +288,48 @@
                 <v-slide-group
                   v-model="modelVideos"
                   selected-class="bg-success"
-                  show-arrows
+                  :show-arrows="!useDisplay.xs"
                 >
-                  <v-slide-group-item v-for="video in videos" :key="video">
-                    <iframe
-                      class="my-4 mr-2"
-                      :width="!useDisplay.xs ? '450' : '300'"
-                      :height="!useDisplay.xs ? '250' : '170'"
-                      :src="`https://www.youtube-nocookie.com/embed/${video.key}`"
-                      frameborder="0"
-                      allow="autoplay; encrypted-media"
-                      allowfullscreen
-                    ></iframe>
+                  <v-slide-group-item
+                    v-for="(video, index) in videos"
+                    :key="index"
+                  >
+                    <v-card
+                      class="ma-4"
+                      :width="!useDisplay.xs ? '450' : '60vw'"
+                      :height="!useDisplay.xs ? '250' : '150'"
+                      @click="playDialog(video)"
+                    >
+                      <v-img
+                        :src="`https://image.tmdb.org/t/p/original${backDrops[index].file_path}`"
+                        :lazy-src="`https://image.tmdb.org/t/p/w300${backDrops[index].file_path}`"
+                        height="100%"
+                        cover
+                      >
+                        <template v-slot:placeholder>
+                          <div
+                            class="d-flex align-center justify-center fill-height"
+                          >
+                            <v-progress-circular
+                              color="grey-lighten-4"
+                              indeterminate
+                            ></v-progress-circular>
+                          </div>
+                        </template>
+
+                        <v-card height="100%" color="rgb(0,0,0,0.5)">
+                          <div
+                            class="d-flex align-center justify-center fill-height"
+                          >
+                            <v-icon
+                              icon="mdi-youtube"
+                              size="80"
+                              color="red"
+                            ></v-icon>
+                          </div>
+                        </v-card>
+                      </v-img>
+                    </v-card>
                   </v-slide-group-item>
                 </v-slide-group>
               </v-sheet>
@@ -289,7 +341,7 @@
                   selected-class="bg-success"
                   :show-arrows="!useDisplay.xs"
                 >
-                  <v-slide-group-item v-for="postes in postes" :key="postes">
+                  <v-slide-group-item v-for="poste in postes" :key="poste">
                     <v-card
                       color="grey-lighten-3"
                       class="ma-4"
@@ -297,10 +349,22 @@
                       width="150"
                     >
                       <v-img
-                        :src="`https://image.tmdb.org/t/p/w300${postes.file_path}`"
+                        :src="`https://image.tmdb.org/t/p/original${poste.file_path}`"
+                        :lazy-src="`https://image.tmdb.org/t/p/w300${poste.file_path}`"
                         height="100%"
                         cover
-                      ></v-img>
+                      >
+                        <template v-slot:placeholder>
+                          <div
+                            class="d-flex align-center justify-center fill-height"
+                          >
+                            <v-progress-circular
+                              color="grey-lighten-4"
+                              indeterminate
+                            ></v-progress-circular>
+                          </div>
+                        </template>
+                      </v-img>
                     </v-card>
                   </v-slide-group-item>
                 </v-slide-group>
@@ -326,10 +390,20 @@
               width="170"
             >
               <v-img
-                :src="`https://image.tmdb.org/t/p/w300${cast.profile_path}`"
+                :src="`https://image.tmdb.org/t/p/original${cast.profile_path}`"
+                :lazy-src="`https://image.tmdb.org/t/p/w300${cast.profile_path}`"
                 height="130px"
                 cover
-              ></v-img>
+              >
+                <template v-slot:placeholder>
+                  <div class="d-flex align-center justify-center fill-height">
+                    <v-progress-circular
+                      color="grey-lighten-4"
+                      indeterminate
+                    ></v-progress-circular>
+                  </div>
+                </template>
+              </v-img>
               <v-card-title>{{ cast.name }}</v-card-title>
               <v-card-subtitle class="mt-n3">{{
                 cast.character
@@ -339,8 +413,8 @@
         </v-slide-group>
       </v-sheet>
 
-      <span class="ml-12 mt-5 text-h5">Reviews</span>
-      <v-sheet elevation="0" max-width="100%">
+      <span v-if="!useDisplay.xs" class="ml-12 mt-5 text-h5">Reviews</span>
+      <v-sheet v-if="!useDisplay.xs" elevation="0" max-width="100%">
         <v-slide-group
           v-model="modelReviews"
           v-if="reviews.length > 0"
@@ -377,9 +451,17 @@
         </v-card>
       </v-sheet>
 
+      <v-list v-if="useDisplay.xs">
+        <v-list-item link @click="dialogReviews = true">
+          <v-list-item-title class="text-h5">Veja as reviews</v-list-item-title>
+          <v-list-item-subtitle>Click aqui</v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
+
       <v-card v-if="tvOrMovie == 'tv'" class="my-5">
         <v-img
           :src="`https://image.tmdb.org/t/p/original${backdropPath}`"
+          :lazy-src="`https://image.tmdb.org/t/p/w300${backdropPath}`"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
           :height="
@@ -395,6 +477,15 @@
           "
           cover
         >
+          <template v-slot:placeholder>
+            <div class="d-flex align-center justify-center fill-height">
+              <v-progress-circular
+                color="grey-lighten-4"
+                indeterminate
+              ></v-progress-circular>
+            </div>
+          </template>
+
           <v-card
             color="rgb(0,0,0,0.4)"
             density="compact"
@@ -496,9 +587,19 @@
             >
               <v-img
                 :src="`https://image.tmdb.org/t/p/original${recommendation.backdrop_path}`"
+                :lazy-src="`https://image.tmdb.org/t/p/w300${recommendation.backdrop_path}`"
                 height="120px"
                 cover
-              ></v-img>
+              >
+                <template v-slot:placeholder>
+                  <div class="d-flex align-center justify-center fill-height">
+                    <v-progress-circular
+                      color="grey-lighten-4"
+                      indeterminate
+                    ></v-progress-circular>
+                  </div>
+                </template>
+              </v-img>
 
               <v-card-title>
                 {{
@@ -525,6 +626,69 @@
         </v-card>
       </v-sheet>
     </v-sheet>
+
+    <v-dialog v-model="dialogPlay" scrim="black">
+      <v-row justify="center">
+        <v-card color="black" height="50" width="80vw" rounded="t-xl">
+          <v-row no-gutters justify="end" class="mr-6 mt-2 mb-n3">
+            <v-icon
+              icon="mdi-close"
+              size="large"
+              color="grey"
+              @click="dialogPlay = false"
+            ></v-icon>
+          </v-row>
+        </v-card>
+      </v-row>
+
+      <v-row justify="center" align="center">
+        <v-card color="black" width="80vw" height="70vh" rounded="b-xl">
+          <iframe
+            class="my-4 mr-2"
+            width="100%"
+            height="100%"
+            :src="`https://www.youtube-nocookie.com/embed/${selectPlay.key}`"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+          ></iframe>
+        </v-card>
+      </v-row>
+    </v-dialog>
+
+    <v-dialog v-model="dialogReviews" scrim="black" fullscreen>
+      <v-card>
+        <v-card-title class="bg-surface text-h5 py-4">
+          <v-row no-gutters>
+            <span class="text-h5">Reviews</span>
+            <v-spacer></v-spacer>
+            <v-btn
+              icon="mdi-close"
+              variant="plain"
+              @click="dialogReviews = false"
+            ></v-btn>
+          </v-row>
+        </v-card-title>
+        <v-card-text>
+          <div v-for="(review, index) in reviews" :key="index">
+            <v-card elevation="0" width="100%">
+              <v-card-title class="text-white">
+                <v-row v-if="review" no-gutters>
+                  <p class="text-h6">Resenha de {{ review.author }}</p>
+                </v-row>
+              </v-card-title>
+
+              <v-card-text>
+                <p class="text-body-2">
+                  {{ review.content }}
+                </p>
+              </v-card-text>
+            </v-card>
+            <v-divider v-if="reviews.length > index + 1"></v-divider>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <WatchProviders
       ref="WatchProviders"
@@ -587,6 +751,9 @@ export default {
       numberOfEpisodes: 0,
       inProduction: false,
       seasons: [],
+      dialogPlay: false,
+      selectPlay: [],
+      dialogReviews: false,
     };
   },
   watch: {
@@ -603,7 +770,7 @@ export default {
       this.loading = true;
       axios
         .get(
-          `https://api.themoviedb.org/3/${this.tvOrMovie}/${this.id}?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=images,videos,similar,recommendations,reviews,credits&include_image_language=en,null&include_video_language=pt-BR`
+          `https://api.themoviedb.org/3/${this.tvOrMovie}/${this.id}?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=images,videos,recommendations,reviews,credits&include_image_language=en,null&include_video_language=pt-BR`
         )
         .then((response) => {
           console.log("MoreDetails", response);
@@ -647,6 +814,10 @@ export default {
     },
     eventEmitEpisodios() {
       this.$refs.Episodios.dialog = true;
+    },
+    playDialog(video) {
+      this.selectPlay = video;
+      this.dialogPlay = true;
     },
     formatRuntime(runtime) {
       if (runtime != undefined) {

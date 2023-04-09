@@ -2,6 +2,72 @@
   <div>
     <v-card class="mx-auto" elevation="0">
       <v-row no-gutters>
+        <h1 class="ml-10 pt-5 mb-n5">Tendências</h1>
+
+        <v-btn-toggle
+          v-model="tabsTendencias"
+          class="mt-6 mb-n5 ml-12"
+          rounded="xl"
+          color="primary"
+          variant="outlined"
+          density="compact"
+          divided
+        >
+          <v-btn value="day">Hoje</v-btn>
+          <v-btn value="week">Nesta semana </v-btn>
+        </v-btn-toggle>
+      </v-row>
+
+      <v-row no-gutters class="mt-5 mb-n4">
+        <v-progress-linear
+          v-if="loadingTendencias"
+          indeterminate
+          color="primary"
+        ></v-progress-linear>
+      </v-row>
+
+      <v-slide-group
+        ref="slideTendencias"
+        class="pa-4"
+        selected-class="bg-grey-darken-3"
+        center-active
+        :show-arrows="useDisplay.xs ? false : true"
+      >
+        <v-slide-group-item v-for="(tend, index) in tendencias" :key="index">
+          <v-card
+            color="black/80"
+            class="ma-2"
+            height="220"
+            width="150"
+            :to="{
+              name: 'Detalhes',
+              params: {
+                id: tend.id,
+                movieOrTv: tend.media_type,
+              },
+            }"
+          >
+            <v-img
+              :src="`https://image.tmdb.org/t/p/original${tend.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${tend.poster_path}`"
+              height="220px"
+              cover
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div> </template
+            ></v-img>
+          </v-card>
+        </v-slide-group-item>
+      </v-slide-group>
+    </v-card>
+
+    <v-card class="mx-auto" elevation="0">
+      <v-row no-gutters>
         <h1 class="ml-10 pt-5 mb-n5">Os Mais Populares</h1>
 
         <v-btn-toggle
@@ -27,18 +93,41 @@
       </v-row>
 
       <v-slide-group
+        ref="slideGroupPopulares"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
         :show-arrows="useDisplay.xs ? false : true"
       >
         <v-slide-group-item v-for="(pop, index) in populares" :key="index">
-          <v-card color="black/80" class="ma-2" height="220" width="150">
+          <v-card
+            color="black/80"
+            class="ma-2"
+            height="220"
+            width="150"
+            :to="{
+              name: 'Detalhes',
+              params: {
+                id: pop.id,
+                movieOrTv: pop.media_type,
+              },
+            }"
+          >
             <v-img
               :src="`https://image.tmdb.org/t/p/original${pop.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${pop.poster_path}`"
               height="220px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -71,17 +160,39 @@
       </v-row>
 
       <v-slide-group
+        ref="slideGroupFree"
         class="pa-4"
         selected-class="bg-grey-darken-3"
         center-active
         :show-arrows="useDisplay.xs ? false : true"
       >
         <v-slide-group-item v-for="(free, index) in movieTvFree" :key="index">
-          <v-card color="black/80" class="ma-2" height="220" width="150">
+          <v-card
+            color="black/80"
+            class="ma-2"
+            height="220"
+            width="150"
+            :to="{
+              name: 'Detalhes',
+              params: {
+                id: free.id,
+                movieOrTv: tabsMovieTvFree,
+              },
+            }"
+          >
             <v-img
               :src="`https://image.tmdb.org/t/p/original${free.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${free.poster_path}`"
               height="220px"
               cover
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div> </template
             ></v-img>
           </v-card>
         </v-slide-group-item>
@@ -104,62 +215,88 @@ export default {
       tabsPopulares: "flatrate",
       populares: [],
       loadingPopulares: false,
+      tabsTendencias: "day",
+      tendencias: [],
+      loadingTendencias: false,
     };
   },
   created() {
     this.getMovieTvFree();
     this.getPopulares();
+    this.getTendencias();
   },
   watch: {
     tabsMovieTvFree() {
+      this.$refs.slideGroupFree.scrollOffset = 0;
       this.getMovieTvFree();
     },
     tabsPopulares() {
+      this.$refs.slideGroupPopulares.scrollOffset = 0;
       this.getPopulares();
+    },
+    tabsTendencias() {
+      this.$refs.slideTendencias.scrollOffset = 0;
+      this.getTendencias();
     },
   },
   methods: {
-    getPopulares() {
-      let url = `https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+    getTendencias() {
+      this.loadingTendencias = true;
+      let url = `https://api.themoviedb.org/3/trending/all/${this.tabsTendencias}?api_key=9f9a623c8918bc56839f26a94b5507aa`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
       url = `${url}&with_original_language=en`;
-      url = `${url}&with_watch_monetization_types=${this.tabsPopulares}`;
       url = `${url}&watch_region=BR`;
 
       axios
         .get(url)
-        .then((response1) => {
-          console.log("PopularesMovie", response1);
-          const data1 = response1.data.results;
-
-          let url2 = `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa`;
-          url2 = `${url2}&language=pt-BR`;
-          url2 = `${url2}&sort_by=popularity.desc`;
-          url2 = `${url2}&with_original_language=en`;
-          url2 = `${url2}&with_watch_monetization_types=${this.tabsPopulares}`;
-          url2 = `${url2}&watch_region=BR`;
-
-          axios
-            .get(url2)
-            .then((response2) => {
-              console.log("PopularesTv", response2);
-              const data2 = response2.data.results;
-
-              const mergedData = data1.concat(data2);
-
-              this.populares = mergedData.filter(
-                (item) => item.popularity > 700
-              );
-              this.populares.sort((a, b) => b.popularity - a.popularity);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+        .then((response) => {
+          console.log("Tendencias", response);
+          this.tendencias = response.data.results;
+          this.loadingTendencias = false;
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    async getPopulares() {
+      try {
+        this.loadingPopulares = true;
+
+        const apiKey = "9f9a623c8918bc56839f26a94b5507aa";
+        const language = "pt-BR";
+        const originalLanguage = "en";
+        const watchRegion = "BR";
+        const tabsPopulares = this.tabsPopulares;
+
+        const movieUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
+
+        const tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
+
+        const [movieResponse, tvResponse] = await Promise.all([
+          axios.get(movieUrl),
+          axios.get(tvUrl),
+        ]);
+
+        const movieData = movieResponse.data.results;
+        const tvData = tvResponse.data.results;
+
+        movieData.forEach((element) => {
+          element["media_type"] = "movie";
+        });
+
+        tvData.forEach((element) => {
+          element["media_type"] = "tv";
+        });
+
+        this.populares = movieData.concat(tvData);
+
+        this.populares.sort((a, b) => b.popularity - a.popularity);
+
+        this.loadingPopulares = false;
+      } catch (error) {
+        console.error(error);
+      }
     },
     getMovieTvFree() {
       this.loadingMovieTvFree = true;

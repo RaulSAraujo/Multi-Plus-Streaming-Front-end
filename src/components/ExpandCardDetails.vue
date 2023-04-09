@@ -9,11 +9,21 @@
           <v-col cols="12" sm="12" md="3" lg="3" xl="2">
             <v-img
               :src="`https://image.tmdb.org/t/p/original${details.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${details.poster_path}`"
               class="align-end"
               gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)"
               cover
               height="100%"
             >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+
               <v-list-item
                 class="mb-3 text-white"
                 title="Assista agora"
@@ -224,6 +234,7 @@
                 >
                   <v-img
                     :src="`https://image.tmdb.org/t/p/original${details.belongs_to_collection.backdrop_path}`"
+                    :lazy-src="`https://image.tmdb.org/t/p/w300${details.belongs_to_collection.backdrop_path}`"
                     class="align-end"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                     :height="
@@ -239,6 +250,17 @@
                     "
                     cover
                   >
+                    <template v-slot:placeholder>
+                      <div
+                        class="d-flex align-center justify-center fill-height"
+                      >
+                        <v-progress-circular
+                          color="grey-lighten-4"
+                          indeterminate
+                        ></v-progress-circular>
+                      </div>
+                    </template>
+
                     <v-card-title class="text-white">
                       <v-row no-gutters justify="space-between">
                         <span
@@ -322,6 +344,7 @@
                 <v-card v-if="tvOrMovie == 'tv'" class="mt-2" rounded="lg">
                   <v-img
                     :src="`https://image.tmdb.org/t/p/original${details.backdrop_path}`"
+                    :lazy-src="`https://image.tmdb.org/t/p/w300${details.backdrop_path}`"
                     class="align-end"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                     :height="
@@ -337,6 +360,17 @@
                     "
                     cover
                   >
+                    <template v-slot:placeholder>
+                      <div
+                        class="d-flex align-center justify-center fill-height"
+                      >
+                        <v-progress-circular
+                          color="grey-lighten-4"
+                          indeterminate
+                        ></v-progress-circular>
+                      </div>
+                    </template>
+
                     <v-card
                       color="rgb(0,0,0,0.4)"
                       density="compact"

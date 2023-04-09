@@ -19,9 +19,23 @@
             ? movies.backdrop_path
             : movies.poster_path
         }`"
+        :lazy-src="`https://image.tmdb.org/t/p/w300${
+          movies.backdrop_path != null
+            ? movies.backdrop_path
+            : movies.poster_path
+        }`"
         cover
         class="justify-center align-end"
       >
+        <template v-slot:placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular
+              color="grey-lighten-4"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
+
         <v-responsive height="100vh" width="100vw" class="d-flex">
           <div
             style="
@@ -135,10 +149,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${nowPlaying.backdrop_path}`"
+              :src="`https://image.tmdb.org/t/p/original${nowPlaying.backdrop_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${nowPlaying.backdrop_path}`"
               height="120px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
 
             <v-card-title>
               {{ nowPlaying.title }}
@@ -214,9 +238,18 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
+              :src="`https://image.tmdb.org/t/p/original${popular.backdrop_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
               height="120px"
               cover
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div> </template
             ></v-img>
 
             <v-card-title>
@@ -293,9 +326,18 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
+              :src="`https://image.tmdb.org/t/p/original${topRated.backdrop_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
               height="120px"
               cover
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div> </template
             ></v-img>
 
             <v-card-title>

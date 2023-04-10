@@ -95,16 +95,10 @@
               flat
             ></v-icon>
 
-            <v-breadcrumbs density="compact" divider="/" class="py-0 px-0">
-              <v-breadcrumbs-item
-                v-for="(genre, index) in genres"
-                :key="index"
-                class="px-0"
-              >
-                <span>{{ genre.name }}</span>
-                <span v-if="genre.length - 1 > index">/</span>
-              </v-breadcrumbs-item>
-            </v-breadcrumbs>
+            <span v-for="(genre, index) in genres" :key="index">
+              {{ genre.name }}
+              <span v-if="genres.length > index + 1">/</span>
+            </span>
 
             <v-icon icon="mdi-timer-sand" class="ml-1" flat></v-icon>
 
@@ -366,10 +360,22 @@
                     width="150"
                   >
                     <v-img
-                      :src="`https://image.tmdb.org/t/p/w300${postes.file_path}`"
+                      :src="`https://image.tmdb.org/t/p/original${postes.file_path}`"
+                      :lazy-src="`https://image.tmdb.org/t/p/w300${postes.file_path}`"
                       height="100%"
                       cover
-                    ></v-img>
+                    >
+                      <template v-slot:placeholder>
+                        <div
+                          class="d-flex align-center justify-center fill-height"
+                        >
+                          <v-progress-circular
+                            color="grey-lighten-4"
+                            indeterminate
+                          ></v-progress-circular>
+                        </div>
+                      </template>
+                    </v-img>
                   </v-card>
                 </v-slide-group-item>
               </v-slide-group>

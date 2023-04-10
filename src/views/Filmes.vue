@@ -553,7 +553,7 @@ export default {
       var dia = ("0" + data.getDate()).slice(-2);
       var dataFormatada = ano + "-" + mes + "-" + dia;
 
-      var duasSemanasEmMilissegundos = 14 * 24 * 60 * 60 * 1000;
+      var duasSemanasEmMilissegundos = 30 * 24 * 60 * 60 * 1000;
       var dataSubtraida = new Date(data - duasSemanasEmMilissegundos);
       var ano2 = dataSubtraida.getFullYear();
       var mes2 = ("0" + (dataSubtraida.getMonth() + 1)).slice(-2);
@@ -564,8 +564,10 @@ export default {
       let url = `https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
-      url = `${url}&release_date.gte=${dataFormatada2}&release_date.lte=${dataFormatada}`;
+      url = `${url}&primary_release_date.gte=${dataFormatada2}&primary_release_date.lte=${dataFormatada}`;
+      url = `${url}&year=2023`;
       url = `${url}&watch_region=BR`;
+      
       // url = `${url}&with_release_type=3|2`;
 
       if (this.selectedGenre != null) {

@@ -186,12 +186,6 @@
         </template>
         <v-list-item-title>Series</v-list-item-title>
       </v-list-item>
-      <v-list-item to="/Livros">
-        <template v-slot:prepend>
-          <v-icon icon="mdi-book-open-variant"></v-icon>
-        </template>
-        <v-list-item-title>Livros</v-list-item-title>
-      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 

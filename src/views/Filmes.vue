@@ -547,11 +547,26 @@ export default {
         });
     },
     getFilmesNowPlaying() {
+      var data = new Date();
+      var ano = data.getFullYear();
+      var mes = ("0" + (data.getMonth() + 1)).slice(-2);
+      var dia = ("0" + data.getDate()).slice(-2);
+      var dataFormatada = ano + "-" + mes + "-" + dia;
+
+      var duasSemanasEmMilissegundos = 14 * 24 * 60 * 60 * 1000;
+      var dataSubtraida = new Date(data - duasSemanasEmMilissegundos);
+      var ano2 = dataSubtraida.getFullYear();
+      var mes2 = ("0" + (dataSubtraida.getMonth() + 1)).slice(-2);
+      var dia2 = ("0" + dataSubtraida.getDate()).slice(-2);
+      var dataFormatada2 = ano2 + '-' + mes2 + '-' + dia2;
+
+
       let url = `https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
-      url = `${url}&release_date.gte=2023-03-01&release_date.lte=2023-04-12`;
+      url = `${url}&release_date.gte=${dataFormatada2}&release_date.lte=${dataFormatada}`;
       url = `${url}&watch_region=BR`;
+      // url = `${url}&with_release_type=3|2`;
 
       if (this.selectedGenre != null) {
         url = `${url}&with_genres=${this.selectedGenre.id}`;

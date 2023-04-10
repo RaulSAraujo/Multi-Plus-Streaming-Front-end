@@ -35,7 +35,7 @@
           variant="flat"
           rounded="lg"
           block
-          size="x-large"
+          size="large"
           to="/Inicio"
           @click="getToken"
           >LOGIN</v-btn

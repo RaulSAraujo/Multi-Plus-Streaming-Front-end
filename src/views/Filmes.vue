@@ -192,10 +192,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${nowPlaying.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/original${nowPlaying.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${nowPlaying.poster_path}`"
               height="220px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -280,10 +290,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${popular.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/original${popular.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${popular.poster_path}`"
               height="220px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -368,10 +388,20 @@
             @click="toggle"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/w300${topRated.poster_path}`"
+              :src="`https://image.tmdb.org/t/p/original${topRated.poster_path}`"
+              :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
               height="220px"
               cover
-            ></v-img>
+            >
+              <template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
           </v-card>
         </v-slide-group-item>
       </v-slide-group>
@@ -558,8 +588,7 @@ export default {
       var ano2 = dataSubtraida.getFullYear();
       var mes2 = ("0" + (dataSubtraida.getMonth() + 1)).slice(-2);
       var dia2 = ("0" + dataSubtraida.getDate()).slice(-2);
-      var dataFormatada2 = ano2 + '-' + mes2 + '-' + dia2;
-
+      var dataFormatada2 = ano2 + "-" + mes2 + "-" + dia2;
 
       let url = `https://api.themoviedb.org/3/discover/movie?api_key=9f9a623c8918bc56839f26a94b5507aa`;
       url = `${url}&language=pt-BR`;
@@ -567,7 +596,7 @@ export default {
       url = `${url}&primary_release_date.gte=${dataFormatada2}&primary_release_date.lte=${dataFormatada}`;
       url = `${url}&year=2023`;
       url = `${url}&watch_region=BR`;
-      
+
       // url = `${url}&with_release_type=3|2`;
 
       if (this.selectedGenre != null) {

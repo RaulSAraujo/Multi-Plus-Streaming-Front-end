@@ -62,24 +62,35 @@
         <v-menu min-width="200px" rounded>
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" class="mx-4">
-              <v-avatar color="grey" size="large" icon="mdi-account">
+              <v-avatar color="grey" size="large">
+                <v-img
+                  src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+                  cover
+                ></v-img>
               </v-avatar>
             </v-btn>
           </template>
           <v-card>
             <v-card-text>
               <div class="mx-auto text-center">
-                <v-avatar
-                  color="grey"
-                  size="large"
-                  icon="mdi-account"
-                  class="mb-2"
-                >
+                <v-avatar color="grey" size="large" class="mb-2">
+                  <v-img
+                    src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+                    cover
+                  ></v-img>
                 </v-avatar>
                 <h3>Raul Silva Araujo</h3>
                 <p class="text-caption mt-1">raul.araujo.2000@hotmail.com</p>
                 <v-divider class="my-3"></v-divider>
-                <v-btn rounded variant="text"> Editar conta </v-btn>
+                <v-btn
+                  rounded
+                  variant="text"
+                  :to="{
+                    name: 'Perfil',
+                  }"
+                >
+                  Editar conta
+                </v-btn>
                 <v-divider class="my-3"></v-divider>
                 <v-btn rounded variant="text" to="/"> Desconectar </v-btn>
               </div>
@@ -138,7 +149,11 @@
         <v-menu min-width="200px" rounded>
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" class="mx-4">
-              <v-avatar color="grey" size="large" icon="mdi-account">
+              <v-avatar color="grey" size="large">
+                <v-img
+                  src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+                  cover
+                ></v-img>
               </v-avatar>
             </v-btn>
           </template>
@@ -155,7 +170,15 @@
                 <h3>Raul Silva Araujo</h3>
                 <p class="text-caption mt-1">raul.araujo.2000@hotmail.com</p>
                 <v-divider class="my-3"></v-divider>
-                <v-btn rounded variant="text"> Editar conta </v-btn>
+                <v-btn
+                  rounded
+                  variant="text"
+                  :to="{
+                    name: 'Perfil',
+                  }"
+                >
+                  Editar conta
+                </v-btn>
                 <v-divider class="my-3"></v-divider>
                 <v-btn rounded variant="text" to="/"> Desconectar </v-btn>
               </div>
@@ -224,9 +247,20 @@
         >
           <v-img
             :src="`https://image.tmdb.org/t/p/original${movies.poster_path}`"
+            :lazy-src="`https://image.tmdb.org/t/p/w300${movies.poster_path}`"
             gradient="to bottom, rgba(0,0,0,.9), rgba(0,0,0,.5)"
             cover
+            height="100%"
           >
+            <template v-slot:placeholder>
+              <div class="d-flex align-center justify-center fill-height">
+                <v-progress-circular
+                  color="grey-lighten-4"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+            </template>
+
             <v-card-title>{{
               movies.title != undefined ? movies.title : movies.name
             }}</v-card-title>
@@ -284,24 +318,6 @@ export default {
       resultSearch: [],
       totalResults: 0,
       drawer: false,
-      items: [
-        {
-          title: "Foo",
-          value: "foo",
-        },
-        {
-          title: "Bar",
-          value: "bar",
-        },
-        {
-          title: "Fizz",
-          value: "fizz",
-        },
-        {
-          title: "Buzz",
-          value: "buzz",
-        },
-      ],
     };
   },
   methods: {

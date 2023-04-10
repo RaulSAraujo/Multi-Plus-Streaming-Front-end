@@ -4,6 +4,7 @@ import Landing from '@/views/LandingPage.vue';
 import Inicio from '@/views/Inicio.vue';
 import Filmes from "@/views/Filmes.vue";
 import Series from "@/views/Series.vue";
+import Perfil from "@/views/Perfil.vue"
 import Details from "@/views/Details.vue"
 
 const routes = [
@@ -26,6 +27,11 @@ const routes = [
     path: '/Series',
     name: 'Series',
     component: Series,
+  },
+  {
+    path: '/Perfil',
+    name: 'Perfil',
+    component: Perfil,
   },
   {
     path: '/Detalhes/:movieOrTv/:id',

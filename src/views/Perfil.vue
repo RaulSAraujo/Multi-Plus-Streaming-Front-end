@@ -3,16 +3,16 @@
     <v-img height="100%" cover src="@/assets/img/Backgroud.png">
       <v-card height="100%" color="rgb(0,0,0,0.5)" class="d-flex align-end">
         <v-row class="mb-3" justify="center" align="center">
-          <v-avatar color="grey" size="150">
+          <v-avatar color="black" size="150">
             <v-img
               cover
-              src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+              src="@/assets/img/avatar.png"
             ></v-img>
           </v-avatar>
           <v-list-item
             class="text-white"
-            title="Marcus Obrien"
-            subtitle="Network Engineer"
+            title="Raul Silva Araujo"
+            subtitle="Desenvolvedor front-end"
           ></v-list-item>
         </v-row>
       </v-card>
@@ -47,9 +47,6 @@
           ></v-btn>
         </template>
       </v-list-item>
-
-
-
 
     </v-list>
   </v-card>

@@ -62,9 +62,9 @@
         <v-menu min-width="200px" rounded>
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" class="mx-4">
-              <v-avatar color="grey" size="large">
+              <v-avatar color="black" size="large">
                 <v-img
-                  src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+                  src="@/assets/img/avatar.png"
                   cover
                 ></v-img>
               </v-avatar>
@@ -73,9 +73,9 @@
           <v-card>
             <v-card-text>
               <div class="mx-auto text-center">
-                <v-avatar color="grey" size="large" class="mb-2">
+                <v-avatar color="black" size="large" class="mb-2">
                   <v-img
-                    src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+                    src="@/assets/img/avatar.png"
                     cover
                   ></v-img>
                 </v-avatar>
@@ -149,9 +149,9 @@
         <v-menu min-width="200px" rounded>
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" class="mx-4">
-              <v-avatar color="grey" size="large">
+              <v-avatar color="black" size="large">
                 <v-img
-                  src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
+                  src="@/assets/img/avatar.png"
                   cover
                 ></v-img>
               </v-avatar>

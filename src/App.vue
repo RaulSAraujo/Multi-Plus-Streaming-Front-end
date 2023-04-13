@@ -5,8 +5,8 @@
   </v-app>
 
   <v-app v-if="$route.path != '/'">
+    <AppBarDefaut />
     <v-main>
-      <AppBarDefaut />
       <router-view />
     </v-main>
   </v-app>
@@ -28,48 +28,23 @@ export default {
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html * {
   font-family: "Yantramanav", sans-serif !important;
 }
 
-html,
 body {
-  height: 100%;
-  overflow: auto;
-  scroll-behavior: smooth;
+  margin: 0;
 }
+
 ::-webkit-scrollbar {
-  width: 0px;
-  height: 15px;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background-color: rgba(94, 94, 94, 0.3);
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
-  margin: 5px;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background-color: rgba(94, 93, 93, 0.2);
-  border-radius: 6px;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(94, 93, 93, 0.4);
-}
-
-.light ::-webkit-scrollbar-track {
-  background-color: rgba(94, 94, 94, 0.3);
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
-  -webkit-border-radius: 6px;
-  border-radius: 6px;
-  margin: 5px;
-}
-.light ::-webkit-scrollbar-thumb {
-  background-color: rgba(94, 93, 93, 0.2);
-  border-radius: 6px;
-}
-.light ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(94, 93, 93, 0.4);
+  width: 10px;
+  background-color: rgb(0, 0, 0);
+  border-radius: 5px;
 }
 </style>

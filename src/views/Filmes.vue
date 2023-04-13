@@ -1,432 +1,429 @@
 <template>
-  <div>
-    <v-carousel
-      v-model="modelCarousel"
-      cycle
-      height="420"
-      hide-delimiter-background
-      hide-delimiters
-      show-arrows="hover"
-      :interval="isHovering ? 50000 : 6000"
-      @mouseenter="isHovering = true"
-      @mouseleave="isHovering = false"
+  <v-carousel
+    v-model="modelCarousel"
+    cycle
+    height="600"
+    hide-delimiter-background
+    hide-delimiters
+    show-arrows="hover"
+    :interval="isHovering ? 50000 : 6000"
+    @mouseenter="isHovering = true"
+    @mouseleave="isHovering = false"
+  >
+    <v-carousel-item
+      v-for="(movies, index) in moviesUpcoming"
+      :key="index"
+      :src="`https://image.tmdb.org/t/p/original${
+        movies.backdrop_path != null ? movies.backdrop_path : movies.poster_path
+      }`"
+      :lazy-src="`https://image.tmdb.org/t/p/w300${
+        movies.backdrop_path != null ? movies.backdrop_path : movies.poster_path
+      }`"
+      cover
+      class="justify-center align-end"
     >
-      <v-carousel-item
-        v-for="(movies, index) in moviesUpcoming"
-        :key="index"
-        :src="`https://image.tmdb.org/t/p/original${
-          movies.backdrop_path != null
-            ? movies.backdrop_path
-            : movies.poster_path
-        }`"
-        :lazy-src="`https://image.tmdb.org/t/p/w300${
-          movies.backdrop_path != null
-            ? movies.backdrop_path
-            : movies.poster_path
-        }`"
-        cover
-        class="justify-center align-end"
-      >
-        <template v-slot:placeholder>
-          <div class="d-flex align-center justify-center fill-height">
-            <v-progress-circular
-              color="grey-lighten-4"
-              indeterminate
-            ></v-progress-circular>
-          </div>
-        </template>
+      <template v-slot:placeholder>
+        <div class="d-flex align-center justify-center fill-height">
+          <v-progress-circular
+            color="grey-lighten-4"
+            indeterminate
+          ></v-progress-circular>
+        </div>
+      </template>
 
-        <v-responsive height="100vh" width="100vw" class="d-flex">
-          <div
+      <v-responsive height="100vh" width="100vw" class="d-flex">
+        <div
+          style="
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            background: rgb(0, 0, 0, 0.4);
+            filter: blur(0px);
+          "
+        ></div>
+      </v-responsive>
+
+      <v-card
+        height="180px"
+        width="100%"
+        elevation="0"
+        color="rgb(0, 0, 0,0.4)"
+        :class="!useDisplay.xs ? 'mx-auto pl-12' : ''"
+        :title="movies.title"
+      >
+        <v-card-text>
+          <p
+            v-if="!useDisplay.xs"
             style="
-              width: 100vw;
-              height: 100vh;
-              position: absolute;
-              background: rgb(0, 0, 0, 0.4);
-              filter: blur(0px);
+              display: -webkit-box;
+              max-width: 50vw;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
             "
-          ></div>
-        </v-responsive>
+            class="text-body-2"
+          >
+            {{ movies.overview }}
+          </p>
+
+          <p
+            v-else
+            style="
+              display: -webkit-box;
+              max-width: 100vw;
+              -webkit-line-clamp: 3;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            "
+            class="text-body-2"
+          >
+            {{ movies.overview }}
+          </p>
+
+          <v-btn class="mt-4 mr-2" variant="outlined" prepend-icon="mdi-plus"
+            >Minha lista</v-btn
+          >
+          <v-btn
+            class="mt-4"
+            variant="outlined"
+            prepend-icon="mdi-information"
+            @click="eventMoreDetails(movies.id)"
+            >Saiba mais</v-btn
+          >
+        </v-card-text>
+      </v-card>
+    </v-carousel-item>
+  </v-carousel>
+
+  <v-card class="mx-auto" elevation="0">
+    <v-row v-if="!useDisplay.xs" no-gutters class="mt-2">
+      <v-col>
+        <h1 class="ml-10 pt-5 mb-n5">Lançamentos</h1>
+      </v-col>
+      <v-col cols="5" sm="4" md="3" lg="2" xl="2">
+        <v-select
+          class="pt-3 mr-7"
+          v-model="selectedGenre"
+          label="Generos"
+          color="primary"
+          density="compact"
+          :items="genres"
+          item-title="name"
+          item-value="id"
+          return-object
+          clearable
+          persistent-clear
+          hide-details
+          single-line
+          hide-selected
+        ></v-select>
+      </v-col>
+    </v-row>
+
+    <h1 v-else class="ml-10 pt-5 mb-n5">Lançamentos</h1>
+
+    <v-slide-group
+      v-model="modelNowPlaying"
+      ref="slideGroupNowPlaying"
+      class="pa-4"
+      selected-class="bg-grey-darken-3"
+      center-active
+      :show-arrows="useDisplay.xs ? false : true"
+    >
+      <v-slide-group-item
+        v-for="(nowPlaying, index) in moviesNowPlaying"
+        :key="index"
+        v-slot="{ toggle, selectedClass }"
+      >
+        <v-card
+          v-if="!useDisplay.xs"
+          color="black/80"
+          :class="['ma-4', selectedClass]"
+          height="220"
+          width="270"
+          @click="toggle"
+        >
+          <v-img
+            :src="`https://image.tmdb.org/t/p/original${nowPlaying.backdrop_path}`"
+            :lazy-src="`https://image.tmdb.org/t/p/w300${nowPlaying.backdrop_path}`"
+            height="120px"
+            cover
+          >
+            <template v-slot:placeholder>
+              <div class="d-flex align-center justify-center fill-height">
+                <v-progress-circular
+                  color="grey-lighten-4"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+            </template>
+          </v-img>
+
+          <v-card-title>
+            {{ nowPlaying.title }}
+          </v-card-title>
+
+          <v-card-subtitle class="mt-n3">
+            <v-responsive height="20px" width="100%">
+              <div class="text-truncate">
+                {{ formatDate(nowPlaying.release_date) }}
+              </div>
+            </v-responsive>
+          </v-card-subtitle>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-icon icon="mdi-menu-down" color="grey" />
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
 
         <v-card
-          height="180px"
-          width="100%"
-          elevation="0"
-          color="rgb(0, 0, 0,0.4)"
-          :class="!useDisplay.xs ? 'mx-auto pl-12' : ''"
-          :title="movies.title"
+          v-else
+          color="black/80"
+          :class="['ma-2', selectedClass]"
+          height="220"
+          width="150"
+          @click="toggle"
         >
-          <v-card-text>
-            <p
-              v-if="!useDisplay.xs"
-              style="
-                display: -webkit-box;
-                max-width: 50vw;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-              "
-              class="text-body-2"
-            >
-              {{ movies.overview }}
-            </p>
-
-            <p
-              v-else
-              style="
-                display: -webkit-box;
-                max-width: 100vw;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-              "
-              class="text-body-2"
-            >
-              {{ movies.overview }}
-            </p>
-
-            <v-btn class="mt-4 mr-2" variant="outlined" prepend-icon="mdi-plus"
-              >Minha lista</v-btn
-            >
-            <v-btn
-              class="mt-4"
-              variant="outlined"
-              prepend-icon="mdi-information"
-              @click="eventMoreDetails(movies.id)"
-              >Saiba mais</v-btn
-            >
-          </v-card-text>
+          <v-img
+            :src="`https://image.tmdb.org/t/p/original${nowPlaying.poster_path}`"
+            :lazy-src="`https://image.tmdb.org/t/p/w300${nowPlaying.poster_path}`"
+            height="220px"
+            cover
+          >
+            <template v-slot:placeholder>
+              <div class="d-flex align-center justify-center fill-height">
+                <v-progress-circular
+                  color="grey-lighten-4"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+            </template>
+          </v-img>
         </v-card>
-      </v-carousel-item>
-    </v-carousel>
+      </v-slide-group-item>
+    </v-slide-group>
 
-    <v-card class="mx-auto" elevation="0">
-      <v-row v-if="!useDisplay.xs" no-gutters class="mt-2">
-        <v-col>
-          <h1 class="ml-10 pt-5 mb-n5">Lançamentos</h1>
-        </v-col>
-        <v-col cols="5" sm="4" md="3" lg="2" xl="2">
-          <v-select
-            class="pt-3 mr-7"
-            v-model="selectedGenre"
-            label="Generos"
-            color="primary"
-            density="compact"
-            :items="genres"
-            item-title="name"
-            item-value="id"
-            return-object
-            clearable
-            persistent-clear
-            hide-details
-            single-line
-            hide-selected
-          ></v-select>
-        </v-col>
-      </v-row>
-
-      <h1 v-else class="ml-10 pt-5 mb-n5">Lançamentos</h1>
-
-      <v-slide-group
-        v-model="modelNowPlaying"
-        ref="slideGroupNowPlaying"
-        class="pa-4"
-        selected-class="bg-grey-darken-3"
-        center-active
-        :show-arrows="useDisplay.xs ? false : true"
-      >
-        <v-slide-group-item
-          v-for="(nowPlaying, index) in moviesNowPlaying"
-          :key="index"
-          v-slot="{ toggle, selectedClass }"
-        >
-          <v-card
-            v-if="!useDisplay.xs"
-            color="black/80"
-            :class="['ma-4', selectedClass]"
-            height="220"
-            width="270"
-            @click="toggle"
-          >
-            <v-img
-              :src="`https://image.tmdb.org/t/p/original${nowPlaying.backdrop_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${nowPlaying.backdrop_path}`"
-              height="120px"
-              cover
-            >
-              <template v-slot:placeholder>
-                <div class="d-flex align-center justify-center fill-height">
-                  <v-progress-circular
-                    color="grey-lighten-4"
-                    indeterminate
-                  ></v-progress-circular>
-                </div>
-              </template>
-            </v-img>
-
-            <v-card-title>
-              {{ nowPlaying.title }}
-            </v-card-title>
-
-            <v-card-subtitle class="mt-n3">
-              <v-responsive height="20px" width="100%">
-                <div class="text-truncate">
-                  {{ formatDate(nowPlaying.release_date) }}
-                </div>
-              </v-responsive>
-            </v-card-subtitle>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-icon icon="mdi-menu-down" color="grey" />
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-
-          <v-card
-            v-else
-            color="black/80"
-            :class="['ma-2', selectedClass]"
-            height="220"
-            width="150"
-            @click="toggle"
-          >
-            <v-img
-              :src="`https://image.tmdb.org/t/p/original${nowPlaying.poster_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${nowPlaying.poster_path}`"
-              height="220px"
-              cover
-            >
-              <template v-slot:placeholder>
-                <div class="d-flex align-center justify-center fill-height">
-                  <v-progress-circular
-                    color="grey-lighten-4"
-                    indeterminate
-                  ></v-progress-circular>
-                </div>
-              </template>
-            </v-img>
-          </v-card>
-        </v-slide-group-item>
-      </v-slide-group>
-
-      <ExpandCardDetails
-        :tvOrMovie="'movie'"
-        :model="modelNowPlaying"
-        :details="moviesDetails"
-        @eventWatchProviders="
-          eventWatchProviders(moviesDetails.id, moviesDetails.title)
-        "
-        @eventWatchColection="
-          eventWatchColection(moviesDetails.belongs_to_collection.id)
-        "
-        @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
-      />
-    </v-card>
-
-    <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Populares</h1>
-      <v-slide-group
-        v-model="modelPopular"
-        ref="slideGroupPopular"
-        class="pa-4"
-        selected-class="bg-grey-darken-3"
-        center-active
-        :show-arrows="useDisplay.xs ? false : true"
-      >
-        <v-slide-group-item
-          v-for="(popular, index) in moviesPopular"
-          :key="index"
-          v-slot="{ toggle, selectedClass }"
-        >
-          <v-card
-            v-if="!useDisplay.xs"
-            color="black/80"
-            :class="['ma-4', selectedClass]"
-            height="220"
-            width="270"
-            @click="toggle"
-          >
-            <v-img
-              :src="`https://image.tmdb.org/t/p/original${popular.backdrop_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
-              height="120px"
-              cover
-            >
-              <template v-slot:placeholder>
-                <div class="d-flex align-center justify-center fill-height">
-                  <v-progress-circular
-                    color="grey-lighten-4"
-                    indeterminate
-                  ></v-progress-circular>
-                </div> </template
-            ></v-img>
-
-            <v-card-title>
-              {{ popular.title }}
-            </v-card-title>
-
-            <v-card-subtitle class="mt-n3">
-              <v-responsive height="20px" width="100%">
-                <div class="text-truncate">
-                  {{ formatDate(popular.release_date) }}
-                </div>
-              </v-responsive>
-            </v-card-subtitle>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-icon icon="mdi-menu-down" color="grey" />
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-
-          <v-card
-            v-else
-            color="black/80"
-            :class="['ma-2', selectedClass]"
-            height="220"
-            width="150"
-            @click="toggle"
-          >
-            <v-img
-              :src="`https://image.tmdb.org/t/p/original${popular.poster_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${popular.poster_path}`"
-              height="220px"
-              cover
-            >
-              <template v-slot:placeholder>
-                <div class="d-flex align-center justify-center fill-height">
-                  <v-progress-circular
-                    color="grey-lighten-4"
-                    indeterminate
-                  ></v-progress-circular>
-                </div>
-              </template>
-            </v-img>
-          </v-card>
-        </v-slide-group-item>
-      </v-slide-group>
-
-      <ExpandCardDetails
-        :tvOrMovie="'movie'"
-        :model="modelPopular"
-        :details="moviesDetails"
-        @eventWatchProviders="
-          eventWatchProviders(moviesDetails.id, moviesDetails.title)
-        "
-        @eventWatchColection="
-          eventWatchColection(moviesDetails.belongs_to_collection.id)
-        "
-        @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
-      />
-    </v-card>
-
-    <v-card class="mx-auto" elevation="0">
-      <h1 class="ml-10 pt-5 mb-n5">Mais votados</h1>
-      <v-slide-group
-        v-model="modelTopRated"
-        ref="slideGroupTopRated"
-        class="pa-4"
-        selected-class="bg-grey-darken-3"
-        center-active
-        :show-arrows="useDisplay.xs ? false : true"
-      >
-        <v-slide-group-item
-          v-for="(topRated, index) in moviesTopRated"
-          :key="index"
-          v-slot="{ toggle, selectedClass }"
-        >
-          <v-card
-            v-if="!useDisplay.xs"
-            color="black/80"
-            :class="['ma-4', selectedClass]"
-            height="220"
-            width="270"
-            @click="toggle"
-          >
-            <v-img
-              :src="`https://image.tmdb.org/t/p/original${topRated.backdrop_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
-              height="120px"
-              cover
-            >
-              <template v-slot:placeholder>
-                <div class="d-flex align-center justify-center fill-height">
-                  <v-progress-circular
-                    color="grey-lighten-4"
-                    indeterminate
-                  ></v-progress-circular>
-                </div> </template
-            ></v-img>
-
-            <v-card-title>
-              {{ topRated.title }}
-            </v-card-title>
-
-            <v-card-subtitle class="mt-n3">
-              <v-responsive height="20px" width="100%">
-                <div class="text-truncate">
-                  {{ formatDate(topRated.release_date) }}
-                </div>
-              </v-responsive>
-            </v-card-subtitle>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-icon icon="mdi-menu-down" color="grey" />
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-
-          <v-card
-            v-else
-            color="black/80"
-            :class="['ma-2', selectedClass]"
-            height="220"
-            width="150"
-            @click="toggle"
-          >
-            <v-img
-              :src="`https://image.tmdb.org/t/p/original${topRated.poster_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
-              height="220px"
-              cover
-            >
-              <template v-slot:placeholder>
-                <div class="d-flex align-center justify-center fill-height">
-                  <v-progress-circular
-                    color="grey-lighten-4"
-                    indeterminate
-                  ></v-progress-circular>
-                </div>
-              </template>
-            </v-img>
-          </v-card>
-        </v-slide-group-item>
-      </v-slide-group>
-
-      <ExpandCardDetails
-        :tvOrMovie="'movie'"
-        :model="modelTopRated"
-        :details="moviesDetails"
-        @eventWatchProviders="
-          eventWatchProviders(moviesDetails.id, moviesDetails.title)
-        "
-        @eventWatchColection="
-          eventWatchColection(moviesDetails.belongs_to_collection.id)
-        "
-        @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
-      />
-    </v-card>
-
-    <FilterMobile
-      v-if="useDisplay.xs"
-      ref="FilterMobile"
-      :genres="genres"
-      @eventChangeGenre="selectedGenre = $event"
+    <ExpandCardDetails
+      id="expandCardNowPlayMovie"
+      :tvOrMovie="'movie'"
+      :model="modelNowPlaying"
+      :details="moviesDetails"
+      @eventWatchProviders="
+        eventWatchProviders(moviesDetails.id, moviesDetails.title)
+      "
+      @eventWatchColection="
+        eventWatchColection(moviesDetails.belongs_to_collection.id)
+      "
+      @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
     />
-  </div>
+  </v-card>
+
+  <v-card class="mx-auto" elevation="0">
+    <h1 class="ml-10 pt-5 mb-n5">Populares</h1>
+    <v-slide-group
+      v-model="modelPopular"
+      ref="slideGroupPopular"
+      class="pa-4"
+      selected-class="bg-grey-darken-3"
+      center-active
+      :show-arrows="useDisplay.xs ? false : true"
+    >
+      <v-slide-group-item
+        v-for="(popular, index) in moviesPopular"
+        :key="index"
+        v-slot="{ toggle, selectedClass }"
+      >
+        <v-card
+          v-if="!useDisplay.xs"
+          color="black/80"
+          :class="['ma-4', selectedClass]"
+          height="220"
+          width="270"
+          @click="toggle"
+        >
+          <v-img
+            :src="`https://image.tmdb.org/t/p/original${popular.backdrop_path}`"
+            :lazy-src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
+            height="120px"
+            cover
+          >
+            <template v-slot:placeholder>
+              <div class="d-flex align-center justify-center fill-height">
+                <v-progress-circular
+                  color="grey-lighten-4"
+                  indeterminate
+                ></v-progress-circular>
+              </div> </template
+          ></v-img>
+
+          <v-card-title>
+            {{ popular.title }}
+          </v-card-title>
+
+          <v-card-subtitle class="mt-n3">
+            <v-responsive height="20px" width="100%">
+              <div class="text-truncate">
+                {{ formatDate(popular.release_date) }}
+              </div>
+            </v-responsive>
+          </v-card-subtitle>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-icon icon="mdi-menu-down" color="grey" />
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+
+        <v-card
+          v-else
+          color="black/80"
+          :class="['ma-2', selectedClass]"
+          height="220"
+          width="150"
+          @click="toggle"
+        >
+          <v-img
+            :src="`https://image.tmdb.org/t/p/original${popular.poster_path}`"
+            :lazy-src="`https://image.tmdb.org/t/p/w300${popular.poster_path}`"
+            height="220px"
+            cover
+          >
+            <template v-slot:placeholder>
+              <div class="d-flex align-center justify-center fill-height">
+                <v-progress-circular
+                  color="grey-lighten-4"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+            </template>
+          </v-img>
+        </v-card>
+      </v-slide-group-item>
+    </v-slide-group>
+
+    <ExpandCardDetails
+      id="expandCardPopularMovie"
+      :tvOrMovie="'movie'"
+      :model="modelPopular"
+      :details="moviesDetails"
+      @eventWatchProviders="
+        eventWatchProviders(moviesDetails.id, moviesDetails.title)
+      "
+      @eventWatchColection="
+        eventWatchColection(moviesDetails.belongs_to_collection.id)
+      "
+      @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
+    />
+  </v-card>
+
+  <v-card class="mx-auto" elevation="0">
+    <h1 class="ml-10 pt-5 mb-n5">Mais votados</h1>
+    <v-slide-group
+      v-model="modelTopRated"
+      ref="slideGroupTopRated"
+      class="pa-4"
+      selected-class="bg-grey-darken-3"
+      center-active
+      :show-arrows="useDisplay.xs ? false : true"
+    >
+      <v-slide-group-item
+        v-for="(topRated, index) in moviesTopRated"
+        :key="index"
+        v-slot="{ toggle, selectedClass }"
+      >
+        <v-card
+          v-if="!useDisplay.xs"
+          color="black/80"
+          :class="['ma-4', selectedClass]"
+          height="220"
+          width="270"
+          @click="toggle"
+        >
+          <v-img
+            :src="`https://image.tmdb.org/t/p/original${topRated.backdrop_path}`"
+            :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
+            height="120px"
+            cover
+          >
+            <template v-slot:placeholder>
+              <div class="d-flex align-center justify-center fill-height">
+                <v-progress-circular
+                  color="grey-lighten-4"
+                  indeterminate
+                ></v-progress-circular>
+              </div> </template
+          ></v-img>
+
+          <v-card-title>
+            {{ topRated.title }}
+          </v-card-title>
+
+          <v-card-subtitle class="mt-n3">
+            <v-responsive height="20px" width="100%">
+              <div class="text-truncate">
+                {{ formatDate(topRated.release_date) }}
+              </div>
+            </v-responsive>
+          </v-card-subtitle>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-icon icon="mdi-menu-down" color="grey" />
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+
+        <v-card
+          v-else
+          color="black/80"
+          :class="['ma-2', selectedClass]"
+          height="220"
+          width="150"
+          @click="toggle"
+        >
+          <v-img
+            :src="`https://image.tmdb.org/t/p/original${topRated.poster_path}`"
+            :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
+            height="220px"
+            cover
+          >
+            <template v-slot:placeholder>
+              <div class="d-flex align-center justify-center fill-height">
+                <v-progress-circular
+                  color="grey-lighten-4"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+            </template>
+          </v-img>
+        </v-card>
+      </v-slide-group-item>
+    </v-slide-group>
+
+    <ExpandCardDetails
+      id="expandCardTopRatedMovie"
+      :tvOrMovie="'movie'"
+      :model="modelTopRated"
+      :details="moviesDetails"
+      @eventWatchProviders="
+        eventWatchProviders(moviesDetails.id, moviesDetails.title)
+      "
+      @eventWatchColection="
+        eventWatchColection(moviesDetails.belongs_to_collection.id)
+      "
+      @eventMoreDetails="eventMoreDetails(moviesDetails.id)"
+    />
+  </v-card>
+
+  <FilterMobile
+    v-if="useDisplay.xs"
+    ref="FilterMobile"
+    :genres="genres"
+    @eventChangeGenre="selectedGenre = $event"
+  />
 
   <MoviesCollection ref="MoviesCollection" :collectionId="collectionId" />
   <WatchProviders
@@ -487,11 +484,20 @@ export default {
     this.getGenre();
   },
   watch: {
+    modelNowPlaying(val) {
+      if (val != undefined) {
+        this.modelPopular = undefined;
+        this.modelTopRated = undefined;
+        this.getDetailsMovies(this.moviesNowPlaying[this.modelNowPlaying].id);
+        this.scrollView("expandCardNowPlayMovie", 250);
+      }
+    },
     modelPopular(val) {
       if (val != undefined) {
         this.modelTopRated = undefined;
         this.modelNowPlaying = undefined;
         this.getDetailsMovies(this.moviesPopular[this.modelPopular].id);
+        this.scrollView("expandCardPopularMovie", 600);
       }
     },
     modelTopRated(val) {
@@ -499,13 +505,7 @@ export default {
         this.modelPopular = undefined;
         this.modelNowPlaying = undefined;
         this.getDetailsMovies(this.moviesTopRated[this.modelTopRated].id);
-      }
-    },
-    modelNowPlaying(val) {
-      if (val != undefined) {
-        this.modelPopular = undefined;
-        this.modelTopRated = undefined;
-        this.getDetailsMovies(this.moviesNowPlaying[this.modelNowPlaying].id);
+        this.scrollView("expandCardTopRatedMovie", 900);
       }
     },
     selectedGenre() {
@@ -673,6 +673,32 @@ export default {
       return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(
         date
       );
+    },
+    scrollView(id, offset) {
+      setTimeout(() => {
+        var elemento = document.getElementById(id);
+        this.animarScroll(elemento.offsetTop + offset, 1000);
+      }, 50);
+    },
+    animarScroll(destino, duracao) {
+      var inicio = window.pageYOffset;
+      var distancia = destino - inicio;
+      var duracaoAtual = 0;
+      var passo = 20;
+
+      requestAnimationFrame(animacaoScroll);
+
+      function animacaoScroll() {
+        duracaoAtual += passo;
+
+        var posicao = inicio + distancia * (duracaoAtual / duracao);
+
+        window.scrollTo(0, posicao);
+
+        if (duracaoAtual < duracao) {
+          requestAnimationFrame(animacaoScroll);
+        }
+      }
     },
   },
   computed: {

@@ -2,16 +2,17 @@
   <v-expand-transition>
     <v-sheet
       v-if="model != null"
-      :class="!useDisplay.xs ? 'px-10 pb-5' : 'px-2 '"
+      color="black"
+      :class="!useDisplay.xs ? 'mx-10 mb-5' : 'px-2 '"
     >
-      <v-card variant="outlined" rounded="xl">
+      <v-card rounded="xl" color="rgba(0,0,0,0.1)" elevation="0">
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="3" lg="3" xl="2">
             <v-img
               :src="`https://image.tmdb.org/t/p/original${details.poster_path}`"
               :lazy-src="`https://image.tmdb.org/t/p/w300${details.poster_path}`"
               class="align-end"
-              gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)"
+              gradient="to right, rgba(0,0,0,0.6),rgba(0,0,0,0.4),rgba(0,0,0,0.3),rgba(0,0,0,0)"
               cover
               height="100%"
             >
@@ -25,7 +26,7 @@
               </template>
 
               <v-list-item
-                class="mb-3 text-white"
+                class="pb-3 text-white"
                 title="Assista agora"
                 subtitle="Stream, Alugar, Comprar"
                 @click="eventEmitWatchProviders()"
@@ -37,7 +38,19 @@
             </v-img>
           </v-col>
           <v-col cols="12" sm="12" md="9" lg="9" xl="10">
-            <v-card class="pa-4" height="100%" elevation="0">
+            <v-card
+              class="pa-4"
+              height="100%"
+              elevation="0"
+              style="
+                background: linear-gradient(
+                  rgba(35, 35, 36, 0.6),
+                  rgba(35, 35, 36, 0.8),
+                  rgba(35, 35, 36, 0.8),
+                  rgba(35, 35, 36, 0.6)
+                );
+              "
+            >
               <v-card-title>
                 <v-row no-gutters justify="space-between" align="center">
                   <v-col cols="10" sm="10" md="11" lg="11">
@@ -249,6 +262,7 @@
                         : '10vw'
                     "
                     cover
+                    @click="useDisplay.xs ? eventEmitWatchColection() : null"
                   >
                     <template v-slot:placeholder>
                       <div
@@ -261,7 +275,7 @@
                       </div>
                     </template>
 
-                    <v-card-title class="text-white">
+                    <v-card-title v-if="!useDisplay.xs" class="text-white">
                       <v-row no-gutters justify="space-between">
                         <span
                           :class="!useDisplay.xs ? 'text-h5' : 'text-body-2'"
@@ -271,12 +285,20 @@
                         <v-btn
                           variant="plain"
                           flat
-                          :size="!useDisplay.xs ? '' : 'x-small'"
                           @click="eventEmitWatchColection()"
                           >VER COLETÂNEA</v-btn
                         >
                       </v-row>
                     </v-card-title>
+
+                    <v-list-item v-else>
+                      <v-list-item-title>{{
+                        details.belongs_to_collection.name
+                      }}</v-list-item-title>
+                      <v-list-item-subtitle
+                        >Click aqui para ver a coleção.</v-list-item-subtitle
+                      >
+                    </v-list-item>
                   </v-img>
                 </v-card>
 
@@ -298,14 +320,13 @@
                       : '10vw'
                   "
                   class="mt-2 mx-n5"
+                  color="black"
                   rounded="lg"
                   elevation="0"
                 >
                   <v-card-title class="text-white">
                     <v-row v-if="review" no-gutters>
                       <p class="text-h6">Resenha de {{ review.author }}</p>
-                      <v-spacer></v-spacer>
-                      <v-card-subtitle>Veja mais...</v-card-subtitle>
                     </v-row>
                     <p v-else class="text-center text-h5 mt-6">
                       Infelizmente este filme não possui resenhas.
@@ -376,8 +397,14 @@
                       density="compact"
                       rounded="t-xl"
                       class="px-3"
+
                     >
-                      <v-row no-gutters align="start" justify="space-between">
+                      <v-row
+                        v-if="!useDisplay.xs"
+                        no-gutters
+                        align="start"
+                        justify="space-between"
+                      >
                         <v-col>
                           <span :class="!useDisplay.xs ? 'text-h6' : ''"
                             >Temporadas
@@ -385,7 +412,12 @@
                           </span>
                         </v-col>
                       </v-row>
-                      <v-row no-gutters align="start" justify="space-between">
+                      <v-row
+                        v-if="!useDisplay.xs"
+                        no-gutters
+                        align="start"
+                        justify="space-between"
+                      >
                         <v-col>
                           <span class="text-caption text-grey">
                             {{ details.number_of_episodes }} episódios
@@ -396,11 +428,20 @@
                           <v-btn
                             :size="!useDisplay.xs ? '' : 'small'"
                             variant="plain"
-                            @click="eventEmitEpisodios"
+                            @click="eventEmitEpisodios()"
                             >Ver Episódios</v-btn
                           >
                         </v-col>
                       </v-row>
+                      <v-list-item v-else @click="eventEmitEpisodios()">
+                        <v-list-item-title>
+                          Temporadas
+                          {{ details.number_of_seasons }}
+                        </v-list-item-title>
+                        <v-list-item-subtitle
+                          >Click aqui para ver os episodios.</v-list-item-subtitle
+                        >
+                      </v-list-item>
                     </v-card>
                   </v-img>
                 </v-card>

@@ -161,10 +161,11 @@
             <v-card-text>
               <div class="mx-auto text-center">
                 <v-avatar
-                  color="grey"
+                  color="black"
                   size="large"
                   icon="mdi-account"
                   class="mb-2"
+                  image="@/assets/img/avatar.png"
                 >
                 </v-avatar>
                 <h3>Raul Silva Araujo</h3>

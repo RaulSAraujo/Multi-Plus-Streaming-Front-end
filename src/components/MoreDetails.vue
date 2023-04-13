@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="dialog"
-    :width="!useDisplay.xs ? '90vw' : ''"
+    :width="!useDisplay.xs ? '100vw' : ''"
     :height="!useDisplay.xs ? '90vh' : ''"
     scrim="black"
     scrollable

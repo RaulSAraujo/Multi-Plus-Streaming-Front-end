@@ -2,12 +2,12 @@
   <v-dialog
     v-model="dialog"
     scrollable
-    :height="!useDisplay.xs ? '70vh' : ''"
-    :width="!useDisplay.xs ? '80vw' : ''"
+    :height="!useDisplay.xs ? '80vh' : ''"
+    :width="!useDisplay.xs ? '100vw' : ''"
     scrim="black"
     :fullscreen="useDisplay.xs"
   >
-    <v-card :rounded="!useDisplay.xs ? 'xl' : ''" border="sm" color="surface">
+    <v-card :rounded="!useDisplay.xs ? 'xl' : ''" border="sm" color="black">
       <v-card-title class="bg-surface text-h5 py-4">
         <v-row no-gutters>
           <span class="text-h5">Temporadas/Episodios</span>
@@ -34,10 +34,21 @@
                   <v-img
                     v-if="season.poster_path"
                     :src="`https://image.tmdb.org/t/p/original${season.poster_path}`"
+                    :lazy-src="`https://image.tmdb.org/t/p/w300${season.still_path}`"
                     :alt="season.name"
                     gradient="to bottom, rgba(0,0,0,.9), rgba(0,0,0,.5)"
                     cover
                   >
+                    <template v-slot:placeholder>
+                      <div
+                        class="d-flex align-center justify-center fill-height"
+                      >
+                        <v-progress-circular
+                          color="grey-lighten-4"
+                          indeterminate
+                        ></v-progress-circular>
+                      </div>
+                    </template>
                     <v-card-title>{{ season.name }}</v-card-title>
                     <v-card-subtitle class="mt-n1">
                       {{
@@ -88,10 +99,22 @@
                         >
                           <v-img
                             :src="`https://image.tmdb.org/t/p/original${episodio.still_path}`"
+                            :lazy-src="`https://image.tmdb.org/t/p/w300${episodio.still_path}`"
                             gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.7)"
                             cover
                             height="100%"
                           >
+                            <template v-slot:placeholder>
+                              <div
+                                class="d-flex align-center justify-center fill-height"
+                              >
+                                <v-progress-circular
+                                  color="grey-lighten-4"
+                                  indeterminate
+                                ></v-progress-circular>
+                              </div>
+                            </template>
+
                             <v-card-title>
                               <v-row
                                 no-gutters

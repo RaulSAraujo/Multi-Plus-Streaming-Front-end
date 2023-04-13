@@ -4,6 +4,8 @@
     height="70"
     scroll-off-screen
     scroll-target="#scrolling-techniques"
+    color="black"
+    border="b-sm"
   >
     <v-app-bar-title>
       <v-row v-if="!useDisplay.smAndDown" no-gutters align="center">

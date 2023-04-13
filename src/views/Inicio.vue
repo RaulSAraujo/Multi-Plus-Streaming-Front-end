@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto" elevation="0">
+    <v-card class="mx-auto" color="black" elevation="0">
       <v-row v-if="!useDisplay.xs" no-gutters>
         <h1 class="ml-10 pt-5 mb-n5">Tendências</h1>
 
@@ -82,7 +82,7 @@
       </v-slide-group>
     </v-card>
 
-    <v-card class="mx-auto" elevation="0">
+    <v-card class="mx-auto" color="black" elevation="0">
       <v-row v-if="!useDisplay.xs" no-gutters>
         <h1 class="ml-10 pt-5 mb-n5">Os Mais Populares</h1>
 
@@ -165,7 +165,7 @@
       </v-slide-group>
     </v-card>
 
-    <v-card class="mx-auto" elevation="0">
+    <v-card class="mx-auto" color="black" elevation="0">
       <v-row v-if="!useDisplay.xs" no-gutters>
         <h1 class="ml-10 pt-5 mb-n5">Grátis para Assistir</h1>
 

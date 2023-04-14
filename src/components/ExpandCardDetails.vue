@@ -322,7 +322,7 @@
                       : '10vw'
                   "
                   class="mt-2 mx-n5"
-                  color="black"
+                  color="transparent"
                   rounded="lg"
                   elevation="0"
                 >

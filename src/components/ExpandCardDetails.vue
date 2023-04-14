@@ -42,6 +42,7 @@
               class="pa-4"
               height="100%"
               elevation="0"
+              color="transparent"
               style="
                 background: linear-gradient(
                   rgba(35, 35, 36, 0.6),
@@ -244,6 +245,7 @@
                   v-if="tvOrMovie == 'movie' && details.belongs_to_collection"
                   class="mt-2"
                   rounded="lg"
+                  color="transparent"
                 >
                   <v-img
                     :src="`https://image.tmdb.org/t/p/original${details.belongs_to_collection.backdrop_path}`"

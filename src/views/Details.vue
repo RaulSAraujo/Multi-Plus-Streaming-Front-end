@@ -18,7 +18,7 @@
 
   <v-sheet v-else elevation="0">
     <v-img
-      :class="!useDisplay.xs ? 'mb-4' : ''"
+      :class="!useDisplay.xs ? 'mb-4 mx-n1' : ''"
       :src="
         backdropPath
           ? `https://image.tmdb.org/t/p/original${backdropPath}`
@@ -31,6 +31,7 @@
       "
       :height="!useDisplay.xs ? '350px' : ''"
       cover
+      gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,0.9)"
     >
       <template v-slot:placeholder>
         <div class="d-flex align-center justify-center fill-height">
@@ -42,10 +43,10 @@
       </template>
 
       <v-card
-        class="pa-4"
+        class="pa-4 mx-n1"
         height="100%"
         elevation="0"
-        color="rgb(0, 0, 0, 0.8)"
+        color="rgb(0, 0, 0, 0.3)"
       >
         <v-card-title>
           <v-row no-gutters justify="space-between" align="center">
@@ -215,9 +216,13 @@
       </v-card>
     </v-img>
 
-    <v-divider class="mb-2" v-if="useDisplay.xs"></v-divider>
-
-    <v-row v-if="useDisplay.xs" align="center" justify="center" no-gutters>
+    <v-row
+      class="mt-3"
+      v-if="useDisplay.xs"
+      align="center"
+      justify="center"
+      no-gutters
+    >
       <span class="mr-2 text-h6">Avalie:</span>
       <span class="text-grey-lighten-2 text-body-2 mr-2"> ({{ rating }}) </span>
       <v-rating
@@ -255,7 +260,7 @@
                   :key="backdrops"
                 >
                   <v-card
-                    color="grey-lighten-3"
+                    color="transparent"
                     class="ma-4"
                     :width="!useDisplay.xs ? '450' : '60vw'"
                     :height="!useDisplay.xs ? '250' : '150'"
@@ -304,6 +309,8 @@
                     class="ma-4"
                     :width="!useDisplay.xs ? '450' : '60vw'"
                     :height="!useDisplay.xs ? '250' : '150'"
+                    rounded="lg"
+                    color="transparent"
                     @click="playDialog(video)"
                   >
                     <v-img
@@ -354,10 +361,11 @@
               >
                 <v-slide-group-item v-for="postes in postes" :key="postes">
                   <v-card
-                    color="grey-lighten-3"
-                    class="ma-4"
+                    color="transparent"
+                    class="ml-4 my-4"
                     height="250"
                     width="150"
+                    rounded="xl"
                   >
                     <v-img
                       :src="`https://image.tmdb.org/t/p/original${postes.file_path}`"
@@ -397,7 +405,13 @@
         :show-arrows="!useDisplay.xs"
       >
         <v-slide-group-item v-for="cast in mainCast" :key="cast">
-          <v-card class="ma-4" color="grey-lighten-3" height="200" width="170">
+          <v-card
+            rounded="xl"
+            class="ma-4"
+            color="transparent"
+            height="200"
+            width="170"
+          >
             <v-img
               :src="`https://image.tmdb.org/t/p/w300${cast.profile_path}`"
               height="130px"
@@ -531,7 +545,16 @@
         "
         cover
       >
-        <v-card-title class="text-white">
+        <template v-slot:placeholder>
+          <div class="d-flex align-center justify-center fill-height">
+            <v-progress-circular
+              color="grey-lighten-4"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
+
+        <v-card-title v-if="!useDisplay.xs" class="text-white">
           <v-row no-gutters>
             <span :class="!useDisplay.xs ? 'text-h5' : 'text-body-2'">{{
               movieBelongsCollection.name
@@ -549,6 +572,22 @@
             >
           </v-row>
         </v-card-title>
+
+        <v-list-item
+          v-else
+          @click="
+            useDisplay.xs
+              ? eventWatchColection(movieBelongsCollection.id)
+              : null
+          "
+        >
+          <v-list-item-title>{{
+            movieBelongsCollection.name
+          }}</v-list-item-title>
+          <v-list-item-subtitle
+            >Click aqui para ver a coleção.</v-list-item-subtitle
+          >
+        </v-list-item>
       </v-img>
     </v-card>
 
@@ -566,10 +605,11 @@
           :key="recommendation"
         >
           <v-card
-            color="grey-lighten-3"
+            color="transparent"
             class="ma-4"
             height="190"
             width="270"
+            rounded="xl"
             :to="{
               name: 'Detalhes',
               params: {

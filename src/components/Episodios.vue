@@ -30,6 +30,7 @@
                   rounded="xl"
                   height="250"
                   class="ma-3"
+                  color="transparent"
                 >
                   <v-img
                     v-if="season.poster_path"
@@ -96,6 +97,7 @@
                           border="sm"
                           rounded="xl"
                           class="ma-3"
+                          color="transparent"
                         >
                           <v-img
                             :src="`https://image.tmdb.org/t/p/original${episodio.still_path}`"
@@ -192,6 +194,8 @@
             :items="seasons"
             item-title="name"
             item-value="season_number"
+            color="primary"
+            bg-color="grey-darken-4"
             return-object
           ></v-select>
           <v-row v-for="episodio in episodios" :key="episodio">
@@ -201,6 +205,7 @@
               border="sm"
               rounded="xl"
               class="ma-3"
+              color="transparent"
             >
               <v-img
                 :src="`https://image.tmdb.org/t/p/original${episodio.still_path}`"

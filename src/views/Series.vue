@@ -121,7 +121,8 @@
           class="pt-3 mr-7"
           v-model="selectedGenre"
           label="Generos"
-          color="primary"
+           color="primary"
+            bg-color="grey-darken-4"
           density="compact"
           :items="genres"
           item-title="name"
@@ -156,6 +157,7 @@
           :class="['ma-4', selectedClass]"
           height="220"
           width="270"
+          rounded="xl"
           @click="toggle"
         >
           <v-img
@@ -258,6 +260,7 @@
           :class="['ma-4', selectedClass]"
           height="220"
           width="270"
+          rounded="xl"
           @click="toggle"
         >
           <v-img
@@ -360,6 +363,7 @@
           :class="['ma-4', selectedClass]"
           height="220"
           width="270"
+          rounded="xl"
           @click="toggle"
         >
           <v-img

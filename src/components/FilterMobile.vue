@@ -8,7 +8,7 @@
 
   <v-dialog v-model="dialog" scrim="black" scrollable fullscreen>
     <v-sheet>
-      <v-toolbar density="compact">
+      <v-toolbar color="grey-darken-3" density="compact">
         <v-toolbar-title> Generos </v-toolbar-title>
         <v-toolbar-items>
           <v-btn
@@ -19,7 +19,7 @@
         </v-toolbar-items>
       </v-toolbar>
 
-      <v-list>
+      <v-list active-color="primary" >
         <v-list-item
           v-for="genre in genres"
           :key="genre.id"
@@ -42,7 +42,7 @@
 <script>
 export default {
   props: {
-    genres: Array,
+    genres: Array
   },
   emits: ["eventChangeGenre"],
   data() {

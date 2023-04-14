@@ -122,6 +122,7 @@
           v-model="selectedGenre"
           label="Generos"
           color="primary"
+          bg-color="grey-darken-4"
           density="compact"
           :items="genres"
           item-title="name"
@@ -441,6 +442,7 @@
     v-if="useDisplay.xs"
     ref="FilterMobile"
     :genres="genres"
+    :selectedGenre="selectedGenre"
     @eventChangeGenre="selectedGenre = $event"
   />
 

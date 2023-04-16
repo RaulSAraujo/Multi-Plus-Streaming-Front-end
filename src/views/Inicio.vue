@@ -1,5 +1,86 @@
 <template>
   <div>
+    <v-img
+      v-if="!useDisplay.xs"
+      :lazy-src="`https://image.tmdb.org/t/p/w300${imgSelected}`"
+      :src="`https://image.tmdb.org/t/p/original${imgSelected}`"
+      height="650"
+      cover
+      class="align-end"
+    >
+      <template v-slot:placeholder>
+        <div class="d-flex align-center justify-center fill-height">
+          <v-progress-circular
+            color="grey-lighten-4"
+            indeterminate
+          ></v-progress-circular>
+        </div>
+      </template>
+
+      <v-slide-group v-model="modelPosters" class="pa-4" show-arrows tag="div">
+        <v-slide-group-item
+          v-for="(poster, index) in posters"
+          :key="index"
+          v-slot="{ isSelected, toggle }"
+        >
+          <div class="d-flex align-end">
+            <v-card
+              color="black"
+              class="card-transition ma-4"
+              :height="isSelected ? '400px' : '220px'"
+              :width="isSelected ? '270px' : '150px'"
+              rounded="lg"
+            >
+              <v-img
+                :src="`https://image.tmdb.org/t/p/original${poster.poster_path}`"
+                :lazy-src="`https://image.tmdb.org/t/p/w300${poster.poster_path}`"
+                :height="isSelected ? '400px' : '220px'"
+                cover
+                :gradient="
+                  isSelected
+                    ? 'to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.9)'
+                    : ''
+                "
+                class="align-end"
+                style="cursor: pointer"
+                @click="toggle"
+              >
+                <template v-slot:placeholder>
+                  <div class="d-flex align-center justify-center fill-height">
+                    <v-progress-circular
+                      color="grey-lighten-4"
+                      indeterminate
+                    ></v-progress-circular>
+                  </div>
+                </template>
+
+                <v-row
+                  v-if="isSelected"
+                  no-gutters
+                  class="mb-4"
+                  justify="center"
+                >
+                  <v-btn
+                    class="mt-4"
+                    variant="outlined"
+                    prepend-icon="mdi-information"
+                    :to="{
+                      name: 'Detalhes',
+                      params: {
+                        id: poster.id,
+                        movieOrTv: poster.media_type,
+                      },
+                    }"
+                    >Saiba mais</v-btn
+                  >
+                </v-row>
+              </v-img>
+            </v-card>
+          </div>
+        </v-slide-group-item>
+      </v-slide-group>
+    </v-img>
+
     <v-card class="mx-auto" color="black" elevation="0">
       <v-row v-if="!useDisplay.xs" no-gutters>
         <h1 class="ml-10 pt-5 mb-n5">Tendências</h1>
@@ -266,9 +347,13 @@ export default {
       tabsTendencias: "day",
       tendencias: [],
       loadingTendencias: false,
+      posters: [],
+      modelPosters: 0,
+      imgSelected: [],
     };
   },
   created() {
+    this.getPoster();
     this.getMovieTvFree();
     this.getPopulares();
     this.getTendencias();
@@ -285,6 +370,12 @@ export default {
     tabsTendencias() {
       this.$refs.slideTendencias.scrollOffset = 0;
       this.getTendencias();
+    },
+    posters() {
+      this.imgSelected = this.posters[this.modelPosters].backdrop_path;
+    },
+    modelPosters() {
+      this.imgSelected = this.posters[this.modelPosters].backdrop_path;
     },
   },
   methods: {
@@ -366,6 +457,40 @@ export default {
           console.log(error);
         });
     },
+    async getPoster() {
+      try {
+        const apiKey = "9f9a623c8918bc56839f26a94b5507aa";
+        const language = "pt-BR";
+        const originalLanguage = "en";
+        const watchRegion = "BR";
+
+        const movieUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
+
+        const tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
+
+        const [movieResponse, tvResponse] = await Promise.all([
+          axios.get(movieUrl),
+          axios.get(tvUrl),
+        ]);
+
+        const movieData = movieResponse.data.results;
+        const tvData = tvResponse.data.results;
+
+        movieData.forEach((element) => {
+          element["media_type"] = "movie";
+        });
+
+        tvData.forEach((element) => {
+          element["media_type"] = "tv";
+        });
+
+        this.posters = movieData.concat(tvData);
+
+        this.posters.sort((a, b) => b.popularity - a.popularity);
+      } catch (error) {
+        console.error(error);
+      }
+    },
     formatDate(dateString) {
       const date = dateString != undefined ? new Date(dateString) : "";
       return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(
@@ -380,5 +505,8 @@ export default {
 .styleTabs {
   border: 1px solid white;
   padding: 0px 20px 0px 20px;
+}
+.card-transition {
+  transition: height 0.6s, width 0.9s;
 }
 </style>

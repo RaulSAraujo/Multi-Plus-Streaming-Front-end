@@ -155,17 +155,18 @@
         <v-card
           v-if="!useDisplay.xs"
           color="black/80"
-          :class="['ma-4', selectedClass]"
+          :class="['ma-2', selectedClass]"
           height="220"
           width="270"
-          rounded="xl"
+          rounded="lg"
           @click="toggle"
         >
           <v-img
             :src="`https://image.tmdb.org/t/p/original${nowPlaying.backdrop_path}`"
             :lazy-src="`https://image.tmdb.org/t/p/w300${nowPlaying.backdrop_path}`"
-            height="120px"
+            height="100%"
             cover
+            class="align-end"
           >
             <template v-slot:placeholder>
               <div class="d-flex align-center justify-center fill-height">
@@ -175,25 +176,21 @@
                 ></v-progress-circular>
               </div>
             </template>
-          </v-img>
 
-          <v-card-title>
-            {{ nowPlaying.title }}
-          </v-card-title>
-
-          <v-card-subtitle class="mt-n3">
-            <v-responsive height="20px" width="100%">
-              <div class="text-truncate">
-                {{ formatDate(nowPlaying.release_date) }}
+            <v-card
+              height="60px"
+              color="rgb(0,0,0,0.7)"
+              rounded="0"
+              class="pl-2 d-flex align-center"
+            >
+              <div>
+                <p class="text-subtitle-1">{{ nowPlaying.title }}</p>
+                <p class="text-caption mt-n2">
+                  {{ formatDate(nowPlaying.release_date) }}
+                </p>
               </div>
-            </v-responsive>
-          </v-card-subtitle>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-icon icon="mdi-menu-down" color="grey" />
-            <v-spacer></v-spacer>
-          </v-card-actions>
+            </v-card>
+          </v-img>
         </v-card>
 
         <v-card
@@ -256,17 +253,18 @@
         <v-card
           v-if="!useDisplay.xs"
           color="black/80"
-          :class="['ma-4', selectedClass]"
+          :class="['ma-2', selectedClass]"
           height="220"
           width="270"
-          rounded="xl"
+          rounded="lg"
           @click="toggle"
         >
           <v-img
             :src="`https://image.tmdb.org/t/p/original${popular.backdrop_path}`"
             :lazy-src="`https://image.tmdb.org/t/p/w300${popular.backdrop_path}`"
-            height="120px"
+            height="100%"
             cover
+            class="align-end"
           >
             <template v-slot:placeholder>
               <div class="d-flex align-center justify-center fill-height">
@@ -274,26 +272,23 @@
                   color="grey-lighten-4"
                   indeterminate
                 ></v-progress-circular>
-              </div> </template
-          ></v-img>
-
-          <v-card-title>
-            {{ popular.title }}
-          </v-card-title>
-
-          <v-card-subtitle class="mt-n3">
-            <v-responsive height="20px" width="100%">
-              <div class="text-truncate">
-                {{ formatDate(popular.release_date) }}
               </div>
-            </v-responsive>
-          </v-card-subtitle>
+            </template>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-icon icon="mdi-menu-down" color="grey" />
-            <v-spacer></v-spacer>
-          </v-card-actions>
+            <v-card
+              height="60px"
+              color="rgb(0,0,0,0.7)"
+              rounded="0"
+              class="pl-2 d-flex align-center"
+            >
+              <div>
+                <p class="text-subtitle-1">{{ popular.title }}</p>
+                <p class="text-caption mt-n2">
+                  {{ formatDate(popular.release_date) }}
+                </p>
+              </div>
+            </v-card>
+          </v-img>
         </v-card>
 
         <v-card
@@ -359,14 +354,15 @@
           :class="['ma-4', selectedClass]"
           height="220"
           width="270"
-          rounded="xl"
+          rounded="lg"
           @click="toggle"
         >
           <v-img
             :src="`https://image.tmdb.org/t/p/original${topRated.backdrop_path}`"
             :lazy-src="`https://image.tmdb.org/t/p/w300${topRated.backdrop_path}`"
-            height="120px"
+            height="100%"
             cover
+            class="align-end"
           >
             <template v-slot:placeholder>
               <div class="d-flex align-center justify-center fill-height">
@@ -374,26 +370,23 @@
                   color="grey-lighten-4"
                   indeterminate
                 ></v-progress-circular>
-              </div> </template
-          ></v-img>
-
-          <v-card-title>
-            {{ topRated.title }}
-          </v-card-title>
-
-          <v-card-subtitle class="mt-n3">
-            <v-responsive height="20px" width="100%">
-              <div class="text-truncate">
-                {{ formatDate(topRated.release_date) }}
               </div>
-            </v-responsive>
-          </v-card-subtitle>
+            </template>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-icon icon="mdi-menu-down" color="grey" />
-            <v-spacer></v-spacer>
-          </v-card-actions>
+            <v-card
+              height="60px"
+              color="rgb(0,0,0,0.7)"
+              rounded="0"
+              class="pl-2 d-flex align-center"
+            >
+              <div>
+                <p class="text-subtitle-1">{{ topRated.title }}</p>
+                <p class="text-caption mt-n2">
+                  {{ formatDate(topRated.release_date) }}
+                </p>
+              </div>
+            </v-card>
+          </v-img>
         </v-card>
 
         <v-card

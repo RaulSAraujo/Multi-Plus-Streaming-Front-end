@@ -4,7 +4,7 @@
       v-if="!useDisplay.xs"
       :lazy-src="`https://image.tmdb.org/t/p/w300${imgSelected}`"
       :src="`https://image.tmdb.org/t/p/original${imgSelected}`"
-      height="650"
+      height="70vh"
       cover
       class="align-end"
     >
@@ -27,8 +27,8 @@
             <v-card
               color="black"
               class="card-transition ma-4"
-              :height="isSelected ? '400px' : '220px'"
-              :width="isSelected ? '270px' : '150px'"
+              :height="isSelected ? '50vh' : '35vh'"
+              :width="isSelected ? '17vw' : '11vw'"
               rounded="lg"
             >
               <v-img

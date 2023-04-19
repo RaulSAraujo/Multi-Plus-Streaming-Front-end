@@ -29,6 +29,7 @@
               class="card-transition ma-4"
               :height="isSelected ? '50vh' : '30vh'"
               :width="isSelected ? '17vw' : '9vw'"
+              min-width="200px"
               rounded="lg"
             >
               <v-img

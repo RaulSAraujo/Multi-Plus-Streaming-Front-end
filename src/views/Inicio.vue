@@ -2,8 +2,8 @@
   <div>
     <v-img
       v-if="!useDisplay.xs"
-      :lazy-src="`https://image.tmdb.org/t/p/w300${imgSelected}`"
-      :src="`https://image.tmdb.org/t/p/original${imgSelected}`"
+      :src="imgUrlPoster(imgSelected)"
+      :lazy-src="lazyImgUrlPoster(imgSelected)"
       height="70vh"
       cover
       class="align-end"
@@ -146,8 +146,8 @@
             }"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/original${tend.poster_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${tend.poster_path}`"
+              :src="imgUrl(tend)"
+              :lazy-src="lazyImgUrl(tend)"
               height="220px"
               cover
             >
@@ -228,8 +228,8 @@
             }"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/original${pop.poster_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${pop.poster_path}`"
+              :src="imgUrl(pop)"
+              :lazy-src="lazyImgUrl(pop)"
               height="220px"
               cover
             >
@@ -311,8 +311,8 @@
             }"
           >
             <v-img
-              :src="`https://image.tmdb.org/t/p/original${free.poster_path}`"
-              :lazy-src="`https://image.tmdb.org/t/p/w300${free.poster_path}`"
+              :src="imgUrl(free)"
+              :lazy-src="lazyImgUrl(free)"
               height="220px"
               cover
             >
@@ -373,16 +373,18 @@ export default {
       this.getTendencias();
     },
     posters() {
-      this.imgSelected = this.posters[this.modelPosters].backdrop_path;
+      this.imgSelected = this.posters[this.modelPosters];
     },
     modelPosters() {
-      this.imgSelected = this.posters[this.modelPosters].backdrop_path;
+      this.imgSelected = this.posters[this.modelPosters];
     },
   },
   methods: {
     getTendencias() {
       this.loadingTendencias = true;
-      let url = `${import.meta.env.VITE_BASE_URL}/trending/all/${this.tabsTendencias}?api_key=${import.meta.env.VITE_API_KEY}`;
+      let url = `${import.meta.env.VITE_BASE_URL}/trending/all/${
+        this.tabsTendencias
+      }?api_key=${import.meta.env.VITE_API_KEY}`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
       url = `${url}&with_original_language=en`;
@@ -409,9 +411,13 @@ export default {
         const watchRegion = "BR";
         const tabsPopulares = this.tabsPopulares;
 
-        const movieUrl = `${import.meta.env.VITE_BASE_URL}/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
+        const movieUrl = `${
+          import.meta.env.VITE_BASE_URL
+        }/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
 
-        const tvUrl = `${import.meta.env.VITE_BASE_URL}/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
+        const tvUrl = `${
+          import.meta.env.VITE_BASE_URL
+        }/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
 
         const [movieResponse, tvResponse] = await Promise.all([
           axios.get(movieUrl),
@@ -440,7 +446,9 @@ export default {
     },
     getMovieTvFree() {
       this.loadingMovieTvFree = true;
-      let url = `${import.meta.env.VITE_BASE_URL}/discover/${this.tabsMovieTvFree}?api_key=${import.meta.env.VITE_API_KEY}`;
+      let url = `${import.meta.env.VITE_BASE_URL}/discover/${
+        this.tabsMovieTvFree
+      }?api_key=${import.meta.env.VITE_API_KEY}`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
       url = `${url}&with_original_language=en`;
@@ -465,9 +473,13 @@ export default {
         const originalLanguage = "en";
         const watchRegion = "BR";
 
-        const movieUrl = `${import.meta.env.VITE_BASE_URL}/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
+        const movieUrl = `${
+          import.meta.env.VITE_BASE_URL
+        }/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
 
-        const tvUrl = `${import.meta.env.VITE_BASE_URL}/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
+        const tvUrl = `${
+          import.meta.env.VITE_BASE_URL
+        }/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
 
         const [movieResponse, tvResponse] = await Promise.all([
           axios.get(movieUrl),
@@ -497,6 +509,50 @@ export default {
       return new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(
         date
       );
+    },
+    imgUrlPoster(props) {
+      let imgNotFound = new URL(
+        `@/assets/img/image-not-found.png`,
+        import.meta.url
+      );
+      if (props.backdrop_path != null)
+        return `https://image.tmdb.org/t/p/original${props.backdrop_path}`;
+      if (props.poster_path != null)
+        return `https://image.tmdb.org/t/p/original${props.poster_path}`;
+      else return imgNotFound.toString();
+    },
+    lazyImgUrlPoster(props) {
+      let imgNotFound = new URL(
+        `@/assets/img/image-not-found.png`,
+        import.meta.url
+      );
+      if (props.backdrop_path != null)
+        return `https://image.tmdb.org/t/p/w300${props.backdrop_path}`;
+      if (props.poster_path != null)
+        return `https://image.tmdb.org/t/p/w300${props.poster_path}`;
+      else return imgNotFound.toString();
+    },
+    imgUrl(props) {
+      let imgNotFound = new URL(
+        `@/assets/img/image-not-found.png`,
+        import.meta.url
+      );
+      if (props.poster_path != null)
+        return `https://image.tmdb.org/t/p/original${props.poster_path}`;
+      if (props.backdrop_path != null)
+        return `https://image.tmdb.org/t/p/original${props.backdrop_path}`;
+      else return imgNotFound.toString();
+    },
+    lazyImgUrl(props) {
+      let imgNotFound = new URL(
+        `@/assets/img/image-not-found.png`,
+        import.meta.url
+      );
+      if (props.poster_path != null)
+        return `https://image.tmdb.org/t/p/w300${props.poster_path}`;
+      if (props.backdrop_path != null)
+        return `https://image.tmdb.org/t/p/w300${props.backdrop_path}`;
+      else return imgNotFound.toString();
     },
   },
 };

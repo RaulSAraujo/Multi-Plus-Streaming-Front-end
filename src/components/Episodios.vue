@@ -34,8 +34,8 @@
                 >
                   <v-img
                     v-if="season.poster_path"
-                    :src="`https://image.tmdb.org/t/p/original${season.poster_path}`"
-                    :lazy-src="`https://image.tmdb.org/t/p/w300${season.still_path}`"
+                    :src="imgUrlCard(season)"
+                    :lazy-src="lazyImgUrlCard(season)"
                     :alt="season.name"
                     gradient="to bottom, rgba(0,0,0,.9), rgba(0,0,0,.5)"
                     cover
@@ -100,8 +100,8 @@
                           color="transparent"
                         >
                           <v-img
-                            :src="`https://image.tmdb.org/t/p/original${episodio.still_path}`"
-                            :lazy-src="`https://image.tmdb.org/t/p/w300${episodio.still_path}`"
+                            :src="imgUrl(episodio)"
+                            :lazy-src="lazyImgUrl(episodio)"
                             gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.7)"
                             cover
                             height="100%"
@@ -208,10 +208,20 @@
               color="transparent"
             >
               <v-img
-                :src="`https://image.tmdb.org/t/p/original${episodio.still_path}`"
+                :src="imgUrl(episodio)"
+                :lazy-src="lazyImgUrl(episodio)"
                 gradient="to bottom, rgba(0,0,0,.3), rgba(0,0,0,.7)"
                 cover
               >
+                <template v-slot:placeholder>
+                  <div class="d-flex align-center justify-center fill-height">
+                    <v-progress-circular
+                      color="grey-lighten-4"
+                      indeterminate
+                    ></v-progress-circular>
+                  </div>
+                </template>
+
                 <v-card-title>
                   <v-row no-gutters justify="space-between" align="center">
                     <v-col cols="10" sm="10" md="11" lg="11">
@@ -359,10 +369,15 @@ export default {
   },
   methods: {
     getEpisodios() {
+      let index = 0;
+      if (this.seasons.length > 1) {
+        index = this.selection;
+      }
+
       axios
         .get(
           `${import.meta.env.VITE_BASE_URL}/tv/${this.serieId}/season/${
-            this.seasons[this.selection].season_number
+            this.seasons[index].season_number
           }?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR`
         )
         .then((response) => {
@@ -378,7 +393,9 @@ export default {
         .get(
           `${import.meta.env.VITE_BASE_URL}/tv/${this.serieId}/season/${
             this.seasons[this.selection].season_number
-          }/episode/${epsodeNumber}/credits?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR`
+          }/episode/${epsodeNumber}/credits?api_key=${
+            import.meta.env.VITE_API_KEY
+          }&language=pt-BR`
         )
         .then((response) => {
           console.log("Credit", response);
@@ -409,6 +426,47 @@ export default {
 
         return `${textoHoras}:${textoMinutos}`;
       }
+    },
+    imgUrlCard(props) {
+      let imgNotFound = new URL(
+        `@/assets/img/image-not-found.png`,
+        import.meta.url
+      );
+
+      if (props.poster_path != null)
+        return `https://image.tmdb.org/t/p/original${props.poster_path}`;
+      if (props.still_path != null)
+        return `https://image.tmdb.org/t/p/original${props.still_path}`;
+      else return imgNotFound.toString();
+    },
+    lazyImgUrlCard(props) {
+      let imgNotFound = new URL(
+        `@/assets/img/image-not-found.png`,
+        import.meta.url
+      );
+      if (props.poster_path != null)
+        return `https://image.tmdb.org/t/p/w342${props.poster_path}`;
+      if (props.still_path != null)
+        return `https://image.tmdb.org/t/p/w300${props.still_path}`;
+      else return imgNotFound.toString();
+    },
+    imgUrl(props) {
+      let imgNotFound = new URL(
+        `@/assets/img/image-not-found.png`,
+        import.meta.url
+      );
+      if (props.still_path != null)
+        return `https://image.tmdb.org/t/p/original${props.still_path}`;
+      else return imgNotFound.toString();
+    },
+    lazyImgUrl(props) {
+      let imgNotFound = new URL(
+        `@/assets/img/image-not-found.png`,
+        import.meta.url
+      );
+      if (props.still_path != null)
+        return `https://image.tmdb.org/t/p/w300${props.still_path}`;
+      else return imgNotFound.toString();
     },
   },
 };

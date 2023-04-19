@@ -36,6 +36,8 @@ A aplicação consiste em uma apresentação pessoal seguida de projetos pessoai
 ## Implantação em produção
 - Back end: Vercel
 - Front end web: Vue.js
+- ## API
+- https://developers.themoviedb.org/3/getting-started
 
 # Como executar o projeto
 

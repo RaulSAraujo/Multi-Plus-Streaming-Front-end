@@ -27,14 +27,14 @@
             <v-card
               color="black"
               class="card-transition ma-4"
-              :height="isSelected ? '50vh' : '35vh'"
-              :width="isSelected ? '17vw' : '11vw'"
+              :height="isSelected ? '50vh' : '30vh'"
+              :width="isSelected ? '17vw' : '9vw'"
               rounded="lg"
             >
               <v-img
                 :src="`https://image.tmdb.org/t/p/original${poster.poster_path}`"
                 :lazy-src="`https://image.tmdb.org/t/p/w300${poster.poster_path}`"
-                :height="isSelected ? '400px' : '220px'"
+                height="100%"
                 cover
                 :gradient="
                   isSelected

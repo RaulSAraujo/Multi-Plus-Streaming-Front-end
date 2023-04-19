@@ -538,7 +538,7 @@ export default {
     getSeriesOnTheAir() {
       axios
         .get(
-          "https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&sort_by=popularity.desc&with_original_language=en&screened_theatrically=true"
+          `${import.meta.env.VITE_BASE_URL}/discover/tv?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR&sort_by=popularity.desc&with_original_language=en&screened_theatrically=true`
         )
         .then((response) => {
           console.log("No ar", response);
@@ -549,7 +549,7 @@ export default {
         });
     },
     getSeriesPopular() {
-      let url = `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      let url = `${import.meta.env.VITE_BASE_URL}/discover/tv?api_key=${import.meta.env.VITE_API_KEY}`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
       url = `${url}&with_original_language=en`;
@@ -570,7 +570,7 @@ export default {
         });
     },
     getSeriesTopRated() {
-      let url = `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      let url = `${import.meta.env.VITE_BASE_URL}/discover/tv?api_key=${import.meta.env.VITE_API_KEY}`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=vote_average.desc`;
       url = `${url}&vote_count.gte=200`;
@@ -591,7 +591,7 @@ export default {
         });
     },
     getSeriesAiringToday() {
-      let url = `https://api.themoviedb.org/3/discover/tv?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      let url = `${import.meta.env.VITE_BASE_URL}/discover/tv?api_key=${import.meta.env.VITE_API_KEY}`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
       url = `${url}&with_original_language=pt`;
@@ -615,7 +615,7 @@ export default {
     getDetailsSeries(id) {
       axios
         .get(
-          `https://api.themoviedb.org/3/tv/${id}?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&append_to_response=reviews`
+          `${import.meta.env.VITE_BASE_URL}/tv/${id}?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR&append_to_response=reviews`
         )
         .then((response) => {
           console.log("Detalhes", response);
@@ -628,7 +628,7 @@ export default {
     getGenre() {
       axios
         .get(
-          `https://api.themoviedb.org/3/genre/tv/list?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
+          `${import.meta.env.VITE_BASE_URL}/genre/tv/list?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR`
         )
         .then((response) => {
           console.log("genre", response);

@@ -62,7 +62,7 @@ export default {
     getToken() {
       axios
         .get(
-          "https://api.themoviedb.org/3/authentication/token/new?api_key=9f9a623c8918bc56839f26a94b5507aa"
+          `${import.meta.env.VITE_BASE_URL}/authentication/token/new?api_key=${import.meta.env.VITE_API_KEY}`
         )
         .then((response) => {
           console.log("token", response);

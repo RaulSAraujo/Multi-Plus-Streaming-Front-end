@@ -103,6 +103,8 @@ export default {
       useDisplay: useDisplay(),
     };
   },
+  created(){
+  },
   methods: {},
 };
 </script>

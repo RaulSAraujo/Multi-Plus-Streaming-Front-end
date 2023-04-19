@@ -198,7 +198,7 @@ export default {
     getWatchColection() {
       axios
         .get(
-          `https://api.themoviedb.org/3/collection/${this.collectionId}?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
+          `${import.meta.env.VITE_BASE_URL}/collection/${this.collectionId}?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR`
         )
         .then((response) => {
           console.log("Collections", response);

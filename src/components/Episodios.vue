@@ -361,9 +361,9 @@ export default {
     getEpisodios() {
       axios
         .get(
-          `https://api.themoviedb.org/3/tv/${this.serieId}/season/${
+          `${import.meta.env.VITE_BASE_URL}/tv/${this.serieId}/season/${
             this.seasons[this.selection].season_number
-          }?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
+          }?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR`
         )
         .then((response) => {
           console.log("Episodios", response);
@@ -376,9 +376,9 @@ export default {
     getEpisodiosCredits(epsodeNumber) {
       axios
         .get(
-          `https://api.themoviedb.org/3/tv/${this.serieId}/season/${
+          `${import.meta.env.VITE_BASE_URL}/tv/${this.serieId}/season/${
             this.seasons[this.selection].season_number
-          }/episode/${epsodeNumber}/credits?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR`
+          }/episode/${epsodeNumber}/credits?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR`
         )
         .then((response) => {
           console.log("Credit", response);

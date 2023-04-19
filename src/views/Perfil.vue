@@ -68,7 +68,7 @@ export default {
   methods: {
     getTendencias() {
       this.loading = true;
-      let url = `https://api.themoviedb.org/3/trending/all/day?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      let url = `${import.meta.env.VITE_BASE_URL}/trending/all/day?api_key=${import.meta.env.VITE_API_KEY}`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
       url = `${url}&with_original_language=en`;

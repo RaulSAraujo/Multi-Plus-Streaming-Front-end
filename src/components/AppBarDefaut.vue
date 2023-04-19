@@ -328,7 +328,7 @@ export default {
       if (this.search != "") {
         axios
           .get(
-            `https://api.themoviedb.org/3/search/multi?api_key=9f9a623c8918bc56839f26a94b5507aa&language=pt-BR&region=BR&page=${this.page}&query=${this.search}`
+            `${import.meta.env.VITE_BASE_URL}/search/multi?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR&region=BR&page=${this.page}&query=${this.search}`
           )
           .then((response) => {
             console.log("Search", response);

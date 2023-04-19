@@ -381,7 +381,7 @@ export default {
   methods: {
     getTendencias() {
       this.loadingTendencias = true;
-      let url = `https://api.themoviedb.org/3/trending/all/${this.tabsTendencias}?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      let url = `${import.meta.env.VITE_BASE_URL}/trending/all/${this.tabsTendencias}?api_key=${import.meta.env.VITE_API_KEY}`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
       url = `${url}&with_original_language=en`;
@@ -402,15 +402,15 @@ export default {
       try {
         this.loadingPopulares = true;
 
-        const apiKey = "9f9a623c8918bc56839f26a94b5507aa";
+        const apiKey = `${import.meta.env.VITE_API_KEY}`;
         const language = "pt-BR";
         const originalLanguage = "en";
         const watchRegion = "BR";
         const tabsPopulares = this.tabsPopulares;
 
-        const movieUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
+        const movieUrl = `${import.meta.env.VITE_BASE_URL}/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
 
-        const tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
+        const tvUrl = `${import.meta.env.VITE_BASE_URL}/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&with_watch_monetization_types=${tabsPopulares}&watch_region=${watchRegion}`;
 
         const [movieResponse, tvResponse] = await Promise.all([
           axios.get(movieUrl),
@@ -439,7 +439,7 @@ export default {
     },
     getMovieTvFree() {
       this.loadingMovieTvFree = true;
-      let url = `https://api.themoviedb.org/3/discover/${this.tabsMovieTvFree}?api_key=9f9a623c8918bc56839f26a94b5507aa`;
+      let url = `${import.meta.env.VITE_BASE_URL}/discover/${this.tabsMovieTvFree}?api_key=${import.meta.env.VITE_API_KEY}`;
       url = `${url}&language=pt-BR`;
       url = `${url}&sort_by=popularity.desc`;
       url = `${url}&with_original_language=en`;
@@ -459,14 +459,14 @@ export default {
     },
     async getPoster() {
       try {
-        const apiKey = "9f9a623c8918bc56839f26a94b5507aa";
+        const apiKey = `${import.meta.env.VITE_API_KEY}`;
         const language = "pt-BR";
         const originalLanguage = "en";
         const watchRegion = "BR";
 
-        const movieUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
+        const movieUrl = `${import.meta.env.VITE_BASE_URL}/discover/movie?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
 
-        const tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
+        const tvUrl = `${import.meta.env.VITE_BASE_URL}/discover/tv?api_key=${apiKey}&language=${language}&sort_by=popularity.desc&with_original_language=${originalLanguage}&watch_region=${watchRegion}`;
 
         const [movieResponse, tvResponse] = await Promise.all([
           axios.get(movieUrl),

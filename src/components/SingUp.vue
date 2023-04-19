@@ -98,13 +98,13 @@
               @keypress.enter="checkForm"
             />
             <v-text-field
-              v-model="basicInf.region"
+              v-model="basicInf.telephone"
               class="mb-2"
-              label="Região"
+              label="Telefone"
               color="pink"
               :error-messages="
-                v$.basicInf.region.$error
-                  ? errorMessage(v$.basicInf.region.$errors[0].$message)
+                v$.basicInf.telephone.$error
+                  ? errorMessage(v$.basicInf.telephone.$errors[0].$message)
                   : ''
               "
               @keypress.enter="checkForm"
@@ -150,6 +150,7 @@
           v-if="step == 4"
           class="gradient"
           variant="flat"
+          to="/Inicio"
           @click="steppyFinalize"
         >
           Finalizar
@@ -160,6 +161,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import useValidate from "@vuelidate/core";
 import { required, email, sameAs } from "@vuelidate/validators";
 export default {
@@ -178,7 +180,7 @@ export default {
       basicInf: {
         name: "",
         age: "",
-        region: "",
+        telephone: "",
       },
     };
   },
@@ -192,7 +194,7 @@ export default {
       basicInf: {
         name: { required },
         age: { required },
-        region: { required },
+        telephone: { required },
       },
     };
   },
@@ -223,7 +225,17 @@ export default {
         return "O valor deve ser igual ao outro valor";
     },
     steppyFinalize() {
-      console.log("Finalizado");
+      axios
+        .get(
+          `${import.meta.env.VITE_BASE_URL}/authentication/token/new?api_key=${import.meta.env.VITE_API_KEY}`
+        )
+        .then((response) => {
+          console.log("token", response);
+          localStorage.setItem("jwt", response.data.request_token);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   computed: {
@@ -247,5 +259,4 @@ export default {
 .gradient {
   background: linear-gradient(to right, #8e0336, #fb394f);
 }
-
 </style>

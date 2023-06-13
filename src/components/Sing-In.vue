@@ -27,6 +27,9 @@
           @click:append-inner="show1 = !show1"
           color="pink"
         />
+        <v-row class="my-1" align="center" justify="center">
+          <span class="text-pink">{{ message }}</span>
+        </v-row>
       </v-card-text>
       <v-row no-gutters class="px-12 mb-5">
         <v-btn
@@ -36,8 +39,7 @@
           rounded="lg"
           block
           size="large"
-          to="/Inicio"
-          @click="getToken"
+          @click="login"
           >LOGIN</v-btn
         >
       </v-row>
@@ -56,21 +58,23 @@ export default {
       show1: false,
       email: "",
       password: "",
+      message: "",
     };
   },
   methods: {
-    getToken() {
-      axios
-        .get(
-          `${import.meta.env.VITE_BASE_URL}/authentication/token/new?api_key=${import.meta.env.VITE_API_KEY}`
-        )
-        .then((response) => {
-          console.log("token", response);
-          localStorage.setItem("jwt", response.data.request_token);
-        })
-        .catch((error) => {
-          console.log(error);
+    async login() {
+      try {
+        const resUser = await axios.post("http://localhost:3333/sessions", {
+          email: this.email,
+          password: this.password,
         });
+
+        localStorage.setItem("name", resUser.data.name);
+        localStorage.setItem("email", resUser.data.email);
+        this.$router.push("/inicio");
+      } catch (error) {
+        this.message = error.response.data.error;
+      }
     },
   },
 };

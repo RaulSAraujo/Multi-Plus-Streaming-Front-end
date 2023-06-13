@@ -3,12 +3,9 @@
     <v-card rounded="xl">
       <v-card-title class="text-h6 font-weight-regular justify-space-between">
         <span>{{ currentTitle }}</span>
-        <v-avatar
-          class="gradient mx-2"
-          size="24"
-          color="pink"
-          v-text="step"
-        ></v-avatar>
+        <v-avatar class="gradient mx-2" size="24" color="pink">
+          {{ step }}
+        </v-avatar>
       </v-card-title>
 
       <v-window v-model="step">
@@ -22,10 +19,13 @@
               :error-messages="
                 v$.email.$error
                   ? errorMessage(v$.email.$errors[0].$message)
+                  : message
+                  ? message
                   : ''
               "
               @keypress.enter="checkForm"
             ></v-text-field>
+
             <span class="text-caption text-grey-darken-1">
               Este é o e-mail que você usará para acessar sua conta.
             </span>
@@ -150,7 +150,6 @@
           v-if="step == 4"
           class="gradient"
           variant="flat"
-          to="/Inicio"
           @click="steppyFinalize"
         >
           Finalizar
@@ -182,6 +181,7 @@ export default {
         age: "",
         telephone: "",
       },
+      message: "",
     };
   },
   validations() {
@@ -199,11 +199,19 @@ export default {
     };
   },
   methods: {
-    checkForm() {
+    async checkForm() {
       if (this.step == 1) {
         this.v$.email.$validate();
         if (!this.v$.email.$error) {
-          this.step++;
+          try {
+            const check = await axios.post("http://localhost:3333/checkUser", {
+              email: this.email,
+            });
+
+            this.step++;
+          } catch (error) {
+            this.message = error.response.data.error;
+          }
         }
       } else if (this.step == 2) {
         this.v$.password.$validate();
@@ -224,18 +232,22 @@ export default {
       if (message == "The value must be equal to the other value")
         return "O valor deve ser igual ao outro valor";
     },
-    steppyFinalize() {
-      axios
-        .get(
-          `${import.meta.env.VITE_BASE_URL}/authentication/token/new?api_key=${import.meta.env.VITE_API_KEY}`
-        )
-        .then((response) => {
-          console.log("token", response);
-          localStorage.setItem("jwt", response.data.request_token);
-        })
-        .catch((error) => {
-          console.log(error);
+    async steppyFinalize() {
+      try {
+        const resUser = await axios.post("http://localhost:3333/users", {
+          email: this.email,
+          password: this.password.password,
+          password_hash: this.password.confirm,
+          name: this.basicInf.name,
+          age: this.basicInf.age,
+          telephone: this.basicInf.telephone,
         });
+        localStorage.setItem("name", resUser.data.name);
+        localStorage.setItem("email", resUser.data.email);
+        this.$router.push("/inicio");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   computed: {

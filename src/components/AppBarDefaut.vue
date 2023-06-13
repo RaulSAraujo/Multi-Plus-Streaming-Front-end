@@ -65,10 +65,7 @@
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" class="mx-4">
               <v-avatar color="black" size="large">
-                <v-img
-                  src="@/assets/img/avatar.png"
-                  cover
-                ></v-img>
+                <v-img src="@/assets/img/avatar.png" cover></v-img>
               </v-avatar>
             </v-btn>
           </template>
@@ -76,13 +73,10 @@
             <v-card-text>
               <div class="mx-auto text-center">
                 <v-avatar color="black" size="large" class="mb-2">
-                  <v-img
-                    src="@/assets/img/avatar.png"
-                    cover
-                  ></v-img>
+                  <v-img src="@/assets/img/avatar.png" cover></v-img>
                 </v-avatar>
-                <h3>Raul Silva Araujo</h3>
-                <p class="text-caption mt-1">raul.araujo.2000@hotmail.com</p>
+                <h3>{{name}}</h3>
+                <p class="text-caption mt-1">{{email}}</p>
                 <v-divider class="my-3"></v-divider>
                 <v-btn
                   rounded
@@ -152,10 +146,7 @@
           <template v-slot:activator="{ props }">
             <v-btn icon v-bind="props" class="mx-4">
               <v-avatar color="black" size="large">
-                <v-img
-                  src="@/assets/img/avatar.png"
-                  cover
-                ></v-img>
+                <v-img src="@/assets/img/avatar.png" cover></v-img>
               </v-avatar>
             </v-btn>
           </template>
@@ -321,14 +312,22 @@ export default {
       resultSearch: [],
       totalResults: 0,
       drawer: false,
+      name: "",
+      email: "",
     };
+  },
+  mounted() {
+    this.name = localStorage.getItem('name')
+    this.email = localStorage.getItem('email')
   },
   methods: {
     searchMulti() {
       if (this.search != "") {
         axios
           .get(
-            `${import.meta.env.VITE_BASE_URL}/search/multi?api_key=${import.meta.env.VITE_API_KEY}&language=pt-BR&region=BR&page=${this.page}&query=${this.search}`
+            `${import.meta.env.VITE_BASE_URL}/search/multi?api_key=${
+              import.meta.env.VITE_API_KEY
+            }&language=pt-BR&region=BR&page=${this.page}&query=${this.search}`
           )
           .then((response) => {
             console.log("Search", response);

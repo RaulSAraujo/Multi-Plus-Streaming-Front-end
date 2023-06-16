@@ -61,13 +61,25 @@ export default {
       message: "",
     };
   },
+  watch: {
+    dialog(val) {
+      if (val === false) {
+        this.email = "";
+        this.password = "";
+        this.message = "";
+      }
+    },
+  },
   methods: {
     async login() {
       try {
-        const resUser = await axios.post("http://localhost:3333/sessions", {
-          email: this.email,
-          password: this.password,
-        });
+        const resUser = await axios.post(
+          "https://nodejs-production-6650.up.railway.app/session",
+          {
+            email: this.email,
+            password: this.password,
+          }
+        );
 
         localStorage.setItem("name", resUser.data.name);
         localStorage.setItem("email", resUser.data.email);

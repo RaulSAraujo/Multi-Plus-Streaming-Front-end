@@ -198,17 +198,34 @@ export default {
       },
     };
   },
+  watch: {
+    dialog(val) {
+      if (val === false) {
+        this.email = "";
+        this.password.password = "";
+        this.password.confirm = "";
+        this.basicInf.name = "";
+        this.basicInf.age = "";
+        this.basicInf.telephone = "";
+        this.message = "";
+      }
+    },
+  },
   methods: {
     async checkForm() {
       if (this.step == 1) {
         this.v$.email.$validate();
         if (!this.v$.email.$error) {
           try {
-            const check = await axios.post("http://localhost:3333/checkUser", {
-              email: this.email,
-            });
+            const res = await axios.get(
+              `https://nodejs-production-6650.up.railway.app/users?email=${this.email}`
+            );
 
-            this.step++;
+            if (res.data.length === 0) {
+              this.step++;
+            } else {
+              this.message = "Email ja cadastrado";
+            }
           } catch (error) {
             this.message = error.response.data.error;
           }
@@ -234,14 +251,17 @@ export default {
     },
     async steppyFinalize() {
       try {
-        const resUser = await axios.post("http://localhost:3333/users", {
-          email: this.email,
-          password: this.password.password,
-          password_hash: this.password.confirm,
-          name: this.basicInf.name,
-          age: this.basicInf.age,
-          telephone: this.basicInf.telephone,
-        });
+        const resUser = await axios.post(
+          "https://nodejs-production-6650.up.railway.app/users",
+          {
+            email: this.email,
+            password: this.password.password,
+            password_hash: this.password.confirm,
+            name: this.basicInf.name,
+            age: this.basicInf.age,
+            telephone: this.basicInf.telephone,
+          }
+        );
         localStorage.setItem("name", resUser.data.name);
         localStorage.setItem("email", resUser.data.email);
         this.$router.push("/inicio");

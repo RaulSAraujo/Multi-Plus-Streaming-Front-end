@@ -25,6 +25,7 @@
           :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show1 ? 'text' : 'password'"
           @click:append-inner="show1 = !show1"
+          @keypress.enter="login"
           color="pink"
         />
         <v-row class="my-1" align="center" justify="center">

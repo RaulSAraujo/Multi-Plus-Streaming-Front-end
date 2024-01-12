@@ -216,19 +216,20 @@ export default {
       if (this.step == 1) {
         this.v$.email.$validate();
         if (!this.v$.email.$error) {
-          try {
-            const res = await axios.get(
-              `https://nodejs-production-6650.up.railway.app/users?email=${this.email}`
-            );
+          // try {
+          //   const res = await axios.get(
+          //     `https://nodejs-production-6650.up.railway.app/users?email=${this.email}`
+          //   );
 
-            if (res.data.length === 0) {
-              this.step++;
-            } else {
-              this.message = "Email ja cadastrado";
-            }
-          } catch (error) {
-            this.message = error.response.data.error;
-          }
+          //   if (res.data.length === 0) {
+          //     this.step++;
+          //   } else {
+          //     this.message = "Email ja cadastrado";
+          //   }
+          // } catch (error) {
+          //   this.message = error.response.data.error;
+          // }
+          this.step++;
         }
       } else if (this.step == 2) {
         this.v$.password.$validate();

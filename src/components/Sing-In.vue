@@ -50,7 +50,7 @@
 
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   data() {
@@ -73,21 +73,24 @@ export default {
   },
   methods: {
     async login() {
-      try {
-        const resUser = await axios.post(
-          "https://nodejs-production-6650.up.railway.app/session",
-          {
-            email: this.email,
-            password: this.password,
-          }
-        );
+      // try {
+      //   const resUser = await axios.post(
+      //     "https://nodejs-production-6650.up.railway.app/session",
+      //     {
+      //       email: this.email,
+      //       password: this.password,
+      //     }
+      //   );
+      //   localStorage.setItem("name", resUser.data.name);
+      //   localStorage.setItem("email", resUser.data.email);
+      //   this.$router.push("/inicio");
+      // } catch (error) {
+      //   this.message = error.response.data.error;
+      // }
 
-        localStorage.setItem("name", resUser.data.name);
-        localStorage.setItem("email", resUser.data.email);
-        this.$router.push("/inicio");
-      } catch (error) {
-        this.message = error.response.data.error;
-      }
+      this.$router.push("/inicio");
+      localStorage.setItem("name", 'john');
+      localStorage.setItem("email", 'john@google.com');
     },
   },
 };

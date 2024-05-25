@@ -22,7 +22,7 @@
         color="pink"
         size="large"
         height="40"
-        @click="activeSingIn"
+        to="/inicio"
         >Entrar</v-btn
       >
       <v-btn
@@ -47,11 +47,7 @@
         <v-card rounded="xl">
           <v-card-text>
             <div class="mx-auto text-center">
-              <v-btn
-                variant="text"
-                rounded="lg"
-                color="primary"
-                @click="activeSingIn"
+              <v-btn variant="text" rounded="lg" color="primary" to="/inicio"
                 >Entrar</v-btn
               >
               <v-divider></v-divider>

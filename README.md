@@ -34,7 +34,7 @@ A aplicação consiste em uma apresentação pessoal seguida de projetos pessoai
 - Vue3
 - Vuetify
 ## Implantação em produção
-- Back end: Vercel
+- Back end: [nodejs](https://github.com/RaulSAraujo/Multi-Plus-Streaming-Back-end)
 - Front end web: Vue.js
 - ## API
 - https://developers.themoviedb.org/3/getting-started

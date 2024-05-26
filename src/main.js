@@ -16,7 +16,7 @@ import { inject } from "@vercel/analytics"
 
 const app = createApp(App)
 
-registerPlugins(inject)
-registerPlugins(app)
+inject();
+registerPlugins(app);
 
 app.mount('#app')

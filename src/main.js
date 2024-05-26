@@ -12,9 +12,11 @@ import { createApp } from 'vue'
 
 // Plugins
 import { registerPlugins } from '@/plugins'
+import { inject } from "@vercel/analytics"
 
 const app = createApp(App)
 
+registerPlugins(inject)
 registerPlugins(app)
 
 app.mount('#app')
